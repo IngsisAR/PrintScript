@@ -15,7 +15,7 @@ class Lexer (val input: String) {
         return tokens
     }
 
-    private fun hasNext() = currentPosition < input.length;
+    private fun hasNext() = currentPosition < input.length
 
     private fun getNextToken(): Token? {
         val remainingInput = input.substring(currentPosition)
@@ -46,8 +46,8 @@ class Lexer (val input: String) {
         val endPosition = currentPosition + matchedValue.length
         val position = Position(startPosition, endPosition)
         return when (tokenType) {
-            TokenType.IDENTIFIER -> {
-                IDENTIFIER(matchedValue, position)
+            TokenType.ID -> {
+                ID(matchedValue, position)
             }
             TokenType.NUMBER -> {
                 val value = matchedValue.toInt()

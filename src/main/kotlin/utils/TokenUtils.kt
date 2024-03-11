@@ -18,7 +18,7 @@ data class CBRACKET(override val position: Position) : Token(position)
 data class OBRACKET(override val position: Position) : Token(position)
 data class PROGRAM(override val position: Position) : Token(position)
 data class TYPE(override val position: Position) : Token(position)
-data class IDENTIFIER(val name: String, override val position: Position) : Token(position)
+data class ID(val name: String, override val position: Position) : Token(position)
 data class NUMBER(val value: Number, override val position: Position) : Token(position)
 data class STRING(val value: String, override val position: Position) : Token(position)
 enum class TokenType{
@@ -37,7 +37,7 @@ enum class TokenType{
     OBRACKET,
     PROGRAM,
     TYPE,
-    IDENTIFIER,
+    ID,
     NUMBER,
     STRING
 }
@@ -58,7 +58,7 @@ val tokenReg = listOf(
     RegexToken("\\]", TokenType.CBRACKET),
     RegexToken("program", TokenType.PROGRAM),
     RegexToken("number|string|float|bool", TokenType.TYPE),
-    RegexToken("[a-zA-Z_][a-zA-Z0-9_]*", TokenType.IDENTIFIER),
+    RegexToken("[a-zA-Z_][a-zA-Z0-9_]*", TokenType.ID),
     RegexToken("[0-9]+", TokenType.NUMBER),
     RegexToken("\"[^\"]*\"", TokenType.STRING)
 )
