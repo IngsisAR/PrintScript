@@ -2,31 +2,18 @@ package australfi.ingsis7.utils
 
 data class Position(val start: Int, val end: Int)
 
-sealed class Token(open val position: Position)
-data class LET(override val position: Position) : Token(position)
-data class PRINTLN(override val position: Position) : Token(position)
-data class COLON(override val position: Position) : Token(position)
-data class SEMICOLON(override val position: Position) : Token(position)
-data class BINARYOPERATION(val kind: String, override val position: Position) : Token(position)
-data class ASSIGN(override val position: Position) : Token(position)
-data class CPAREN(override val position: Position) : Token(position)
-data class OPAREN(override val position: Position) : Token(position)
-data class CBRACE(override val position: Position) : Token(position)
-data class OBRACE(override val position: Position) : Token(position)
-data class COMMA(override val position: Position) : Token(position)
-data class CBRACKET(override val position: Position) : Token(position)
-data class OBRACKET(override val position: Position) : Token(position)
-data class PROGRAM(override val position: Position) : Token(position)
-data class TYPE(override val position: Position) : Token(position)
-data class ID(val name: String, override val position: Position) : Token(position)
-data class NUMBER(val value: Number, override val position: Position) : Token(position)
-data class STRING(val value: String, override val position: Position) : Token(position)
+data class Token(val type: String, val position: Position, val value: String? = null)
 enum class TokenType{
     LET,
+    CONST,
+    PLUS,
+    MUL,
+    DIV,
+    MINUS,
+    MODULE,
     PRINTLN,
     COLON,
     SEMICOLON,
-    BINARYOPERATION,
     ASSIGN,
     CPAREN,
     OPAREN,
@@ -44,11 +31,16 @@ enum class TokenType{
 
 val tokenReg = listOf(
     RegexToken("let", TokenType.LET),
+    RegexToken("const", TokenType.CONST),
     RegexToken("println", TokenType.PRINTLN),
     RegexToken(":", TokenType.COLON),
     RegexToken(";", TokenType.SEMICOLON),
     RegexToken(",", TokenType.COMMA),
-    RegexToken("[-+*/]", TokenType.BINARYOPERATION),
+    RegexToken("\\+", TokenType.PLUS),
+    RegexToken("-", TokenType.MINUS),
+    RegexToken("\\*", TokenType.MUL),
+    RegexToken("/", TokenType.DIV),
+    RegexToken("%", TokenType.MODULE),
     RegexToken("=", TokenType.ASSIGN),
     RegexToken("\\(", TokenType.OPAREN),
     RegexToken("\\)", TokenType.CPAREN),

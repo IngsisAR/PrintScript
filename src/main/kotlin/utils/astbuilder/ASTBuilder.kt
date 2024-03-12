@@ -10,7 +10,5 @@ sealed interface ASTBuilder {
 
     fun verify(): Boolean
 
-    fun isStructureValid(): Boolean
-
     fun build(): ASTNode
 }
