@@ -33,4 +33,5 @@ data class Identifier(val name:String, override val start: Int, override val end
 
 data class TypeReference(override val start: Int, override val end: Int) : ASTNode
 
-data class VariableDeclarator(val id: Identifier,val type: TypeReference, val init: Expression, override val start: Int, override val end: Int) : ASTNode
+data class VariableDeclarator(val id: Identifier,val type: TypeReference?, val init: Expression?,
+                              override val start: Int, override val end: Int) : ASTNode
