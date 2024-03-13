@@ -21,9 +21,7 @@ data class AssigmentExpression(val left: Identifier, val right: Expression, over
 data class BinaryExpression(val left: Expression, val right: Expression, val operator: String,
                             override val start: Int, override val end: Int) : Expression
 
-data class CallExpression (val callee: Identifier, val arguments: SequenceExpression, override val start: Int, override val end: Int) : Expression
-
-data class SequenceExpression(val expressions: List<Expression>, override val start: Int, override val end: Int) : Expression
+data class CallExpression (val callee: Identifier, val arguments: List<Expression>, override val start: Int, override val end: Int) : Expression
 
 data class NumberLiteral(val value:Number, override val start: Int, override val end: Int) : Expression
 
@@ -33,5 +31,5 @@ data class Identifier(val name:String, override val start: Int, override val end
 
 data class TypeReference(override val start: Int, override val end: Int) : ASTNode
 
-data class VariableDeclarator(val id: Identifier,val type: TypeReference?, val init: Expression?,
+data class VariableDeclarator(val id: Identifier,val type: String?, val init: Expression?,
                               override val start: Int, override val end: Int) : ASTNode

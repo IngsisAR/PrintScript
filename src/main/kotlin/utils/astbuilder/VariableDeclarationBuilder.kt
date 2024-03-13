@@ -1,40 +1,49 @@
 package australfi.ingsis7.utils.astbuilder
 
-import australfi.ingsis7.astbuilder.AbstractASTBuilder
-import australfi.ingsis7.utils.ASTNode
-import australfi.ingsis7.utils.Token
+import australfi.ingsis7.utils.*
 
 class VariableDeclarationBuilder(tokens:List<Token>) : AbstractASTBuilder(tokens) {
+    private lateinit var variableDeclarators:List<VariableDeclarator>
     override fun verify(): Boolean {
-        return when {
-            tokens.isEmpty() -> {
-                println("No tokens provided")
-                false
-            }
-            tokens.size < 5 -> {
-                println("Not enough members for declaration")
-                false
-            }
-            tokens.first().type != "LET" || tokens.first().type != "CONST"-> {
-                println("First token is not a variable declaration")
-                false
-            }
-            tokens[1].type != "ID" -> {
-                println("Variable declaration does not have identifier")
-                false
-            }
-            tokens[2].type != "COLON" || tokens[2].type == "COLON" && tokens[3].type != "TYPE" ->{
-                println("No type declared")
-                false
-            }
-            else -> {
-                println("Tokens are valid")
-                true
-            }
+        if (tokens.isEmpty()) {
+            println("No tokens provided")
+            return false
         }
+
+        if (tokens.first().type != "LET" || tokens.first().type != "CONST") {
+            println("First token is not a variable declaration")
+            return false
+        }
+
+        if (tokens.last().type != "SEMICOLON") {
+            println("Last token is not a semicolon")
+            return false
+        }
+
+        val commaCount = tokens.count { it.type == "COMMA" }
+        if (commaCount == 0) {
+            val variableDeclaratorBuilder = VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1))
+            if (!variableDeclaratorBuilder.verify()) {
+                return false
+            }
+            variableDeclarators+= variableDeclaratorBuilder.build()
+            return true
+        }
+        var tokensAux = tokens.subList(1, tokens.size - 1)
+        for (i in 0 until commaCount) {
+            val commaIndex = tokens.indexOfFirst { it.type == "COMMA" }
+            val variableDeclaratorBuilder = VariableDeclaratorBuilder(tokens.subList(0, commaIndex))
+            if (!variableDeclaratorBuilder.verify()) {
+                return false
+            }
+            variableDeclarators+= variableDeclaratorBuilder.build()
+            tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
+        }
+
+        return true
     }
 
-    override fun build(): ASTNode {
+    override fun build(): VariableDeclaration {
         TODO("Not yet implemented")
     }
 }
