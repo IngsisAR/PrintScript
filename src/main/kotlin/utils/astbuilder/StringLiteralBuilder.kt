@@ -1,6 +1,5 @@
 package australfi.ingsis7.utils.astbuilder
 
-import australfi.ingsis7.utils.ASTNode
 import australfi.ingsis7.utils.StringLiteral
 import australfi.ingsis7.utils.Token
 
@@ -9,8 +8,11 @@ class StringLiteralBuilder(tokens:List<Token>):AbstractASTBuilder(tokens){
         return tokens.size == 1 && tokens[0].type == "STRING"
     }
 
-    override fun build(): StringLiteral {
-        return StringLiteral(tokens[0].value!!, tokens[0].position.start, tokens[0].position.end)
+    override fun verifyAndBuild(): StringLiteral? {
+        return if (verify())
+            StringLiteral(tokens[0].value!!, tokens[0].position.start,
+                tokens[0].position.end)
+        else null
     }
 
 }

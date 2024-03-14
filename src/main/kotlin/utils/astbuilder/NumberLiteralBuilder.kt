@@ -8,8 +8,10 @@ class NumberLiteralBuilder(tokens: List<Token>):AbstractASTBuilder(tokens) {
         return tokens.size==1 && tokens[0].type == "NUMBER"
     }
 
-    override fun build(): NumberLiteral {
-        return NumberLiteral(tokens[0].value!!.toBigDecimal(),
+    override fun verifyAndBuild(): NumberLiteral? {
+        return if (verify())
+            NumberLiteral(tokens[0].value!!.toBigDecimal(),
             tokens[0].position.start, tokens[0].position.end)
+        else null
     }
 }

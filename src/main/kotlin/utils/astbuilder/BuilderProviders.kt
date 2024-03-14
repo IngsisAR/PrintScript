@@ -1,8 +1,10 @@
 package australfi.ingsis7.utils.astbuilder
 
+import australfi.ingsis7.utils.Expression
+import australfi.ingsis7.utils.Statement
 import australfi.ingsis7.utils.Token
 
-class AssignableExpressionBuilderProvider(tokens:List<Token>) {
+class AssignableExpressionProvider(tokens:List<Token>) {
     private val assignableExpressionBuilders: List<AbstractASTBuilder> = listOf(
         CallExpressionBuilder(tokens),
         BinaryExpressionBuilder(tokens),
@@ -11,12 +13,18 @@ class AssignableExpressionBuilderProvider(tokens:List<Token>) {
         IdentifierBuilder(tokens)
     )
 
-    fun getAssignableExpressionBuilder(): AbstractASTBuilder? {
-        return assignableExpressionBuilders.firstOrNull { it.build()!=null }
+    fun getAssignableExpressionOrNull(): Expression? {
+        for (expressionBuilder in assignableExpressionBuilders) {
+            val expression = expressionBuilder.verifyAndBuild()
+            if (expression != null) {
+                return expression as Expression
+            }
+        }
+        return null
     }
 }
 
-class ExpressionBuilderProvider(tokens:List<Token>) {
+class ExpressionProvider(tokens:List<Token>) {
     private val expressionBuilders: List<AbstractASTBuilder> = listOf(
         AssigmentExpressionBuilder(tokens),
         CallExpressionBuilder(tokens),
@@ -26,7 +34,30 @@ class ExpressionBuilderProvider(tokens:List<Token>) {
         IdentifierBuilder(tokens)
     )
 
-    fun getExpressionBuilder(): AbstractASTBuilder? {
-        return expressionBuilders.firstOrNull { it.build()!=null }
+    fun getVerifiedExpressionOrNull(): Expression? {
+        for (expressionBuilder in expressionBuilders) {
+            val expression = expressionBuilder.verifyAndBuild()
+            if (expression != null) {
+                return expression as Expression
+            }
+        }
+        return null
+    }
+}
+
+class StatementProvider(tokens:List<Token>) {
+    private val statementBuilders: List<AbstractASTBuilder> = listOf(
+        ExpressionStatementBuilder(tokens),
+        VariableDeclarationBuilder(tokens)
+    )
+
+    fun getVerifiedStatementOrNull(): Statement? {
+        for (statementBuilder in statementBuilders) {
+            val statement = statementBuilder.verifyAndBuild()
+            if (statement != null) {
+                return statement as Statement
+            }
+        }
+        return null
     }
 }
