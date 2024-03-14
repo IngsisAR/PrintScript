@@ -3,7 +3,7 @@ package australfi.ingsis7.utils
 data class Position(val start: Int, val end: Int)
 
 data class Token(val type: String, val position: Position, val value: String? = null)
-enum class TokenType{
+enum class TokenType {
     LET,
     CONST,
     PLUS,
@@ -11,7 +11,6 @@ enum class TokenType{
     DIV,
     MINUS,
     MODULE,
-    PRINTLN,
     COLON,
     SEMICOLON,
     ASSIGN,
@@ -32,7 +31,6 @@ enum class TokenType{
 val tokenReg = listOf(
     RegexToken("let", TokenType.LET),
     RegexToken("const", TokenType.CONST),
-    RegexToken("println", TokenType.PRINTLN),
     RegexToken(":", TokenType.COLON),
     RegexToken(";", TokenType.SEMICOLON),
     RegexToken(",", TokenType.COMMA),

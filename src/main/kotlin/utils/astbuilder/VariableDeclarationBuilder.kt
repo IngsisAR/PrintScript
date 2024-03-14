@@ -22,28 +22,28 @@ class VariableDeclarationBuilder(tokens:List<Token>) : AbstractASTBuilder(tokens
 
         val commaCount = tokens.count { it.type == "COMMA" }
         if (commaCount == 0) {
-            val variableDeclaratorBuilder = VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1))
-            if (!variableDeclaratorBuilder.verify()) {
-                return false
-            }
-            variableDeclarators+= variableDeclaratorBuilder.build()
+            val variableDeclarator = VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1))
+                .build() ?: return false
+            variableDeclarators+= variableDeclarator
             return true
         }
         var tokensAux = tokens.subList(1, tokens.size - 1)
         for (i in 0 until commaCount) {
-            val commaIndex = tokens.indexOfFirst { it.type == "COMMA" }
-            val variableDeclaratorBuilder = VariableDeclaratorBuilder(tokens.subList(0, commaIndex))
-            if (!variableDeclaratorBuilder.verify()) {
-                return false
-            }
-            variableDeclarators+= variableDeclaratorBuilder.build()
+            val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
+            val variableDeclarator = VariableDeclaratorBuilder(tokens.subList(0, commaIndex))
+                .build()?: return false
+            variableDeclarators+= variableDeclarator
             tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
         }
-
         return true
     }
 
     override fun build(): VariableDeclaration {
-        TODO("Not yet implemented")
+        return VariableDeclaration(
+            kind = tokens.first().type,
+            declarations = variableDeclarators,
+            start = tokens.first().position.start,
+            end = tokens.last().position.end
+        )
     }
 }
