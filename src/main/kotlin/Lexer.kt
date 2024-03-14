@@ -1,5 +1,8 @@
 package australfi.ingsis7
-import australfi.ingsis7.utils.*
+import australfi.ingsis7.utils.Position
+import australfi.ingsis7.utils.RegexToken
+import australfi.ingsis7.utils.Token
+import australfi.ingsis7.utils.tokenReg
 
 class Lexer (private val input: String) {
     private var currentPosition = 0
@@ -45,7 +48,6 @@ class Lexer (private val input: String) {
         val startPosition = currentPosition
         val endPosition = currentPosition + matchedValue.length
         val position = Position(startPosition, endPosition)
-        if (matchedValue == tokenType.regex.replace("\\","")) return Token(tokenType.token.toString(), position)
         return Token(tokenType.token.toString(), position, matchedValue)
     }
 }

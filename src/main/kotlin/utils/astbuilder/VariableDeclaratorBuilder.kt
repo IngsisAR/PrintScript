@@ -16,7 +16,8 @@ class VariableDeclaratorBuilder(tokens:List<Token>) : AbstractASTBuilder(tokens)
                 println("No identifier declared for variable declarator")
                 false
             }
-            tokens[1].type != "COLON" || tokens[1].type == "COLON" && TypeReferenceBuilder(tokens.subList(2,3)).verifyAndBuild()!=null -> {
+            tokens[1].type != "COLON" || tokens[1].type == "COLON" &&
+                    TypeReferenceBuilder(tokens.subList(2,3)).verifyAndBuild()==null -> {
                 println("No type declared")
                 false
             }
