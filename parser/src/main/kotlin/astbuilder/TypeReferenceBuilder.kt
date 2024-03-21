@@ -8,7 +8,7 @@ class TypeReferenceBuilder(
 ) : AbstractASTBuilder(tokens) {
     override fun verify(): Boolean = tokens.size == 1 && tokens.first().type == "TYPE"
 
-    override fun verifyAndBuild(): TypeReference? =
+    override fun verifyAndBuild(): TypeReference =
         if (verify()) {
             TypeReference(
                 type = tokens.first().value,
@@ -16,6 +16,6 @@ class TypeReferenceBuilder(
                 end = tokens.first().position.end,
             )
         } else {
-            null
+            throw IllegalArgumentException("This is not a valid type")
         }
 }

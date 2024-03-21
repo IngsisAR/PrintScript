@@ -6,7 +6,7 @@ data class Position(
 data class Token(
     val type: String,
     val position: Position,
-    val value: String? = null,
+    val value: String,
 )
 
 enum class TokenType {

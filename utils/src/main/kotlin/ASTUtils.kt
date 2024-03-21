@@ -68,14 +68,14 @@ data class Identifier(
 ) : Expression
 
 data class TypeReference(
-    val type: String?,
+    val type: String,
     override val start: Int,
     override val end: Int,
 ) : ASTNode
 
 data class VariableDeclarator(
     val id: Identifier,
-    val type: TypeReference?,
+    val type: TypeReference,
     val init: Expression?,
     override val start: Int,
     override val end: Int,
