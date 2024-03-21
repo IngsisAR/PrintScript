@@ -1,6 +1,6 @@
 fun main() {
     val input = """
-        let c: number = a + 2 * 3 % 5 / 21;
+        let a: number = 5;
     """.trimIndent()
 
     val lexer = Lexer(input)
@@ -8,5 +8,7 @@ fun main() {
     tokens.forEach { print(it) }
     val parser = Parser()
     val ast = parser.parse(tokens)
+    val interpreter = Interpreter()
+    if (ast != null) interpreter.interpret(ast)
     println(ast)
 }

@@ -10,7 +10,7 @@ class Interpreter {
             is StringLiteral -> node.value
             is Program -> TODO()
             is ExpressionStatement -> TODO()
-            is VariableDeclaration -> TODO()
+            is VariableDeclaration -> node.declarations.forEach{ declaration -> interpret(declaration)}
             is TypeReference -> node.type
             is VariableDeclarator -> VariableDeclaratorInterpreter(variableMap).interpret(node)
         }
