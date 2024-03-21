@@ -12,6 +12,7 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     api(project(":utils"))
+    implementation(kotlin("script-runtime"))
 }
 
 tasks.test {
