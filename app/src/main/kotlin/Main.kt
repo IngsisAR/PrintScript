@@ -10,6 +10,5 @@ fun main() {
     val parser = Parser()
     val ast = parser.parse(tokens)
     val interpreterImpl = InterpreterImpl()
-    if (ast != null) interpreterImpl.interpret(ast)
     println(ast)
 }
