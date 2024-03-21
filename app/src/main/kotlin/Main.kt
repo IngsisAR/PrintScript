@@ -8,7 +8,7 @@ fun main() {
     tokens.forEach { print(it) }
     val parser = Parser()
     val ast = parser.parse(tokens)
-    val interpreter = Interpreter()
-    if (ast != null) interpreter.interpret(ast)
+    val interpreterImpl = InterpreterImpl()
+    if (ast != null) interpreterImpl.interpret(ast)
     println(ast)
 }
