@@ -1,7 +1,8 @@
 class Interpreter {
     private val variableMap: Map<String, VariableInfo> = mapOf()
-    fun interpret(node: ASTNode){
-        when(node){
+
+    fun interpret(node: ASTNode) {
+        when (node) {
             is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(node)
             is AssigmentExpression -> TODO()
             is CallExpression -> TODO()
@@ -10,7 +11,7 @@ class Interpreter {
             is StringLiteral -> node.value
             is Program -> TODO()
             is ExpressionStatement -> TODO()
-            is VariableDeclaration -> node.declarations.forEach{ declaration -> interpret(declaration)}
+            is VariableDeclaration -> node.declarations.forEach { declaration -> interpret(declaration) }
             is TypeReference -> node.type
             is VariableDeclarator -> VariableDeclaratorInterpreter(variableMap).interpret(node)
         }

@@ -4,9 +4,11 @@ import Expression
 import ExpressionStatement
 import Token
 
-
-class ExpressionStatementBuilder(tokens:List<Token>): AbstractASTBuilder(tokens) {
+class ExpressionStatementBuilder(
+    tokens: List<Token>,
+) : AbstractASTBuilder(tokens) {
     private var expression: Expression? = null
+
     override fun verify(): Boolean {
         if (tokens.isEmpty()) {
             println("No tokens provided")
@@ -16,8 +18,8 @@ class ExpressionStatementBuilder(tokens:List<Token>): AbstractASTBuilder(tokens)
             println("Last token is not a semicolon")
             return false
         }
-        expression = ExpressionProvider(tokens.subList(0,tokens.size-1)).getVerifiedExpressionOrNull()
-        return if (expression != null){
+        expression = ExpressionProvider(tokens.subList(0, tokens.size - 1)).getVerifiedExpressionOrNull()
+        return if (expression != null) {
             println("Expression Statement verified")
             true
         } else {
@@ -26,11 +28,14 @@ class ExpressionStatementBuilder(tokens:List<Token>): AbstractASTBuilder(tokens)
         }
     }
 
-    override fun verifyAndBuild(): ExpressionStatement? {
-        return if (verify()) ExpressionStatement(
-            expression!!,
-            tokens.first().position.start,
-            tokens.last().position.end
-        ) else null
-    }
+    override fun verifyAndBuild(): ExpressionStatement? =
+        if (verify()) {
+            ExpressionStatement(
+                expression!!,
+                tokens.first().position.start,
+                tokens.last().position.end,
+            )
+        } else {
+            null
+        }
 }

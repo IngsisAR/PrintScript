@@ -1,7 +1,8 @@
 fun main() {
-    val input = """
+    val input =
+        """
         let a: number = 5;
-    """.trimIndent()
+        """.trimIndent()
 
     val lexer = Lexer(input)
     val tokens = lexer.tokenize()

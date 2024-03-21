@@ -1,42 +1,58 @@
 
-class BinaryExpressionInterpreter(val variableMap:Map<String, VariableInfo>) : InterpreterInterface {
-    override fun interpret(node: ASTNode) : Any{
+
+class BinaryExpressionInterpreter(
+    val variableMap: Map<String, VariableInfo>,
+) : InterpreterInterface {
+    override fun interpret(node: ASTNode): Any {
         node as BinaryExpression
-        val leftValue = when(val left = node.left){
-            is NumberLiteral -> left.value
-            is StringLiteral -> left.value
-            is BinaryExpression -> interpret(left)
-            else -> TODO()
-        }
-        val rightValue = when(val right = node.right){
-            is NumberLiteral -> right.value
-            is StringLiteral -> right.value
-            is BinaryExpression -> interpret(right)
-            else -> TODO()
-        }
+        val leftValue =
+            when (val left = node.left) {
+                is NumberLiteral -> left.value
+                is StringLiteral -> left.value
+                is BinaryExpression -> interpret(left)
+                else -> TODO()
+            }
+        val rightValue =
+            when (val right = node.right) {
+                is NumberLiteral -> right.value
+                is StringLiteral -> right.value
+                is BinaryExpression -> interpret(right)
+                else -> TODO()
+            }
         return handleOperation(leftValue, rightValue, node.operator)
     }
 
-    private fun handleOperation(leftValue: Any, rightValue: Any, operator: String): Any {
-        return when (operator) {
-            "+" -> when {
-                leftValue is String && rightValue is String -> leftValue + rightValue
-                leftValue is Number && rightValue is Number -> leftValue.toDouble() + rightValue.toDouble()
-                else -> throw IllegalArgumentException("Invalid operands for '+': $leftValue, $rightValue")
-            }
-            "-" -> when {
-                leftValue is Number && rightValue is Number -> leftValue.toDouble() - rightValue.toDouble()
-                else -> throw IllegalArgumentException("Invalid operands for '-': $leftValue, $rightValue")
-            }
-            "*" -> when {
-                leftValue is Number && rightValue is Number -> leftValue.toDouble() * rightValue.toDouble()
-                else -> throw IllegalArgumentException("Invalid operands for '*': $leftValue, $rightValue")
-            }
-            "/" -> when {
-                leftValue is Number && rightValue is Number -> leftValue.toDouble() / rightValue.toDouble()
-                else -> throw IllegalArgumentException("Invalid operands for '/': $leftValue, $rightValue")
-            }
+    private fun handleOperation(
+        leftValue: Any,
+        rightValue: Any,
+        operator: String,
+    ): Any =
+        when (operator) {
+            "+" ->
+                when {
+                    leftValue is String && rightValue is String -> leftValue + rightValue
+                    leftValue is Number && rightValue is Number -> leftValue.toDouble() + rightValue.toDouble()
+                    else -> throw IllegalArgumentException("Invalid operands for '+': $leftValue, $rightValue")
+                }
+
+            "-" ->
+                when {
+                    leftValue is Number && rightValue is Number -> leftValue.toDouble() - rightValue.toDouble()
+                    else -> throw IllegalArgumentException("Invalid operands for '-': $leftValue, $rightValue")
+                }
+
+            "*" ->
+                when {
+                    leftValue is Number && rightValue is Number -> leftValue.toDouble() * rightValue.toDouble()
+                    else -> throw IllegalArgumentException("Invalid operands for '*': $leftValue, $rightValue")
+                }
+
+            "/" ->
+                when {
+                    leftValue is Number && rightValue is Number -> leftValue.toDouble() / rightValue.toDouble()
+                    else -> throw IllegalArgumentException("Invalid operands for '/': $leftValue, $rightValue")
+                }
+
             else -> throw IllegalArgumentException("Invalid operator: $operator")
         }
-    }
 }

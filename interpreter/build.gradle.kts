@@ -12,12 +12,11 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     api(project(":utils"))
-    implementation(kotlin("script-runtime"))
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(21)
 }

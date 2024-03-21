@@ -1,4 +1,3 @@
 package astbuilder
 
-class ProgramBuilder {
-}
+class ProgramBuilder

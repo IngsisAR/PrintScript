@@ -1,3 +1,3 @@
 sealed interface InterpreterInterface {
-    fun interpret(node: ASTNode) : Any
+    fun interpret(node: ASTNode): Any
 }

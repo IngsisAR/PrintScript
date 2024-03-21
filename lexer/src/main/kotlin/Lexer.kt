@@ -1,12 +1,15 @@
 
-class Lexer (private val input: String) {
+
+class Lexer(
+    private val input: String,
+) {
     private var currentPosition = 0
 
-    fun tokenize() : List<Token> {
+    fun tokenize(): List<Token> {
         val tokens = mutableListOf<Token>()
-        while(hasNext()){
+        while (hasNext()) {
             val token = getNextToken()
-            if(token != null){
+            if (token != null) {
                 tokens.add(token)
             }
         }
@@ -38,8 +41,10 @@ class Lexer (private val input: String) {
         error("Unexpected character at position $currentPosition: ${remainingInput[0]}")
     }
 
-
-    private fun createToken(matchedValue: String, tokenType: RegexToken): Token {
+    private fun createToken(
+        matchedValue: String,
+        tokenType: RegexToken,
+    ): Token {
         val startPosition = currentPosition
         val endPosition = currentPosition + matchedValue.length
         val position = Position(startPosition, endPosition)
