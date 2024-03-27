@@ -2,73 +2,77 @@ package astbuilder
 
 import CallExpression
 import Expression
+import Identifier
 import Token
 
 class CallExpressionBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
     private var arguments: List<Expression> = emptyList()
+    private var identifierResult: ASTBuilderResult = ASTBuilderFailure("")
 
-    override fun verify(): Boolean {
-        when {
-            tokens.size < 3 -> {
-                println("Not enough members for call expression")
-                return false
-            }
+    override fun verify(): ASTBuilderResult {
+        if (tokens.size < 3) {
+            return ASTBuilderFailure("Not enough members for call expression")
+        }
 
-            IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild() == null -> {
-                println("Call expression does not have identifier")
-                return false
-            }
+        identifierResult = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()
+        if (identifierResult is ASTBuilderFailure) {
+            return ASTBuilderFailure("Call expression does not have a valid identifier")
+        }
 
-            tokens[1].type != "OPAREN" -> {
-                println("Call expression does not have left parenthesis")
-                return false
-            }
+        if (tokens[1].type != "OPAREN") {
+            return ASTBuilderFailure("Call expression does not have open parenthesis")
+        }
 
-            tokens.last().type != "CPAREN" -> {
-                println("Call expression does not have right parenthesis")
-                return false
-            }
+        if (tokens.last().type != "CPAREN") {
+            return ASTBuilderFailure("Call expression does not have close parenthesis")
+        }
 
-            tokens.size > 3 -> {
-                val commaCount = tokens.count { it.type == "COMMA" }
-                if (commaCount == 0) {
-                    val expression =
-                        ExpressionProvider(tokens.subList(2, tokens.size - 1))
-                            .getVerifiedExpressionOrNull() ?: return false
-                    arguments = listOf(expression)
-                    return true
-                } else {
-                    var tokensAux = tokens.subList(2, tokens.size - 1)
-                    for (i in 0 until commaCount) {
-                        val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
-                        val expression =
-                            AssignableExpressionProvider(tokens.subList(0, commaIndex))
-                                .getAssignableExpressionOrNull() ?: return false
-                        arguments += expression
-                        tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
-                    }
+        if (tokens.size > 3) {
+            val commaCount = tokens.count { it.type == "COMMA" }
+            if (commaCount == 0) {
+                val expressionResult =
+                    ExpressionProvider(tokens.subList(2, tokens.size - 1))
+                        .getVerifiedExpressionResult()
+                if (expressionResult is ASTBuilderFailure) {
+                    return ASTBuilderFailure("Call expression does not have valid arguments: ${expressionResult.errorMessage}")
                 }
-                return true
+                arguments = listOf((expressionResult as ASTBuilderSuccess).astNode as Expression)
+                return expressionResult
+            } else {
+                var tokensAux = tokens.subList(2, tokens.size - 1)
+                for (i in 0 until commaCount) {
+                    val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
+                    val expressionResult =
+                        AssignableExpressionProvider(tokensAux.subList(0, commaIndex))
+                            .getAssignableExpressionResult()
+                    if (expressionResult is ASTBuilderFailure) {
+                        return ASTBuilderFailure("Call expression does not have valid arguments")
+                    }
+                    arguments += (expressionResult as ASTBuilderSuccess).astNode as Expression
+                    tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
+                }
             }
-
-            else -> {
-                println("Call expression is valid")
-                return true
-            }
+            return identifierResult
+        } else {
+            return identifierResult
         }
     }
 
-    override fun verifyAndBuild(): CallExpression? =
-        if (verify()) {
-            CallExpression(
-                callee = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()!!,
-                arguments = arguments,
-                start = tokens.first().position.start,
-                end = tokens.last().position.end,
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            ASTBuilderSuccess(
+                CallExpression(
+                    callee = (identifierResult as ASTBuilderSuccess).astNode as Identifier,
+                    arguments = arguments,
+                    start = tokens.first().position.start,
+                    end = tokens.last().position.end,
+                ),
             )
         } else {
-            null
+            result
         }
+    }
 }

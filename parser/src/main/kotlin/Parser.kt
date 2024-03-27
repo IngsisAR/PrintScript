@@ -1,8 +1,9 @@
+import astbuilder.ASTBuilderResult
 import astbuilder.StatementProvider
 
 class Parser {
-    fun parse(tokens: List<Token>): ASTNode? {
+    fun parse(tokens: List<Token>): ASTBuilderResult {
         val statementProvider = StatementProvider(tokens)
-        return statementProvider.getVerifiedStatementOrNull()
+        return statementProvider.getVerifiedStatementResult()
     }
 }

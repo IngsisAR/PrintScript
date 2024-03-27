@@ -12,7 +12,11 @@ repositories {
 }
 
 dependencies {
-    ktlint("com.pinterest.ktlint:ktlint-cli:1.2.1")
+    ktlint("com.pinterest.ktlint:ktlint-cli:1.2.1") {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
@@ -31,7 +35,7 @@ val ktlintCheck by tasks.registering(JavaExec::class) {
 
 val ktlintFormat by tasks.registering(JavaExec::class) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = "Check Kotlin code style and format"
+    description = "Format Kotlin code style and format"
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
@@ -44,12 +48,9 @@ val ktlintFormat by tasks.registering(JavaExec::class) {
 }
 
 tasks.check {
-    dependsOn(ktlintFormat)
+    dependsOn(ktlintCheck)
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
 kotlin {
     jvmToolchain(20)
 }

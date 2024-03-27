@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    jacoco
 }
 
 group = "australfi.ingsis7"
@@ -11,7 +12,9 @@ repositories {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
 kotlin {
     jvmToolchain(20)
 }

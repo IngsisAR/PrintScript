@@ -6,12 +6,25 @@ import Token
 class IdentifierBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
-    override fun verify(): Boolean = tokens.size == 1 && tokens.first().type == "ID"
-
-    override fun verifyAndBuild(): Identifier? =
-        if (verify()) {
-            Identifier(tokens.first().value!!, tokens.first().position.start, tokens.first().position.end)
+    override fun verify(): ASTBuilderResult =
+        if (tokens.size == 1 && tokens.first().type == "ID") {
+            ASTBuilderSuccess(
+                Identifier(
+                    tokens.first().value,
+                    tokens.first().position.start,
+                    tokens.first().position.end,
+                ),
+            )
         } else {
-            null
+            ASTBuilderFailure("Invalid identifier")
         }
+
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            result
+        } else {
+            result
+        }
+    }
 }

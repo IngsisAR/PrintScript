@@ -1,5 +1,3 @@
-
-
 class Lexer(
     private val input: String,
 ) {
@@ -18,6 +16,7 @@ class Lexer(
 
     private fun hasNext() = currentPosition < input.length
 
+    @Throws(IllegalStateException::class)
     private fun getNextToken(): Token? {
         val remainingInput = input.substring(currentPosition)
 

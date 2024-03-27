@@ -1,67 +1,75 @@
 package astbuilder
 
 import Expression
+import Identifier
 import Token
+import TypeReference
 import VariableDeclarator
 
 class VariableDeclaratorBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
     private var assignableExpression: Expression? = null
+    private lateinit var identifier: Identifier
+    private lateinit var typeReference: TypeReference
 
-    override fun verify(): Boolean =
-        when {
-            tokens.size < 3 -> {
-                println("Not enough members for declaration")
-                false
-            }
-
-            IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild() == null -> {
-                println("No identifier declared for variable declarator")
-                false
-            }
-
-            tokens[1].type != "COLON" ||
-                tokens[1].type == "COLON" &&
-                TypeReferenceBuilder(tokens.subList(2, 3)).verifyAndBuild() == null -> {
-                println("No type declared")
-                false
-            }
-
-            tokens.size > 4 -> {
-                if (tokens[3].type == "ASSIGN") {
-                    val assignableExpressionProvider =
-                        AssignableExpressionProvider(tokens.subList(4, tokens.size))
-                    assignableExpression = assignableExpressionProvider.getAssignableExpressionOrNull()
-                    if (assignableExpression != null) {
-                        println("Variable declarator is valid")
-                        true
-                    } else {
-                        println("Invalid assignable expression")
-                        false
-                    }
-                } else {
-                    println("Variable declarator needs a valid assignation")
-                    false
-                }
-            }
-
-            else -> {
-                println("Variable declarator is valid")
-                true
-            }
+    override fun verify(): ASTBuilderResult {
+        if (tokens.size < 3) {
+            return ASTBuilderFailure("Not enough tokens for a variable declarator")
         }
 
-    override fun verifyAndBuild(): VariableDeclarator? =
-        if (verify()) {
-            VariableDeclarator(
-                id = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()!!,
-                type = TypeReferenceBuilder(tokens.subList(2, 3)).verifyAndBuild(),
-                init = assignableExpression,
-                start = tokens.first().position.start,
-                end = tokens.last().position.end,
+        val idBuilderResult = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()
+        if (idBuilderResult is ASTBuilderFailure) {
+            return ASTBuilderFailure("Invalid declarator: ${(idBuilderResult).errorMessage}")
+        } else {
+            identifier = (idBuilderResult as ASTBuilderSuccess).astNode as Identifier
+        }
+
+        if (tokens[1].type != "COLON") {
+            return ASTBuilderFailure("Invalid declarator: Missing colon")
+        }
+
+        val typeBuilderResult = TypeReferenceBuilder(tokens.subList(2, 3)).verifyAndBuild()
+        if (tokens[1].type == "COLON" &&
+            typeBuilderResult is ASTBuilderFailure
+        ) {
+            return ASTBuilderFailure("Invalid declarator: ${typeBuilderResult.errorMessage}")
+        } else if (typeBuilderResult is ASTBuilderSuccess) {
+            typeReference = typeBuilderResult.astNode as TypeReference
+        }
+
+        if (tokens.size > 4) {
+            return if (tokens[3].type == "ASSIGN") {
+                val assignableExpressionResult =
+                    AssignableExpressionProvider(
+                        tokens.subList(4, tokens.size),
+                    ).getAssignableExpressionResult()
+                if (assignableExpressionResult is ASTBuilderFailure) {
+                    ASTBuilderFailure("Invalid declarator: ${assignableExpressionResult.errorMessage}")
+                } else {
+                    assignableExpressionResult
+                }
+            } else {
+                ASTBuilderFailure("Invalid declarator: Missing assignment operator")
+            }
+        }
+        return idBuilderResult
+    }
+
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            ASTBuilderSuccess(
+                VariableDeclarator(
+                    id = identifier,
+                    type = typeReference,
+                    init = assignableExpression,
+                    start = tokens.first().position.start,
+                    end = tokens.last().position.end,
+                ),
             )
         } else {
-            null
+            result
         }
+    }
 }

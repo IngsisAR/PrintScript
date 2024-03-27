@@ -11,11 +11,10 @@ class BinaryExpressionBuilder(
     private lateinit var right: Expression
     private lateinit var operator: String
 
-    override fun verify(): Boolean {
+    override fun verify(): ASTBuilderResult {
         when {
             tokens.size < 3 -> {
-                println("Not enough tokens to build BinaryExpression")
-                return false
+                return ASTBuilderFailure("Binary expression must have at least 3 tokens")
             }
 
             else -> {
@@ -35,38 +34,47 @@ class BinaryExpressionBuilder(
                         return verifyAndBuildLeftAndRight(mulDivModIndex)
                     }
                 } else {
-                    println("No operator found")
-                    return false
+                    return ASTBuilderFailure("No operator found in binary expression")
                 }
             }
         }
     }
 
-    private fun verifyAndBuildLeftAndRight(operatorIndex: Int): Boolean {
+    private fun verifyAndBuildLeftAndRight(operatorIndex: Int): ASTBuilderResult {
         val leftTokens = tokens.subList(0, operatorIndex)
         val rightTokens = tokens.subList(operatorIndex + 1, tokens.size)
-        val expression =
+        val leftExpressionResult =
             ExpressionProvider(leftTokens)
-                .getVerifiedExpressionOrNull() ?: return false
-        left = expression
-        val expression2 =
+                .getVerifiedExpressionResult()
+        if (leftExpressionResult is ASTBuilderFailure) {
+            return ASTBuilderFailure("Left expression of binary expression is invalid: ${leftExpressionResult.errorMessage}")
+        }
+        left = (leftExpressionResult as ASTBuilderSuccess).astNode as Expression
+        val rightExpressionResult =
             ExpressionProvider(rightTokens)
-                .getVerifiedExpressionOrNull() ?: return false
-        right = expression2
-        operator = tokens[operatorIndex].value!!
-        return true
+                .getVerifiedExpressionResult()
+        if (rightExpressionResult is ASTBuilderFailure) {
+            return ASTBuilderFailure("Right expression of binary expression is invalid: ${rightExpressionResult.errorMessage}")
+        }
+        right = (rightExpressionResult as ASTBuilderSuccess).astNode as Expression
+        operator = tokens[operatorIndex].value
+        return leftExpressionResult
     }
 
-    override fun verifyAndBuild(): BinaryExpression? =
-        if (verify()) {
-            BinaryExpression(
-                left = left,
-                right = right,
-                operator = operator,
-                start = tokens.first().position.start,
-                end = tokens.last().position.end,
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            ASTBuilderSuccess(
+                BinaryExpression(
+                    left = left,
+                    right = right,
+                    operator = operator,
+                    start = tokens.first().position.start,
+                    end = tokens.last().position.end,
+                ),
             )
         } else {
-            null
+            result
         }
+    }
 }

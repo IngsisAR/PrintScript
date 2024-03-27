@@ -7,35 +7,33 @@ import Token
 class ExpressionStatementBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
-    private var expression: Expression? = null
-
-    override fun verify(): Boolean {
+    override fun verify(): ASTBuilderResult {
         if (tokens.isEmpty()) {
-            println("No tokens provided")
-            return false
+            return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            println("Last token is not a semicolon")
-            return false
+            return ASTBuilderFailure("Missing semicolon at expression statement")
         }
-        expression = ExpressionProvider(tokens.subList(0, tokens.size - 1)).getVerifiedExpressionOrNull()
-        return if (expression != null) {
-            println("Expression Statement verified")
-            true
+        val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1)).getVerifiedExpressionResult()
+        return if (expressionResult is ASTBuilderFailure) {
+            ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
         } else {
-            println("Expression is not valid")
-            false
+            expressionResult
         }
     }
 
-    override fun verifyAndBuild(): ExpressionStatement? =
-        if (verify()) {
-            ExpressionStatement(
-                expression!!,
-                tokens.first().position.start,
-                tokens.last().position.end,
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            ASTBuilderSuccess(
+                ExpressionStatement(
+                    result.astNode as Expression,
+                    tokens.first().position.start,
+                    tokens.last().position.end,
+                ),
             )
         } else {
-            null
+            result
         }
+    }
 }

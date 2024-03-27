@@ -6,16 +6,30 @@ import TypeReference
 class TypeReferenceBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
-    override fun verify(): Boolean = tokens.size == 1 && tokens.first().type == "TYPE"
+    override fun verify(): ASTBuilderResult =
+        tokens
+            .firstOrNull()
+            ?.let {
+                if (it.type == "TYPE") {
+                    ASTBuilderSuccess(
+                        TypeReference(
+                            type = tokens.first().value,
+                            start = tokens.first().position.start,
+                            end = tokens.first().position.end,
+                        ),
+                    )
+                } else {
+                    ASTBuilderFailure("Invalid type")
+                }
+            }
+            ?: ASTBuilderFailure("Invalid type")
 
-    override fun verifyAndBuild(): TypeReference =
-        if (verify()) {
-            TypeReference(
-                type = tokens.first().value,
-                start = tokens.first().position.start,
-                end = tokens.first().position.end,
-            )
+    override fun verifyAndBuild(): ASTBuilderResult {
+        val result = verify()
+        return if (result is ASTBuilderSuccess) {
+            result
         } else {
-            throw IllegalArgumentException("This is not a valid type")
+            result
         }
+    }
 }

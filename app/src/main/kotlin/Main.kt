@@ -6,7 +6,7 @@ fun main() {
 
     val lexer = Lexer(input)
     val tokens = lexer.tokenize()
-    tokens.forEach { print(it) }
+    tokens.forEach { println(it) }
     val parser = Parser()
     val ast = parser.parse(tokens)
     val interpreterImpl = InterpreterImpl()

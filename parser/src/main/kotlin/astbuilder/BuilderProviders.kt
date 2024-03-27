@@ -16,14 +16,14 @@ class AssignableExpressionProvider(
             IdentifierBuilder(tokens),
         )
 
-    fun getAssignableExpressionOrNull(): Expression? {
+    fun getAssignableExpressionResult(): ASTBuilderResult {
         for (expressionBuilder in assignableExpressionBuilders) {
-            val expression = expressionBuilder.verifyAndBuild()
-            if (expression != null) {
-                return expression as Expression
+            val astBuilderResult = expressionBuilder.verifyAndBuild()
+            if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
+                return astBuilderResult
             }
         }
-        return null
+        return ASTBuilderFailure("No valid assignable expression found")
     }
 }
 
@@ -40,14 +40,14 @@ class ExpressionProvider(
             IdentifierBuilder(tokens),
         )
 
-    fun getVerifiedExpressionOrNull(): Expression? {
+    fun getVerifiedExpressionResult(): ASTBuilderResult {
         for (expressionBuilder in expressionBuilders) {
-            val expression = expressionBuilder.verifyAndBuild()
-            if (expression != null) {
-                return expression as Expression
+            val astBuilderResult = expressionBuilder.verifyAndBuild()
+            if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
+                return astBuilderResult
             }
         }
-        return null
+        return ASTBuilderFailure("No valid expression found")
     }
 }
 
@@ -60,13 +60,13 @@ class StatementProvider(
             VariableDeclarationBuilder(tokens),
         )
 
-    fun getVerifiedStatementOrNull(): Statement? {
+    fun getVerifiedStatementResult(): ASTBuilderResult {
         for (statementBuilder in statementBuilders) {
-            val statement = statementBuilder.verifyAndBuild()
-            if (statement != null) {
-                return statement as Statement
+            val astBuilderResult = statementBuilder.verifyAndBuild()
+            if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Statement) {
+                return astBuilderResult
             }
         }
-        return null
+        return ASTBuilderFailure("No valid statement found")
     }
 }
