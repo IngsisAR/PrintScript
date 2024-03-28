@@ -44,15 +44,15 @@ class BinaryExpressionBuilder(
         val leftTokens = tokens.subList(0, operatorIndex)
         val rightTokens = tokens.subList(operatorIndex + 1, tokens.size)
         val leftExpressionResult =
-            ExpressionProvider(leftTokens)
-                .getVerifiedExpressionResult()
+            AssignableExpressionProvider(leftTokens)
+                .getAssignableExpressionResult()
         if (leftExpressionResult is ASTBuilderFailure) {
             return ASTBuilderFailure("Left expression of binary expression is invalid: ${leftExpressionResult.errorMessage}")
         }
         left = (leftExpressionResult as ASTBuilderSuccess).astNode as Expression
         val rightExpressionResult =
-            ExpressionProvider(rightTokens)
-                .getVerifiedExpressionResult()
+            AssignableExpressionProvider(rightTokens)
+                .getAssignableExpressionResult()
         if (rightExpressionResult is ASTBuilderFailure) {
             return ASTBuilderFailure("Right expression of binary expression is invalid: ${rightExpressionResult.errorMessage}")
         }
