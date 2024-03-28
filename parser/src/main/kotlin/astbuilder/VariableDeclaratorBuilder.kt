@@ -9,7 +9,6 @@ import VariableDeclarator
 class VariableDeclaratorBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
-    private var assignableExpression: Expression? = null
     private lateinit var identifier: Identifier
     private lateinit var typeReference: TypeReference
 
@@ -63,7 +62,7 @@ class VariableDeclaratorBuilder(
                 VariableDeclarator(
                     id = identifier,
                     type = typeReference,
-                    init = assignableExpression,
+                    init = result.astNode as Expression,
                     start = tokens.first().position.start,
                     end = tokens.last().position.end,
                 ),
