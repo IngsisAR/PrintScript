@@ -47,10 +47,19 @@ val ktlintFormat by tasks.registering(JavaExec::class) {
     )
 }
 
+tasks.register("installGitHooks", Copy::class) {
+    from(file("$rootDir/hooks"))
+    into(file("$rootDir/.git/hooks"))
+    fileMode = 0b0111101101 // -rwxr-xr-x
+}
+
 tasks.check {
     dependsOn(ktlintCheck)
 }
 
+tasks.build {
+    dependsOn("installGitHooks")
+}
 kotlin {
     jvmToolchain(20)
 }
