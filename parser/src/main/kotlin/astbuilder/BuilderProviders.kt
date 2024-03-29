@@ -9,8 +9,8 @@ class AssignableExpressionProvider(
 ) {
     private val assignableExpressionBuilders: List<AbstractASTBuilder> =
         listOf(
-            CallExpressionBuilder(tokens),
             BinaryExpressionBuilder(tokens),
+            CallExpressionBuilder(tokens),
             NumberLiteralBuilder(tokens),
             StringLiteralBuilder(tokens),
             IdentifierBuilder(tokens),
@@ -33,8 +33,8 @@ class ExpressionProvider(
     private val expressionBuilders: List<AbstractASTBuilder> =
         listOf(
             AssigmentExpressionBuilder(tokens),
-            CallExpressionBuilder(tokens),
             BinaryExpressionBuilder(tokens),
+            CallExpressionBuilder(tokens),
             NumberLiteralBuilder(tokens),
             StringLiteralBuilder(tokens),
             IdentifierBuilder(tokens),
@@ -56,17 +56,21 @@ class StatementProvider(
 ) {
     private val statementBuilders: List<AbstractASTBuilder> =
         listOf(
-            ExpressionStatementBuilder(tokens),
             VariableDeclarationBuilder(tokens),
+            ExpressionStatementBuilder(tokens),
         )
 
     fun getVerifiedStatementResult(): ASTBuilderResult {
+        var errorMessages = ""
         for (statementBuilder in statementBuilders) {
             val astBuilderResult = statementBuilder.verifyAndBuild()
             if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Statement) {
                 return astBuilderResult
             }
+            if (astBuilderResult is ASTBuilderFailure) {
+                errorMessages += astBuilderResult.errorMessage + "\n"
+            }
         }
-        return ASTBuilderFailure("No valid statement found")
+        return ASTBuilderFailure("No valid statement found, errors: \n$errorMessages")
     }
 }

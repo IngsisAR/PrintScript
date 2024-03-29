@@ -14,6 +14,9 @@ class ExpressionStatementBuilder(
         if (tokens.last().type != "SEMICOLON") {
             return ASTBuilderFailure("Missing semicolon at expression statement")
         }
+        if (tokens.size == 1) {
+            return ASTBuilderFailure("No expression found")
+        }
         val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1)).getVerifiedExpressionResult()
         return if (expressionResult is ASTBuilderFailure) {
             ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
