@@ -36,4 +36,14 @@ class LexerTest {
             }
         assertEquals("Unexpected character at position 3: '", exception.message)
     }
+
+    @Test
+    fun tokenizeWithEmptyInput() {
+        val code = ""
+        val lexer = Lexer(code)
+        val tokens = lexer.tokenize()
+        assertEquals(0, tokens.size)
+    }
+
+
 }

@@ -11,6 +11,7 @@ class VariableDeclaratorBuilder(
 ) : AbstractASTBuilder(tokens) {
     private lateinit var identifier: Identifier
     private lateinit var typeReference: TypeReference
+    private var init: Expression? = null
 
     override fun verify(): ASTBuilderResult {
         if (tokens.size < 3) {
@@ -46,6 +47,7 @@ class VariableDeclaratorBuilder(
                 if (assignableExpressionResult is ASTBuilderFailure) {
                     ASTBuilderFailure("Invalid declarator: ${assignableExpressionResult.errorMessage}")
                 } else {
+                    init = (assignableExpressionResult as ASTBuilderSuccess).astNode as Expression
                     assignableExpressionResult
                 }
             } else {
@@ -62,7 +64,7 @@ class VariableDeclaratorBuilder(
                 VariableDeclarator(
                     id = identifier,
                     type = typeReference,
-                    init = result.astNode as Expression,
+                    init = init,
                     start = tokens.first().position.start,
                     end = tokens.last().position.end,
                 ),
