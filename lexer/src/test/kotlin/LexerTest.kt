@@ -44,6 +44,4 @@ class LexerTest {
         val tokens = lexer.tokenize()
         assertEquals(0, tokens.size)
     }
-
-
 }

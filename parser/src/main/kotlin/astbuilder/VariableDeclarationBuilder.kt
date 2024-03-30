@@ -35,7 +35,7 @@ class VariableDeclarationBuilder(
         }
         var tokensAux = tokens.subList(1, tokens.size - 1)
         var declaratorResult: ASTBuilderResult = ASTBuilderFailure("Invalid variable declaration")
-        for (i in 0 until  commaCount+1) {
+        for (i in 0 until commaCount + 1) {
             if (i == commaCount) {
                 val variableDeclaratorResult =
                     VariableDeclaratorBuilder(tokensAux)
