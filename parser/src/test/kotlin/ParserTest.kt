@@ -5,6 +5,8 @@ import TokenType.CPAREN
 import TokenType.DIV
 import TokenType.ID
 import TokenType.LET
+import TokenType.MINUS
+import TokenType.MODULE
 import TokenType.MUL
 import TokenType.NUMBER
 import TokenType.OPAREN
@@ -201,6 +203,281 @@ class ParserTest {
                     ),
             )
         assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parsePlusOperationInExpressionStatement() {
+        val parser = Parser()
+        val token =
+            listOf(
+                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
+                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
+                Token(type = PLUS.toString(), position = Position(start = 6, end = 7), value = "+"),
+                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            AssigmentExpression(
+                                left =
+                                    Identifier(
+                                        name = "a",
+                                        start = 0,
+                                        end = 1,
+                                    ),
+                                right =
+                                    BinaryExpression(
+                                        left = NumberLiteral(value = 5.toBigDecimal(), start = 4, end = 5),
+                                        right = NumberLiteral(value = 5.toBigDecimal(), start = 8, end = 9),
+                                        operator = "+",
+                                        start = 4,
+                                        end = 9,
+                                    ),
+                                start = 0,
+                                end = 9,
+                            ),
+                        start = 0,
+                        end = 10,
+                    ),
+            )
+
+        assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parseMinusOperationInExpressionStatement() {
+        val parser = Parser()
+        val token =
+            listOf(
+                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
+                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
+                Token(type = MINUS.toString(), position = Position(start = 6, end = 7), value = "-"),
+                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            AssigmentExpression(
+                                left =
+                                    Identifier(
+                                        name = "a",
+                                        start = 0,
+                                        end = 1,
+                                    ),
+                                right =
+                                    BinaryExpression(
+                                        left = NumberLiteral(value = 5.toBigDecimal(), start = 4, end = 5),
+                                        right = NumberLiteral(value = 5.toBigDecimal(), start = 8, end = 9),
+                                        operator = "-",
+                                        start = 4,
+                                        end = 9,
+                                    ),
+                                start = 0,
+                                end = 9,
+                            ),
+                        start = 0,
+                        end = 10,
+                    ),
+            )
+        assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parseBinaryExpressionWithAllOperatorsInStatementExpression() {
+        val parser = Parser()
+        val token =
+            listOf(
+                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
+                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "1"),
+                Token(type = PLUS.toString(), position = Position(start = 6, end = 7), value = "+"),
+                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "2"),
+                Token(type = MUL.toString(), position = Position(start = 10, end = 11), value = "*"),
+                Token(type = NUMBER.toString(), position = Position(start = 12, end = 13), value = "3"),
+                Token(type = DIV.toString(), position = Position(start = 14, end = 15), value = "/"),
+                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "4"),
+                Token(type = MINUS.toString(), position = Position(start = 17, end = 18), value = "-"),
+                Token(type = NUMBER.toString(), position = Position(start = 19, end = 20), value = "5"),
+                Token(type = MODULE.toString(), position = Position(start = 21, end = 22), value = "%"),
+                Token(type = NUMBER.toString(), position = Position(start = 23, end = 24), value = "6"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 24, end = 25), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            AssigmentExpression(
+                                left = Identifier(name = "a", start = 0, end = 1),
+                                right =
+                                    BinaryExpression(
+                                        left =
+                                            BinaryExpression(
+                                                left = NumberLiteral(value = 1.toBigDecimal(), start = 4, end = 5),
+                                                right =
+                                                    BinaryExpression(
+                                                        left =
+                                                            BinaryExpression(
+                                                                left = NumberLiteral(value = 2.toBigDecimal(), start = 8, end = 9),
+                                                                right = NumberLiteral(value = 3.toBigDecimal(), start = 12, end = 13),
+                                                                operator = "*",
+                                                                start = 8,
+                                                                end = 13,
+                                                            ),
+                                                        right = NumberLiteral(value = 4.toBigDecimal(), start = 16, end = 17),
+                                                        operator = "/",
+                                                        start = 8,
+                                                        end = 17,
+                                                    ),
+                                                operator = "+",
+                                                start = 4,
+                                                end = 17,
+                                            ),
+                                        right =
+                                            BinaryExpression(
+                                                left = NumberLiteral(value = 5.toBigDecimal(), start = 19, end = 20),
+                                                right = NumberLiteral(value = 6.toBigDecimal(), start = 23, end = 24),
+                                                operator = "%",
+                                                start = 19,
+                                                end = 24,
+                                            ),
+                                        operator = "-",
+                                        start = 4,
+                                        end = 24,
+                                    ),
+                                start = 0,
+                                end = 24,
+                            ),
+                        start = 0,
+                        end = 25,
+                    ),
+            )
+
+        assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parseBinaryExpressionsWithFunctionIdentifierAndNumbersInStatementExpression() {
+        val parser = Parser()
+        // function(1 + 2) * a / (4 + 5)
+        val token =
+            listOf(
+                Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
+                Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
+                Token(type = NUMBER.toString(), position = Position(start = 9, end = 10), value = "1"),
+                Token(type = PLUS.toString(), position = Position(start = 11, end = 12), value = "+"),
+                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "2"),
+                Token(type = CPAREN.toString(), position = Position(start = 14, end = 15), value = ")"),
+                Token(type = MUL.toString(), position = Position(start = 16, end = 17), value = "*"),
+                Token(type = ID.toString(), position = Position(start = 18, end = 19), value = "a"),
+                Token(type = DIV.toString(), position = Position(start = 20, end = 21), value = "/"),
+                Token(type = OPAREN.toString(), position = Position(start = 22, end = 23), value = "("),
+                Token(type = NUMBER.toString(), position = Position(start = 23, end = 24), value = "4"),
+                Token(type = PLUS.toString(), position = Position(start = 25, end = 26), value = "-"),
+                Token(type = NUMBER.toString(), position = Position(start = 27, end = 28), value = "5"),
+                Token(type = CPAREN.toString(), position = Position(start = 28, end = 29), value = ")"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 29, end = 30), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            BinaryExpression(
+                                left =
+                                    BinaryExpression(
+                                        left =
+                                            CallExpression(
+                                                callee = Identifier(name = "function", start = 0, end = 8),
+                                                arguments =
+                                                    listOf(
+                                                        BinaryExpression(
+                                                            left = NumberLiteral(value = 1.toBigDecimal(), start = 9, end = 10),
+                                                            right = NumberLiteral(value = 2.toBigDecimal(), start = 13, end = 14),
+                                                            operator = "+",
+                                                            start = 9,
+                                                            end = 14,
+                                                        ),
+                                                    ),
+                                                start = 0,
+                                                end = 15,
+                                            ),
+                                        right = Identifier(name = "a", start = 18, end = 19),
+                                        operator = "*",
+                                        start = 0,
+                                        end = 19,
+                                    ),
+                                right =
+                                    BinaryExpression(
+                                        left = NumberLiteral(value = 4.toBigDecimal(), start = 23, end = 24),
+                                        right = NumberLiteral(value = 5.toBigDecimal(), start = 27, end = 28),
+                                        operator = "-",
+                                        start = 23,
+                                        end = 28,
+                                    ),
+                                operator = "/",
+                                start = 0,
+                                end = 28,
+                            ),
+                        start = 0,
+                        end = 30,
+                    ),
+            )
+        assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parseBinaryExpressionWithStringAndNumberInStatementExpression() {
+        val parser = Parser()
+        val token =
+            listOf(
+                Token(type = STRING.toString(), position = Position(start = 0, end = 13), value = "Hello world"),
+                Token(type = PLUS.toString(), position = Position(start = 14, end = 15), value = "+"),
+                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            BinaryExpression(
+                                left = StringLiteral(value = "Hello world", start = 0, end = 13),
+                                right = NumberLiteral(value = 5.toBigDecimal(), start = 16, end = 17),
+                                operator = "+",
+                                start = 0,
+                                end = 17,
+                            ),
+                        start = 0,
+                        end = 18,
+                    ),
+            )
+        assertEquals(result, parser.parse(token))
+    }
+
+    @Test
+    fun parseBinaryExpressionWithMismatchedParenthesisInStatementExpressionReturnsFailure() {
+        val parser = Parser()
+        val token =
+            listOf(
+                Token(type = OPAREN.toString(), position = Position(start = 0, end = 1), value = "("),
+                Token(type = NUMBER.toString(), position = Position(start = 1, end = 2), value = "1"),
+                Token(type = PLUS.toString(), position = Position(start = 3, end = 4), value = "+"),
+                Token(type = NUMBER.toString(), position = Position(start = 5, end = 6), value = "2"),
+                Token(type = CPAREN.toString(), position = Position(start = 6, end = 7), value = ")"),
+                Token(type = CPAREN.toString(), position = Position(start = 7, end = 8), value = ")"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 8, end = 9), value = ";"),
+            )
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Mismatched parenthesis"))
     }
 
     @Test
@@ -409,50 +686,7 @@ class ParserTest {
     }
 
     @Test
-    fun parseBinaryOperation() {
-        val parser = Parser()
-        val token =
-            listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
-                Token(type = PLUS.toString(), position = Position(start = 6, end = 7), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
-            )
-        val result =
-            ASTBuilderSuccess(
-                astNode =
-                    ExpressionStatement(
-                        expression =
-                            AssigmentExpression(
-                                left =
-                                    Identifier(
-                                        name = "a",
-                                        start = 0,
-                                        end = 1,
-                                    ),
-                                right =
-                                    BinaryExpression(
-                                        left = NumberLiteral(value = 5.toBigDecimal(), start = 4, end = 5),
-                                        right = NumberLiteral(value = 5.toBigDecimal(), start = 8, end = 9),
-                                        operator = "+",
-                                        start = 4,
-                                        end = 9,
-                                    ),
-                                start = 0,
-                                end = 9,
-                            ),
-                        start = 0,
-                        end = 10,
-                    ),
-            )
-
-        assertEquals(result, parser.parse(token))
-    }
-
-    @Test
-    fun parseErrorForMisingSemicolon() {
+    fun parseErrorForMissingSemicolon() {
         val parser = Parser()
         val token =
             listOf(
@@ -492,22 +726,19 @@ class ParserTest {
     }
 
     @Test
-    fun parseErrorForMisingColonInDeclaration() {
+    fun parseErrorForMissingColonInDeclaration() {
         val parser = Parser()
         val token =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
                 Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 13, end = 14), value = ";"),
+                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "a"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid variable declaration: " +
-                        "Not enough tokens for a variable declarator\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Missing colon"))
     }
 
     @Test
@@ -522,14 +753,8 @@ class ParserTest {
                 Token(type = TYPE.toString(), position = Position(start = 9, end = 15), value = "number"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \n" +
-                        "Invalid variable declaration: Invalid declarator: Invalid type\n" +
-                        "Invalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid type"))
     }
 
     @Test
@@ -542,13 +767,8 @@ class ParserTest {
                 Token(type = TYPE.toString(), position = Position(start = 3, end = 9), value = "number"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid start of variable declaration" +
-                        "\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid start of variable declaration"))
     }
 
     @Test
@@ -577,13 +797,8 @@ class ParserTest {
                 Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
                 Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid variable declaration: " +
-                        "Not enough tokens for a variable declarator\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Not enough tokens for a variable declarator"))
     }
 
     @Test
@@ -604,17 +819,12 @@ class ParserTest {
                 Token(type = NUMBER.toString(), position = Position(start = 30, end = 32), value = "10"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 32, end = 33), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid variable declaration: " +
-                        "Invalid declarator: No valid assignable expression found\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid declarator: No valid assignable expression found"))
     }
 
     @Test
-    fun parseErrorMisingCloseParenthesisInPrintFunction() {
+    fun parseErrorMissingCloseParenthesisInPrintFunction() {
         val parser = Parser()
         val token =
             listOf(
@@ -623,17 +833,12 @@ class ParserTest {
                 Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 19, end = 20), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid start of variable declaration" +
-                        "\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have close parenthesis"))
     }
 
     @Test
-    fun parseErrorMisingOpenParenthesisInPrintFunction() {
+    fun parseErrorMissingOpenParenthesisInPrintFunction() {
         val parser = Parser()
         val token =
             listOf(
@@ -642,12 +847,7 @@ class ParserTest {
                 Token(type = CPAREN.toString(), position = Position(start = 19, end = 20), value = ")"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 20, end = 21), value = ";"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nInvalid start of variable declaration" +
-                        "\nInvalid expression: No valid expression found\n",
-            )
-        assertEquals(result, parser.parse(token))
+        val result = parser.parse(token)
+        assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have open parenthesis"))
     }
 }

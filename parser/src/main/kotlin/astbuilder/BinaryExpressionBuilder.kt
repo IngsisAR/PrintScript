@@ -1,16 +1,18 @@
 package astbuilder
 
 import BinaryExpression
+import CallExpression
 import Expression
+import Identifier
+import NumberLiteral
+import Position
+import StringLiteral
 import Token
+import java.util.Stack
 
 class BinaryExpressionBuilder(
     tokens: List<Token>,
 ) : AbstractASTBuilder(tokens) {
-    private lateinit var left: Expression
-    private lateinit var right: Expression
-    private lateinit var operator: String
-
     override fun verify(): ASTBuilderResult {
         when {
             tokens.size < 3 -> {
@@ -18,7 +20,7 @@ class BinaryExpressionBuilder(
             }
 
             else -> {
-                if (tokens.any {
+                return if (tokens.any {
                         it.type == "PLUS" ||
                             it.type == "MINUS" ||
                             it.type == "MUL" ||
@@ -26,55 +28,156 @@ class BinaryExpressionBuilder(
                             it.type == "MODULE"
                     }
                 ) {
-                    if (tokens.any { it.type == "PLUS" || it.type == "MINUS" }) {
-                        val plusMinusIndex = tokens.indexOfFirst { it.type == "PLUS" || it.type == "MINUS" }
-                        return verifyAndBuildLeftAndRight(plusMinusIndex)
-                    } else {
-                        val mulDivModIndex = tokens.indexOfFirst { it.type == "MUL" || it.type == "DIV" || it.type == "MODULE" }
-                        return verifyAndBuildLeftAndRight(mulDivModIndex)
-                    }
+                    performShuntingYardAndPostFix()
                 } else {
-                    return ASTBuilderFailure("No operator found in binary expression")
+                    ASTBuilderFailure("No operator found in binary expression")
                 }
             }
         }
     }
 
-    private fun verifyAndBuildLeftAndRight(operatorIndex: Int): ASTBuilderResult {
-        val leftTokens = tokens.subList(0, operatorIndex)
-        val rightTokens = tokens.subList(operatorIndex + 1, tokens.size)
-        val leftExpressionResult =
-            AssignableExpressionProvider(leftTokens)
-                .getAssignableExpressionResult()
-        if (leftExpressionResult is ASTBuilderFailure) {
-            return ASTBuilderFailure("Left expression of binary expression is invalid: ${leftExpressionResult.errorMessage}")
+    private fun performShuntingYardAndPostFix(): ASTBuilderResult {
+        val operatorStack = Stack<Token>()
+        val outputQueue = mutableListOf<Token>()
+        var i = 0
+
+        while (i < tokens.size) {
+            val token = tokens[i]
+            when (token.type) {
+                "NUMBER", "STRING" -> {
+                    outputQueue.add(token)
+                    i++
+                }
+
+                "ID" -> {
+                    if (i + 1 < tokens.size && tokens[i + 1].type == "OPAREN") {
+                        // Buscamos el índice del próximo CPAREN.
+                        val endIndex = tokens.subList(i, tokens.size).indexOfFirst { it.type == "CPAREN" } + i
+                        if (endIndex == -1) {
+                            return ASTBuilderFailure("Mismatched parenthesis in call expression")
+                        }
+                        // Creamos la sublista de tokens para la CallExpression.
+                        val callExpressionTokens = tokens.subList(i, endIndex + 1)
+                        val callExpressionResult = CallExpressionBuilder(callExpressionTokens).verifyAndBuild()
+                        if (callExpressionResult is ASTBuilderSuccess) {
+                            outputQueue.add(Token("CALL_EXPRESSION", Position(i, endIndex), callExpressionResult.astNode.toString()))
+                            i = endIndex + 1 // Saltamos todos los tokens procesados por CallExpressionBuilder.
+                        } else {
+                            return callExpressionResult
+                        }
+                    } else {
+                        outputQueue.add(token)
+                        i++
+                    }
+                }
+
+                in listOf("PLUS", "MINUS", "MUL", "DIV", "MODULE") -> {
+                    while (operatorStack.isNotEmpty() &&
+                        operatorStack.peek().type in listOf("PLUS", "MINUS", "MUL", "DIV", "MODULE") &&
+                        precedence(token.type) <= precedence(operatorStack.peek().type)
+                    ) {
+                        outputQueue.add(operatorStack.pop())
+                    }
+                    operatorStack.push(token)
+                    i++
+                }
+
+                "OPAREN" -> {
+                    operatorStack.push(token)
+                    i++
+                }
+
+                "CPAREN" -> {
+                    while (operatorStack.isNotEmpty() && operatorStack.peek().type != "OPAREN") {
+                        outputQueue.add(operatorStack.pop())
+                    }
+                    if (operatorStack.isEmpty()) {
+                        return ASTBuilderFailure("Mismatched parenthesis")
+                    }
+                    operatorStack.pop() // Descarta el paréntesis abierto.
+                    i++
+                }
+
+                else -> {
+                    i++
+                }
+            }
         }
-        left = (leftExpressionResult as ASTBuilderSuccess).astNode as Expression
-        val rightExpressionResult =
-            AssignableExpressionProvider(rightTokens)
-                .getAssignableExpressionResult()
-        if (rightExpressionResult is ASTBuilderFailure) {
-            return ASTBuilderFailure("Right expression of binary expression is invalid: ${rightExpressionResult.errorMessage}")
+
+        while (operatorStack.isNotEmpty()) {
+            outputQueue.add(operatorStack.pop())
         }
-        right = (rightExpressionResult as ASTBuilderSuccess).astNode as Expression
-        operator = tokens[operatorIndex].value
-        return leftExpressionResult
+
+        return buildBinaryExpressionFromPostFix(outputQueue)
+    }
+
+    private fun precedence(operator: String): Int =
+        when (operator) {
+            "PLUS", "MINUS" -> 1
+            "MUL", "DIV", "MODULE" -> 2
+            else -> 0
+        }
+
+    private fun buildBinaryExpressionFromPostFix(postFixTokens: List<Token>): ASTBuilderResult {
+        val stack = Stack<Expression>()
+
+        for (token in postFixTokens) {
+            when (token.type) {
+                "NUMBER" -> {
+                    val numberResult = NumberLiteralBuilder(listOf(token)).verifyAndBuild()
+                    if (numberResult is ASTBuilderFailure) {
+                        return numberResult
+                    }
+                    stack.push((numberResult as ASTBuilderSuccess).astNode as NumberLiteral)
+                }
+
+                "ID" -> {
+                    val identifierResult = IdentifierBuilder(listOf(token)).verifyAndBuild()
+                    if (identifierResult is ASTBuilderFailure) {
+                        return identifierResult
+                    }
+                    stack.push((identifierResult as ASTBuilderSuccess).astNode as Identifier)
+                }
+
+                "STRING" -> {
+                    val stringResult = StringLiteralBuilder(listOf(token)).verifyAndBuild()
+                    if (stringResult is ASTBuilderFailure) {
+                        return stringResult
+                    }
+                    stack.push((stringResult as ASTBuilderSuccess).astNode as StringLiteral)
+                }
+
+                "CALL_EXPRESSION" -> {
+                    val callExpressionResult =
+                        CallExpressionBuilder(
+                            tokens.subList(token.position.start, token.position.end + 1),
+                        ).verifyAndBuild()
+                    if (callExpressionResult is ASTBuilderFailure) {
+                        return callExpressionResult
+                    }
+                    stack.push((callExpressionResult as ASTBuilderSuccess).astNode as CallExpression)
+                }
+
+                in listOf("PLUS", "MINUS", "MUL", "DIV", "MODULE") -> {
+                    if (stack.size < 2) {
+                        return ASTBuilderFailure("Invalid postfix expression")
+                    }
+                    val right = stack.pop()
+                    val left = stack.pop()
+                    stack.push(BinaryExpression(left, right, token.value, left.start, right.end))
+                }
+            }
+        }
+
+        if (stack.size != 1) {
+            return ASTBuilderFailure("Invalid postfix expression")
+        }
+
+        return ASTBuilderSuccess(stack.pop())
     }
 
     override fun verifyAndBuild(): ASTBuilderResult {
         val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            ASTBuilderSuccess(
-                BinaryExpression(
-                    left = left,
-                    right = right,
-                    operator = operator,
-                    start = tokens.first().position.start,
-                    end = tokens.last().position.end,
-                ),
-            )
-        } else {
-            result
-        }
+        return result
     }
 }

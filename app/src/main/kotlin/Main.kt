@@ -1,9 +1,10 @@
+import utils.PrintScriptLineReader
+
 fun main() {
     println("\nReading from string\n")
     val input =
         """
-        let a: number = 5, b: number = 10, c:number = 15;
-        print(a + b + c);
+        function(1 + 2) * a / (4 + 5);
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
     val lines = printScriptLineReader.readLinesFromString(input)

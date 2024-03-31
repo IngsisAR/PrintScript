@@ -9,8 +9,8 @@ class AssignableExpressionProvider(
 ) {
     private val assignableExpressionBuilders: List<AbstractASTBuilder> =
         listOf(
-            BinaryExpressionBuilder(tokens),
             CallExpressionBuilder(tokens),
+            BinaryExpressionBuilder(tokens),
             NumberLiteralBuilder(tokens),
             StringLiteralBuilder(tokens),
             IdentifierBuilder(tokens),
@@ -33,21 +33,25 @@ class ExpressionProvider(
     private val expressionBuilders: List<AbstractASTBuilder> =
         listOf(
             AssigmentExpressionBuilder(tokens),
-            BinaryExpressionBuilder(tokens),
             CallExpressionBuilder(tokens),
+            BinaryExpressionBuilder(tokens),
             NumberLiteralBuilder(tokens),
             StringLiteralBuilder(tokens),
             IdentifierBuilder(tokens),
         )
 
     fun getVerifiedExpressionResult(): ASTBuilderResult {
+        var errorMessages = ""
         for (expressionBuilder in expressionBuilders) {
             val astBuilderResult = expressionBuilder.verifyAndBuild()
             if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
                 return astBuilderResult
             }
+            if (astBuilderResult is ASTBuilderFailure) {
+                errorMessages += astBuilderResult.errorMessage + "\n"
+            }
         }
-        return ASTBuilderFailure("No valid expression found")
+        return ASTBuilderFailure("No valid expression found: \n$errorMessages")
     }
 }
 
