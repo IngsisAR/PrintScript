@@ -11,7 +11,6 @@ class InterpreterImpl(
             is Identifier -> node.name
             is NumberLiteral -> node.value
             is StringLiteral -> node.value
-            is Program -> TODO()
             is ExpressionStatement -> interpret(node.expression)
             is VariableDeclaration -> internalVariableMap = VariableDeclarationInterpreter(internalVariableMap).interpret(node)
             is TypeReference -> node.type
