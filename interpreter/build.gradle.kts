@@ -13,12 +13,13 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     api(project(":utils"))
+    api(project(":parser"))
 }
 
 tasks.test {
     useJUnitPlatform()
 }
-//tasks.jacocoTestCoverageVerification {
+// tasks.jacocoTestCoverageVerification {
 //    violationRules {
 //        rule {
 //            element = "BUNDLE"
@@ -34,11 +35,11 @@ tasks.test {
 //            }
 //        }
 //    }
-//}
+// }
 //
-//tasks.check {
+// tasks.check {
 //    dependsOn(tasks.jacocoTestCoverageVerification)
-//}
+// }
 kotlin {
     jvmToolchain(20)
 }

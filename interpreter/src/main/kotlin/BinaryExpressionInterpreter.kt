@@ -10,14 +10,16 @@ class BinaryExpressionInterpreter(
                 is NumberLiteral -> left.value
                 is StringLiteral -> left.value
                 is BinaryExpression -> interpret(left)
-                else -> TODO()
+                is Identifier -> IdentifierInterpreter(variableMap).interpret(left)
+                else -> throw IllegalArgumentException("Invalid expression")
             }
         val rightValue =
             when (val right = node.right) {
                 is NumberLiteral -> right.value
                 is StringLiteral -> right.value
                 is BinaryExpression -> interpret(right)
-                else -> TODO()
+                is Identifier -> IdentifierInterpreter(variableMap).interpret(right)
+                else -> throw IllegalArgumentException("Invalid expression ")
             }
         return handleOperation(leftValue, rightValue, node.operator)
     }

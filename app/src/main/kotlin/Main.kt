@@ -1,4 +1,5 @@
 import utils.PrintScriptLineReader
+import astbuilder.ASTBuilderSuccess
 
 fun main() {
     println("\nReading from string\n")
@@ -7,14 +8,15 @@ fun main() {
         function(1 + 2) * a / (4 + 5);
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
-    val lines = printScriptLineReader.readLinesFromString(input)
-    performFromLines(lines)
+//    val lines = printScriptLineReader.readLinesFromString(input)
+//    performFromLines(lines)
     println("\nReading from file\n")
     val fileLines = printScriptLineReader.readLinesFromFile("app/src/main/resources/script_example.txt")
     performFromLines(fileLines)
 }
 
 private fun performFromLines(fileLines: List<String>) {
+    var interpreter = InterpreterImpl()
     for (line in fileLines) {
         val lexer = Lexer(line)
         val tokens = lexer.tokenize()
@@ -22,5 +24,7 @@ private fun performFromLines(fileLines: List<String>) {
         val parser = Parser()
         val ast = parser.parse(tokens)
         println(ast)
+        if(ast is ASTBuilderSuccess)
+            interpreter = interpreter.interpret(ast.astNode)
     }
 }
