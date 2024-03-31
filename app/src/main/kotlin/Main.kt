@@ -1,5 +1,5 @@
-import utils.PrintScriptLineReader
 import astbuilder.ASTBuilderSuccess
+import utils.PrintScriptLineReader
 
 fun main() {
     println("\nReading from string\n")
@@ -24,7 +24,8 @@ private fun performFromLines(fileLines: List<String>) {
         val parser = Parser()
         val ast = parser.parse(tokens)
         println(ast)
-        if(ast is ASTBuilderSuccess)
+        if (ast is ASTBuilderSuccess) {
             interpreter = interpreter.interpret(ast.astNode)
+        }
     }
 }

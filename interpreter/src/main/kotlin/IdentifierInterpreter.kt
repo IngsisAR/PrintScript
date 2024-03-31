@@ -1,4 +1,6 @@
-class IdentifierInterpreter(private val variableMap: Map<String, VariableInfo>) : Interpreter {
+class IdentifierInterpreter(
+    private val variableMap: Map<String, VariableInfo>,
+) : Interpreter {
     override fun interpret(node: ASTNode): Any {
         node as Identifier
         val variableInfo = variableMap[node.name] ?: throw IllegalArgumentException("Variable not found")
