@@ -14,6 +14,6 @@ class VariableDeclaratorInterpreter(
                 is StringLiteral -> init.value
                 else -> throw IllegalArgumentException("Unsupported init type")
             }
-        return mapOf(id to VariableInfo(type, value as String, kind == "let"))
+        return mapOf(id to VariableInfo(type, value.toString(), kind == "let"))
     }
 }

@@ -51,7 +51,7 @@ class Lexer(
         val startPosition = currentPosition
         val endPosition = currentPosition + matchedValue.length
         val position = Position(startPosition, endPosition)
-        val trimmedVal = if(tokenType.token == TokenType.STRING) matchedValue.substring(1, matchedValue.length - 1) else matchedValue
+        val trimmedVal = if (tokenType.token == TokenType.STRING) matchedValue.substring(1, matchedValue.length - 1) else matchedValue
         return Token(tokenType.token.toString(), position, trimmedVal)
     }
 }

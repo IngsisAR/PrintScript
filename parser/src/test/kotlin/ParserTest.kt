@@ -553,36 +553,41 @@ class ParserTest {
     fun parseCallExpressionWithMultipleArguments() {
         val parser = Parser()
         // function(1,2,3,4);
-        val token = listOf(
-            Token(type=ID.toString(), position=Position(start=0, end=8), value="function"),
-            Token(type=OPAREN.toString(), position=Position(start=8, end=9), value="("),
-            Token(type=NUMBER.toString(), position=Position(start=9, end=10), value="1"),
-            Token(type=COMMA.toString(), position=Position(start=10, end=11), value=","),
-            Token(type=NUMBER.toString(), position=Position(start=11, end=12), value="2"),
-            Token(type=COMMA.toString(), position=Position(start=12, end=13), value=","),
-            Token(type=NUMBER.toString(), position=Position(start=13, end=14), value="3"),
-            Token(type=COMMA.toString(), position=Position(start=14, end=15), value=","),
-            Token(type=NUMBER.toString(), position=Position(start=15, end=16), value="4"),
-            Token(type=CPAREN.toString(), position=Position(start=16, end=17), value=")"),
-            Token(type=SEMICOLON.toString(), position=Position(start=17, end=18), value=";"),
-        )
-        val result = ASTBuilderSuccess(
-            astNode=ExpressionStatement(
-                expression=CallExpression(
-                    callee=Identifier(name="function", start=0, end=8),
-                    arguments=listOf(
-                        NumberLiteral(value=1.toBigDecimal(), start=9, end=10),
-                        NumberLiteral(value=2.toBigDecimal(), start=11, end=12),
-                        NumberLiteral(value=3.toBigDecimal(), start=13, end=14),
-                        NumberLiteral(value=4.toBigDecimal(), start=15, end=16),
+        val token =
+            listOf(
+                Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
+                Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
+                Token(type = NUMBER.toString(), position = Position(start = 9, end = 10), value = "1"),
+                Token(type = COMMA.toString(), position = Position(start = 10, end = 11), value = ","),
+                Token(type = NUMBER.toString(), position = Position(start = 11, end = 12), value = "2"),
+                Token(type = COMMA.toString(), position = Position(start = 12, end = 13), value = ","),
+                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "3"),
+                Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
+                Token(type = NUMBER.toString(), position = Position(start = 15, end = 16), value = "4"),
+                Token(type = CPAREN.toString(), position = Position(start = 16, end = 17), value = ")"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            CallExpression(
+                                callee = Identifier(name = "function", start = 0, end = 8),
+                                arguments =
+                                    listOf(
+                                        NumberLiteral(value = 1.toBigDecimal(), start = 9, end = 10),
+                                        NumberLiteral(value = 2.toBigDecimal(), start = 11, end = 12),
+                                        NumberLiteral(value = 3.toBigDecimal(), start = 13, end = 14),
+                                        NumberLiteral(value = 4.toBigDecimal(), start = 15, end = 16),
+                                    ),
+                                start = 0,
+                                end = 17,
+                            ),
+                        start = 0,
+                        end = 18,
                     ),
-                    start=0,
-                    end=17,
-                ),
-                start=0,
-                end=18,
-            ),
-        )
+            )
         assertEquals(result, parser.parse(token))
     }
 
