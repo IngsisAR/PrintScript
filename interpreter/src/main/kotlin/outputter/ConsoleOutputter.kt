@@ -10,8 +10,10 @@ import NumberLiteral
 import StringLiteral
 import VariableInfo
 
-class ConsoleOutputter(private val variableMap: Map<String, VariableInfo>): Outputter {
-    override fun output(node : ASTNode) {
+class ConsoleOutputter(
+    private val variableMap: Map<String, VariableInfo>,
+) : Outputter {
+    override fun output(node: ASTNode) {
         node as CallExpression
         val output: StringBuilder = StringBuilder()
         node.arguments.forEach { arg ->

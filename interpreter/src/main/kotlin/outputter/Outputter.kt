@@ -3,5 +3,5 @@ package outputter
 import ASTNode
 
 interface Outputter {
-    fun output(node : ASTNode)
+    fun output(node: ASTNode)
 }
