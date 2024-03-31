@@ -53,6 +53,13 @@ class CallExpressionBuilder(
                     arguments += (expressionResult as ASTBuilderSuccess).astNode as Expression
                     tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
                 }
+                val expressionResult =
+                    AssignableExpressionProvider(tokensAux)
+                        .getAssignableExpressionResult()
+                if (expressionResult is ASTBuilderFailure) {
+                    return ASTBuilderFailure("Call expression does not have valid arguments")
+                }
+                arguments += (expressionResult as ASTBuilderSuccess).astNode as Expression
             }
             return identifierResult
         } else {
