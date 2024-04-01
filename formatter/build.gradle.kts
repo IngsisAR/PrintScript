@@ -12,6 +12,9 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    api(project(":utils"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    implementation("org.json:json:20240303")
 }
 
 tasks.test {

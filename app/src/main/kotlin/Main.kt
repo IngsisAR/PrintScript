@@ -5,7 +5,7 @@ fun main() {
     println("\nReading from string\n")
     val input =
         """
-        function(1 + 2) * a / (4 + 5);
+        5+5;
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
 //    val lines = printScriptLineReader.readLinesFromString(input)
