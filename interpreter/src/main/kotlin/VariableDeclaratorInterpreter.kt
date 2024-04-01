@@ -6,14 +6,15 @@ class VariableDeclaratorInterpreter(
         node as VariableDeclarator
         val id = node.id.name // should check if already exists
         val type = node.type.type
-        val value =
-            when (val init = node.init) {
-                is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(init)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(init)
-                is NumberLiteral -> init.value
-                is StringLiteral -> init.value
+        val value = node.init?.let {
+            when (it) {
+                is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(it)
+                is Identifier -> IdentifierInterpreter(variableMap).interpret(it)
+                is NumberLiteral -> it.value
+                is StringLiteral -> it.value
                 else -> throw IllegalArgumentException("Unsupported init type")
             }
-        return mapOf(id to VariableInfo(type, value.toString(), kind == "let"))
+        }
+        return mapOf(id to VariableInfo(type, value?.toString(), kind == "let"))
     }
 }

@@ -1,5 +1,5 @@
 class InterpreterImpl(
-    private val variableMap: Map<String, VariableInfo> = emptyMap(),
+    val variableMap: Map<String, VariableInfo> = emptyMap(),
 ) {
     fun interpret(node: ASTNode): InterpreterImpl {
         var internalVariableMap: Map<String, VariableInfo> = variableMap

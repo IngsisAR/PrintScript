@@ -1,7 +1,2 @@
-let a: string = 5 + "some";
-let b: string = "hello";
-let c: string = "fcker";
-let d: number = 4;
-let e: number = 5;
-println(d + e);
-println(b + " mother" + c + " " + d + e);
+let a: number;
+let b: string = 8 + "th";

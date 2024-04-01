@@ -46,19 +46,19 @@ class BinaryExpressionInterpreter(
 
             "-" ->
                 when {
-                    leftValue is Number && rightValue is Number -> leftValue.toDouble() - rightValue.toDouble()
+                    leftValue is Number && rightValue is Number -> leftValue as BigDecimal - rightValue as BigDecimal
                     else -> throw IllegalArgumentException("Invalid operands for '-': $leftValue, $rightValue")
                 }
 
             "*" ->
                 when {
-                    leftValue is Number && rightValue is Number -> leftValue.toDouble() * rightValue.toDouble()
+                    leftValue is Number && rightValue is Number -> leftValue as BigDecimal * rightValue as BigDecimal
                     else -> throw IllegalArgumentException("Invalid operands for '*': $leftValue, $rightValue")
                 }
 
             "/" ->
                 when {
-                    leftValue is Number && rightValue is Number -> leftValue.toDouble() / rightValue.toDouble()
+                    leftValue is Number && rightValue is Number -> leftValue as BigDecimal / rightValue as BigDecimal
                     else -> throw IllegalArgumentException("Invalid operands for '/': $leftValue, $rightValue")
                 }
 
