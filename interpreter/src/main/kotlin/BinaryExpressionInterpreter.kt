@@ -1,9 +1,9 @@
 import java.math.BigDecimal
 
 class BinaryExpressionInterpreter(
-    val variableMap: Map<String, VariableInfo>,
+    private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
-    override fun interpret(node: ASTNode): Any {
+    override fun interpret(node: ASTNode): String {
         node as BinaryExpression
         val leftValue =
             when (val left = node.left) {
@@ -29,8 +29,8 @@ class BinaryExpressionInterpreter(
         leftValue: Any,
         rightValue: Any,
         operator: String,
-    ): Any =
-        when (operator) {
+    ): String {
+        val result = when (operator) {
             "+" ->
                 when {
                     leftValue is String && rightValue is String -> leftValue + rightValue
@@ -64,4 +64,6 @@ class BinaryExpressionInterpreter(
 
             else -> throw IllegalArgumentException("Invalid operator: $operator")
         }
+        return result.toString()
+    }
 }
