@@ -13,13 +13,16 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     api(project(":utils"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    implementation("org.json:json:20240303")
 }
 
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }
- tasks.jacocoTestCoverageVerification {
+
+tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             element = "BUNDLE"
@@ -31,15 +34,15 @@ tasks.test {
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                minimum = "0.68".toBigDecimal()
+                minimum = "0.69".toBigDecimal()
             }
         }
     }
- }
+}
 
- tasks.check {
+tasks.check {
     dependsOn(tasks.jacocoTestCoverageVerification)
- }
+}
 
 kotlin {
     jvmToolchain(20)

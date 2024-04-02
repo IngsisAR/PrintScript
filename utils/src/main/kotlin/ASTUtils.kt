@@ -7,12 +7,12 @@ sealed interface Statement : ASTNode
 
 sealed interface Expression : ASTNode
 
-//data class Program(
+// data class Program(
 //    val body: List<Statement>,
 //    val sourceType: String,
 //    override val start: Int,
 //    override val end: Int,
-//) : ASTNode
+// ) : ASTNode
 
 data class ExpressionStatement(
     val expression: Expression,

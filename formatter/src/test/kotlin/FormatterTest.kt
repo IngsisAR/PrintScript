@@ -8,28 +8,31 @@ import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class FormatterTest {
-
     @Test
     fun printWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1,1,1)
-        val ast = ExpressionStatement(
-            expression = CallExpression(
-                callee = Identifier(name = "print", start = 0, end = 5),
-                arguments = listOf(
-                    BinaryExpression(
-                        left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
-                        right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
-                        operator = "+",
-                        start = 6,
-                        end = 11
-                    )
-                ),
+        copyJsonAndModifyAttribute(1, 1, 1, 1)
+        val ast =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "print", start = 0, end = 5),
+                        arguments =
+                            listOf(
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
+                                    operator = "+",
+                                    start = 6,
+                                    end = 11,
+                                ),
+                            ),
+                        start = 0,
+                        end = 12,
+                    ),
                 start = 0,
-                end = 12
-            ), start = 0, end = 13
-        )
+                end = 13,
+            )
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         assertEquals("\nprint(5 + 4);\n", formatter.format(ast))
         deleteTestJson()
@@ -37,23 +40,28 @@ class FormatterTest {
 
     @Test
     fun printWithNoneValue() {
-        copyJsonAndModifyAttribute(1,1,1,0)
-        val ast = ExpressionStatement(
-            expression = CallExpression(
-                callee = Identifier(name = "print", start = 0, end = 5),
-                arguments = listOf(
-                    BinaryExpression(
-                        left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
-                        right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
-                        operator = "+",
-                        start = 6,
-                        end = 11
-                    )
-                ),
+        copyJsonAndModifyAttribute(1, 1, 1, 0)
+        val ast =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "print", start = 0, end = 5),
+                        arguments =
+                            listOf(
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
+                                    operator = "+",
+                                    start = 6,
+                                    end = 11,
+                                ),
+                            ),
+                        start = 0,
+                        end = 12,
+                    ),
                 start = 0,
-                end = 12
-            ), start = 0, end = 13
-        )
+                end = 13,
+            )
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         assertEquals("print(5 + 4);\n", formatter.format(ast))
         deleteTestJson()
@@ -61,18 +69,23 @@ class FormatterTest {
 
     @Test
     fun numberVariableDeclaratorWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1,1,1)
-        val ast = VariableDeclaration(
-            declarations = listOf(
-                VariableDeclarator(
-                    id = Identifier(name = "a", start = 4, end = 5),
-                    type = TypeReference(type = "number", start = 7, end = 13),
-                    init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
-                    start = 4,
-                    end = 18
-                )
-            ), kind = "let", start = 0, end = 19
-        )
+        copyJsonAndModifyAttribute(1, 1, 1, 1)
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "number", start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            start = 4,
+                            end = 18,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 19,
+            )
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         assertEquals("let a : number = 1;\n", formatter.format(ast))
         deleteTestJson()
@@ -80,18 +93,23 @@ class FormatterTest {
 
     @Test
     fun stringVariableDeclaratorWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1,1,1)
-        val ast = VariableDeclaration(
-            declarations = listOf(
-                VariableDeclarator(
-                    id = Identifier(name = "a", start = 4, end = 5),
-                    type = TypeReference(type = "string", start = 7, end = 13),
-                    init = StringLiteral(value = "Hello World", start = 16, end = 29),
-                    start = 4,
-                    end = 29
-                )
-            ), kind = "let", start = 0, end = 30
-        )
+        copyJsonAndModifyAttribute(1, 1, 1, 1)
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "string", start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            start = 4,
+                            end = 29,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 30,
+            )
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         assertEquals("let a : string = \"Hello World\";\n", formatter.format(ast))
         deleteTestJson()
@@ -99,24 +117,27 @@ class FormatterTest {
 
     @Test
     fun assignationStatementWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1,1,1)
-        val ast = ExpressionStatement(
-            expression = AssigmentExpression(
-                left = Identifier(name = "a", start = 0, end = 1),
-                right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
+        copyJsonAndModifyAttribute(1, 1, 1, 1)
+        val ast =
+            ExpressionStatement(
+                expression =
+                    AssigmentExpression(
+                        left = Identifier(name = "a", start = 0, end = 1),
+                        right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
+                        start = 0,
+                        end = 5,
+                    ),
                 start = 0,
-                end = 5
-            ), start = 0, end = 6
-        )
+                end = 6,
+            )
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         assertEquals("a = 2;\n", formatter.format(ast))
         deleteTestJson()
     }
 
-
     @Test
     fun errorUnknownASTNodeType() {
-        copyJsonAndModifyAttribute(1, 1,1,1)
+        copyJsonAndModifyAttribute(1, 1, 1, 1)
         val ast = NumberLiteral(value = 2.toBigDecimal(), start = 0, end = 1)
         val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
         val expected = IllegalArgumentException("Unknown ASTNode type")
@@ -130,7 +151,7 @@ class FormatterTest {
         spaceBeforeColonValue: Int,
         spaceAfterColonValue: Int,
         spacesInAssignSymbolValue: Int,
-        lineJumpBeforePrintlnValue: Int
+        lineJumpBeforePrintlnValue: Int,
     ) {
         val path = Paths.get("src/main/resources/FormatterConfig.json")
         val json = String(Files.readAllBytes(path))

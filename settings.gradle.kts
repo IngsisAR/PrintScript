@@ -3,3 +3,4 @@ plugins {
 }
 rootProject.name = "PrintScript"
 include("app", "interpreter", "lexer", "parser", "utils", "formatter")
+include("sca")
