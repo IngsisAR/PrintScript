@@ -13,16 +13,9 @@ class InterpreterImpl(
 
             is Identifier -> IdentifierInterpreter(variableMap).interpret(node)
 
-            is NumberLiteral -> node.value
-
-            is StringLiteral -> node.value
-
             is ExpressionStatement -> return interpret(node.expression)
 
-            // should check this return
             is VariableDeclaration -> internalVariableMap = VariableDeclarationInterpreter(internalVariableMap).interpret(node)
-
-            is TypeReference -> node.type
 
             else -> throw IllegalArgumentException("Invalid node type: ${node::class.simpleName}")
         }

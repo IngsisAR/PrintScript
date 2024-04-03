@@ -1,9 +1,8 @@
 let a: number = 3;
 let b: string = 8 + "th";
-let c : number = 5 - a;
-let d : string = b + " test";
-a = 9;
+let c : number = (5 / 5) - (a * a);
+let d : number = 3;
+a = d;
 println(a);
 println(b);
-println(c * a);
-println(d);
+println(c);
