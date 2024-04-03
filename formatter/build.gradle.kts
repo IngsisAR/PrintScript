@@ -21,7 +21,7 @@ tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }
- tasks.jacocoTestCoverageVerification {
+tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             element = "BUNDLE"
@@ -37,11 +37,11 @@ tasks.test {
             }
         }
     }
- }
+}
 
- tasks.check {
+tasks.check {
     dependsOn(tasks.jacocoTestCoverageVerification)
- }
+}
 kotlin {
     jvmToolchain(20)
 }

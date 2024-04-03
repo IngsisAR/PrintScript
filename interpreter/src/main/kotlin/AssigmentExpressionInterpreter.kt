@@ -5,7 +5,7 @@ class AssigmentExpressionInterpreter(
         node as AssigmentExpression
         val id = node.left.name
         val variable = variableMap[id] ?: throw IllegalArgumentException("Variable not found")
-        if(variable.isMutable == false) throw IllegalArgumentException("Variable not mutable")
+        if (variable.isMutable == false) throw IllegalArgumentException("Variable not mutable")
         val newValue =
             when (val right = node.right) {
                 is NumberLiteral -> right.value.toString()
