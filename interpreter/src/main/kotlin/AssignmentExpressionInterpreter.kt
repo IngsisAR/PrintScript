@@ -1,8 +1,8 @@
-class AssigmentExpressionInterpreter(
+class AssignmentExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
-        node as AssigmentExpression
+        node as AssignmentExpression
         val id = node.left.name
         val variable = variableMap[id]
         if (variable == null || variable.isMutable == false) throw IllegalArgumentException("Variable not mutable or not found")

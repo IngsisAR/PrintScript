@@ -32,7 +32,7 @@ class ExpressionProvider(
 ) {
     private val expressionBuilders: List<AbstractASTBuilder> =
         listOf(
-            AssigmentExpressionBuilder(tokens),
+            AssignmentExpressionBuilder(tokens),
             CallExpressionBuilder(tokens),
             BinaryExpressionBuilder(tokens),
             NumberLiteralBuilder(tokens),

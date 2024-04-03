@@ -27,7 +27,7 @@ data class VariableDeclaration(
     override val end: Int,
 ) : Statement
 
-data class AssigmentExpression(
+data class AssignmentExpression(
     val left: Identifier,
     val right: Expression,
     override val start: Int,

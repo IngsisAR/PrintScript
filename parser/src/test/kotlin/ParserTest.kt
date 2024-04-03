@@ -138,7 +138,7 @@ class ParserTest {
                 astNode =
                     ExpressionStatement(
                         expression =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left =
                                     Identifier(
                                         name = "a",
@@ -180,7 +180,7 @@ class ParserTest {
                 astNode =
                     ExpressionStatement(
                         expression =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left =
                                     Identifier(
                                         name = "a",
@@ -222,7 +222,7 @@ class ParserTest {
                 astNode =
                     ExpressionStatement(
                         expression =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left =
                                     Identifier(
                                         name = "a",
@@ -265,7 +265,7 @@ class ParserTest {
                 astNode =
                     ExpressionStatement(
                         expression =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left =
                                     Identifier(
                                         name = "a",
@@ -315,7 +315,7 @@ class ParserTest {
                 astNode =
                     ExpressionStatement(
                         expression =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left = Identifier(name = "a", start = 0, end = 1),
                                 right =
                                     BinaryExpression(
