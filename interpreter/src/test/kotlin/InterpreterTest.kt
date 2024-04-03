@@ -353,7 +353,7 @@ class InterpreterTest {
         val astNodeA =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = NumberLiteral(value = 9, start = 4, end = 5),
                         start = 0,
@@ -372,7 +372,7 @@ class InterpreterTest {
         val astNodeD =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = StringLiteral(value = "world", start = 4, end = 5),
                         start = 0,
@@ -396,7 +396,7 @@ class InterpreterTest {
         val astNodeBinaryExpression =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right =
                             BinaryExpression(
@@ -428,7 +428,7 @@ class InterpreterTest {
         val astNodeBinaryExpression =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = Identifier(name = "d", start = 18, end = 19),
                         start = 0,
@@ -447,7 +447,7 @@ class InterpreterTest {
         val astNodeB =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = NumberLiteral(value = 9, start = 4, end = 5),
                         start = 0,
@@ -467,7 +467,7 @@ class InterpreterTest {
         val astNode =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = StringLiteral(value = "world", start = 4, end = 5),
                         start = 0,
@@ -487,10 +487,10 @@ class InterpreterTest {
         val astNode =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right =
-                            AssigmentExpression(
+                            AssignmentExpression(
                                 left = Identifier(name = "a", start = 0, end = 1),
                                 right = StringLiteral(value = "world", start = 4, end = 5),
                                 start = 0,
