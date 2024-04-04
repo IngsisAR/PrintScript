@@ -20,12 +20,16 @@ class AssigmentExpressionInterpreter(
         return updatedMap
     }
 
-    private fun checkTypeMatches(variable: VariableInfo, newValue: Any) {
-        val expectedType = when (newValue) {
-            is Number -> "number"
-            is String -> "string"
-            else -> throw IllegalArgumentException("Unsupported value type: ${newValue::class.simpleName}")
-        }
+    private fun checkTypeMatches(
+        variable: VariableInfo,
+        newValue: Any,
+    ) {
+        val expectedType =
+            when (newValue) {
+                is Number -> "number"
+                is String -> "string"
+                else -> throw IllegalArgumentException("Unsupported value type: ${newValue::class.simpleName}")
+            }
         require(variable.type == expectedType) {
             "Type mismatch: expected ${variable.type}, got ${newValue::class.simpleName}"
         }

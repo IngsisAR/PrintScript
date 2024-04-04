@@ -45,8 +45,23 @@ EOF
 	exit 1
 fi
 
+echo "Checking format"
+
 ./gradlew ktlintFormat
+if [ $? -ne 0 ]; then
+  echo "ktlintFormat task failed, aborting commit."
+  exit 1
+fi
+
+echo "Checking build"
+
 ./gradlew build
+if [ $? -ne 0 ]; then
+  echo "Build task failed, aborting commit."
+  exit 1
+fi
+
+echo "Ready for commit"
 
 # If there are whitespace errors, print the offending file names and fail.
 exec git diff-index --check --cached $against --

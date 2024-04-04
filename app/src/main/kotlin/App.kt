@@ -1,5 +1,5 @@
 import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.Locale
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
