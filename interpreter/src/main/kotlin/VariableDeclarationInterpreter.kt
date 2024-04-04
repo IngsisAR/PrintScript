@@ -2,14 +2,11 @@ class VariableDeclarationInterpreter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
-        node as VariableDeclaration
-        val updatedVariableMap = mutableMapOf<String, VariableInfo>()
-        updatedVariableMap.putAll(variableMap)
+        require(node is VariableDeclaration) { "Node must be a VariableDeclaration" }
 
-        node.declarations.forEach { declaration ->
-            val newVariableMap = VariableDeclaratorInterpreter(variableMap, node.kind).interpret(declaration)
-            updatedVariableMap.putAll(newVariableMap)
+        return node.declarations.fold(variableMap) { acc, declaration ->
+            val newVariableMap = VariableDeclaratorInterpreter(acc, node.kind).interpret(declaration)
+            acc + newVariableMap
         }
-        return updatedVariableMap
     }
 }

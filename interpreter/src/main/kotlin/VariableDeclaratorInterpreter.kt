@@ -1,21 +1,23 @@
 class VariableDeclaratorInterpreter(
     private val variableMap: Map<String, VariableInfo>,
-    val kind: String,
+    private val kind: String,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
-        node as VariableDeclarator
-        val id = node.id.name // should check if already exists
+        require(node is VariableDeclarator) { "Node must be a VariableDeclarator" }
+        val id = node.id.name
+        require(variableMap[id] == null) { "Variable '$id' already exists" }
+
         val type = node.type.type
-        val value =
-            node.init?.let {
-                when (it) {
-                    is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(it)
-                    is Identifier -> IdentifierInterpreter(variableMap).interpret(it)
-                    is NumberLiteral -> it.value
-                    is StringLiteral -> it.value
-                    else -> throw IllegalArgumentException("Unsupported init type")
-                }
+        val value = node.init?.let {
+            when (it) {
+                is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(it)
+                is Identifier -> IdentifierInterpreter(variableMap).interpret(it)
+                is NumberLiteral -> it.value
+                is StringLiteral -> it.value
+                else -> throw IllegalArgumentException("Unsupported init type: ${it::class.simpleName}")
             }
+        }
+
         return mapOf(id to VariableInfo(type, value?.toString(), kind == "let"))
     }
 }
