@@ -7,28 +7,29 @@ import Token
 
 class AssignmentExpressionBuilder(
     tokens: List<Token>,
-) : AbstractASTBuilder(tokens) {
+    val lineIndex: Int,
+) : AbstractASTBuilder(tokens, lineIndex) {
     private var assignableExpressionResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
     private var identifierResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
 
     override fun verify(): ASTBuilderResult {
         if (tokens.size < 3) {
-            return ASTBuilderFailure("Not enough tokens to build AssignmentExpression")
+            return ASTBuilderFailure("Not enough tokens to build assignment expression")
         }
-        identifierResult = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()
+        identifierResult = IdentifierBuilder(tokens.subList(0, 1), lineIndex).verifyAndBuild()
         if (identifierResult is ASTBuilderSuccess && tokens[1].type == "ASSIGN") {
             assignableExpressionResult =
-                AssignableExpressionProvider(tokens.subList(2, tokens.size))
+                AssignableExpressionProvider(tokens.subList(2, tokens.size), lineIndex)
                     .getAssignableExpressionResult()
             return if (assignableExpressionResult is ASTBuilderSuccess &&
                 (assignableExpressionResult as ASTBuilderSuccess).astNode is Expression
             ) {
                 assignableExpressionResult
             } else {
-                ASTBuilderFailure("No valid assignable expression found")
+                ASTBuilderFailure((assignableExpressionResult as ASTBuilderFailure).errorMessage)
             }
         } else {
-            return ASTBuilderFailure("Invalid Assignment Expression")
+            return ASTBuilderFailure("Invalid assignment expression")
         }
     }
 

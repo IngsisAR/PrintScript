@@ -5,7 +5,8 @@ import TypeReference
 
 class TypeReferenceBuilder(
     tokens: List<Token>,
-) : AbstractASTBuilder(tokens) {
+    lineIndex: Int,
+) : AbstractASTBuilder(tokens, lineIndex) {
     override fun verify(): ASTBuilderResult =
         tokens
             .firstOrNull()
@@ -22,14 +23,7 @@ class TypeReferenceBuilder(
                     ASTBuilderFailure("Invalid type")
                 }
             }
-            ?: ASTBuilderFailure("Invalid type")
+            ?: ASTBuilderFailure("Empty tokens")
 
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            result
-        } else {
-            result
-        }
-    }
+    override fun verifyAndBuild(): ASTBuilderResult = verify()
 }

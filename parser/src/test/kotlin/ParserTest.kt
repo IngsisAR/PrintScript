@@ -50,7 +50,7 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -83,7 +83,7 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -118,7 +118,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -160,7 +160,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -202,7 +202,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -245,7 +245,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -287,7 +287,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -361,7 +361,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -431,7 +431,7 @@ class ParserTest {
                         end = 30,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -460,7 +460,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -476,7 +476,7 @@ class ParserTest {
                 Token(type = CPAREN.toString(), position = Position(start = 7, end = 8), value = ")"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 8, end = 9), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Mismatched parenthesis"))
     }
 
@@ -512,7 +512,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -546,7 +546,7 @@ class ParserTest {
                         end = 21,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -588,7 +588,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -622,7 +622,7 @@ class ParserTest {
                         end = 9,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -675,7 +675,7 @@ class ParserTest {
                         end = 34,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -724,7 +724,7 @@ class ParserTest {
                         end = 22,
                     ),
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -739,13 +739,11 @@ class ParserTest {
                 Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
                 Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
             )
-        val result =
-            ASTBuilderFailure(
-                errorMessage =
-                    "No valid statement found, errors: \nMissing semicolon at variable declaration\n" +
-                        "Missing semicolon at expression statement\n",
-            )
-        assertEquals(result, parser.parse(token))
+
+        assert(
+            parser.parse(token, 0) is ASTBuilderFailure &&
+                (parser.parse(token, 0) as ASTBuilderFailure).errorMessage.contains("Missing semicolon"),
+        )
     }
 
     @Test
@@ -761,7 +759,7 @@ class ParserTest {
                 Token(type = SEMICOLON.toString(), position = Position(start = 14, end = 15), value = ";"),
             )
         try {
-            parser.parse(token)
+            parser.parse(token, 0)
         } catch (e: IllegalStateException) {
             assertEquals("Only one line of code is allowed at a time.", e.message)
         }
@@ -779,7 +777,7 @@ class ParserTest {
                 Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "a"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Missing colon"))
     }
 
@@ -795,7 +793,7 @@ class ParserTest {
                 Token(type = TYPE.toString(), position = Position(start = 9, end = 15), value = "number"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid type"))
     }
 
@@ -809,7 +807,7 @@ class ParserTest {
                 Token(type = TYPE.toString(), position = Position(start = 3, end = 9), value = "number"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid start of variable declaration"))
     }
 
@@ -820,10 +818,9 @@ class ParserTest {
         val result =
             ASTBuilderFailure(
                 errorMessage =
-                    "No valid statement found, errors: " +
-                        "\nEmpty tokens\nEmpty tokens\n",
+                    "Empty tokens",
             )
-        assertEquals(result, parser.parse(token))
+        assertEquals(result, parser.parse(token, 0))
     }
 
     @Test
@@ -839,7 +836,7 @@ class ParserTest {
                 Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
                 Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Not enough tokens for a variable declarator"))
     }
 
@@ -861,7 +858,7 @@ class ParserTest {
                 Token(type = NUMBER.toString(), position = Position(start = 30, end = 32), value = "10"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 32, end = 33), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid declarator: No valid assignable expression found"))
     }
 
@@ -875,7 +872,7 @@ class ParserTest {
                 Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 19, end = 20), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have close parenthesis"))
     }
 
@@ -889,7 +886,7 @@ class ParserTest {
                 Token(type = CPAREN.toString(), position = Position(start = 19, end = 20), value = ")"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 20, end = 21), value = ";"),
             )
-        val result = parser.parse(token)
+        val result = parser.parse(token, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have open parenthesis"))
     }
 }

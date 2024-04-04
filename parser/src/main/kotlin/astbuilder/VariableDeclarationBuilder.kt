@@ -6,7 +6,8 @@ import VariableDeclarator
 
 class VariableDeclarationBuilder(
     tokens: List<Token>,
-) : AbstractASTBuilder(tokens) {
+    val lineIndex: Int,
+) : AbstractASTBuilder(tokens, lineIndex) {
     private var variableDeclarators: List<VariableDeclarator> = emptyList()
 
     override fun verify(): ASTBuilderResult {
@@ -15,7 +16,7 @@ class VariableDeclarationBuilder(
         }
 
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at variable declaration")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
         }
 
         if (tokens.first().type != "LET" && tokens.first().type != "CONST") {
@@ -24,8 +25,14 @@ class VariableDeclarationBuilder(
 
         val commaCount = tokens.count { it.type == "COMMA" }
         if (commaCount == 0) {
+            if (tokens.size < 3) {
+                return ASTBuilderFailure(
+                    "Invalid variable declaration: not enough tokens for a variable declarator at " +
+                        "($lineIndex, ${tokens.first().position.end})",
+                )
+            }
             val variableDeclaratorResult =
-                VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1))
+                VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1), lineIndex)
                     .verifyAndBuild()
             if (variableDeclaratorResult is ASTBuilderFailure) {
                 return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
@@ -36,9 +43,15 @@ class VariableDeclarationBuilder(
         var tokensAux = tokens.subList(1, tokens.size - 1)
         var declaratorResult: ASTBuilderResult = ASTBuilderFailure("Invalid variable declaration")
         for (i in 0 until commaCount + 1) {
+            if (tokensAux.size < 3) {
+                return ASTBuilderFailure(
+                    "Invalid variable declaration: not enough tokens for a variable declarator at " +
+                        "($lineIndex, ${tokens.first().position.end})",
+                )
+            }
             if (i == commaCount) {
                 val variableDeclaratorResult =
-                    VariableDeclaratorBuilder(tokensAux)
+                    VariableDeclaratorBuilder(tokensAux, lineIndex)
                         .verifyAndBuild()
                 if (variableDeclaratorResult is ASTBuilderFailure) {
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
@@ -49,7 +62,7 @@ class VariableDeclarationBuilder(
             }
             val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
             val variableDeclaratorResult =
-                VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex))
+                VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex), lineIndex)
                     .verifyAndBuild()
             if (variableDeclaratorResult is ASTBuilderFailure) {
                 return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")

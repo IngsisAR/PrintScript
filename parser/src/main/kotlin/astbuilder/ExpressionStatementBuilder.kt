@@ -6,18 +6,19 @@ import Token
 
 class ExpressionStatementBuilder(
     tokens: List<Token>,
-) : AbstractASTBuilder(tokens) {
+    val lineIndex: Int,
+) : AbstractASTBuilder(tokens, lineIndex) {
     override fun verify(): ASTBuilderResult {
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at expression statement")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
         }
         if (tokens.size == 1) {
-            return ASTBuilderFailure("No expression found")
+            return ASTBuilderFailure("No expression found at ($lineIndex, ${tokens.first().position.start})")
         }
-        val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1)).getVerifiedExpressionResult()
+        val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1), lineIndex).getVerifiedExpressionResult()
         return if (expressionResult is ASTBuilderFailure) {
             ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
         } else {
