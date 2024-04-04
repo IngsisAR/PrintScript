@@ -14,7 +14,7 @@ class ConsoleOutputter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Outputter {
     override fun output(node: ASTNode) {
-        node as CallExpression
+        require(node is CallExpression) { "Node must be a CallExpression" }
         val output: StringBuilder = StringBuilder()
         node.arguments.forEach { arg ->
             when (arg) {

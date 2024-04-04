@@ -483,12 +483,12 @@ class InterpreterTest {
 
     @Test
     fun interpretErrorAssignmentExpression() {
-        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true)))
+        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true),"b" to VariableInfo("string", "world", true)))
         val astNode =
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a", start = 0, end = 1),
+                        left = Identifier(name = "b", start = 0, end = 1),
                         right =
                             AssignmentExpression(
                                 left = Identifier(name = "a", start = 0, end = 1),
@@ -499,6 +499,26 @@ class InterpreterTest {
                         start = 0,
                         end = 5,
                     ),
+                start = 0,
+                end = 6,
+            )
+        assertThrows(IllegalArgumentException::class.java) {
+            interpreter.interpret(astNode)
+        }
+    }
+
+    @Test
+    fun interpretTypeMismatchAssignmentExpression() {
+        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("number", "2", true)))
+        val astNode =
+            ExpressionStatement(
+                expression =
+                AssignmentExpression(
+                    left = Identifier(name = "1", start = 0, end = 1),
+                    right = StringLiteral(value = "world", start = 4, end = 5),
+                    start = 0,
+                    end = 5,
+                ),
                 start = 0,
                 end = 6,
             )

@@ -4,7 +4,7 @@ class BinaryExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Any {
-        node as BinaryExpression
+        require(node is BinaryExpression) { "Node must be an BinaryExpression" }
         val leftValue =
             when (val left = node.left) {
                 is NumberLiteral -> left.value
@@ -35,34 +35,21 @@ class BinaryExpressionInterpreter(
                 "+" ->
                     when {
                         leftValue is String && rightValue is String -> leftValue + rightValue
-
                         leftValue is Number && rightValue is Number -> leftValue as BigDecimal + rightValue as BigDecimal
-
                         leftValue is Number && rightValue is String || leftValue is String && rightValue is Number ->
                             leftValue.toString() +
                                 rightValue.toString()
-
                         else -> throw IllegalArgumentException("Invalid operands for '+': $leftValue, $rightValue")
                     }
-
-                "-" ->
-                    when {
-                        leftValue is Number && rightValue is Number -> leftValue as BigDecimal - rightValue as BigDecimal
-                        else -> throw IllegalArgumentException("Invalid operands for '-': $leftValue, $rightValue")
+                "-", "*", "/" -> when {
+                    leftValue is Number && rightValue is Number -> when (operator) {
+                        "-" -> (leftValue as BigDecimal) - (rightValue as BigDecimal)
+                        "*" -> (leftValue as BigDecimal) * (rightValue as BigDecimal)
+                        "/" -> (leftValue as BigDecimal) / (rightValue as BigDecimal)
+                        else -> throw IllegalArgumentException("Invalid operator: $operator")
                     }
-
-                "*" ->
-                    when {
-                        leftValue is Number && rightValue is Number -> leftValue as BigDecimal * rightValue as BigDecimal
-                        else -> throw IllegalArgumentException("Invalid operands for '*': $leftValue, $rightValue")
-                    }
-
-                "/" ->
-                    when {
-                        leftValue is Number && rightValue is Number -> leftValue as BigDecimal / rightValue as BigDecimal
-                        else -> throw IllegalArgumentException("Invalid operands for '/': $leftValue, $rightValue")
-                    }
-
+                    else -> throw IllegalArgumentException("Invalid operands for '$operator': $leftValue, $rightValue")
+                }
                 else -> throw IllegalArgumentException("Invalid operator: $operator")
             }
         return result

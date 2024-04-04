@@ -4,7 +4,7 @@ class CallExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
     override fun interpret(node: ASTNode) {
-        node as CallExpression
+        require(node is CallExpression) { "Node must be an CallExpression" }
         if (node.callee.name == "println") {
             ConsoleOutputter(variableMap).output(node)
             return
