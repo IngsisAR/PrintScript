@@ -1,14 +1,14 @@
 package formatter
 
 import ASTNode
-import AssigmentExpression
+import AssignmentExpression
 
-class AssigmentExpressionFormatter : FormatterInterface {
+class AssignmentExpressionFormatter : FormatterInterface {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
     ): String {
-        astNode as AssigmentExpression
+        astNode as AssignmentExpression
         val spacesInAssignSymbol = configMap["spacesInAssignSymbol"]?.let { it as Int } ?: 0
         return astNode.left.name + spaces(spacesInAssignSymbol) + '=' + spaces(spacesInAssignSymbol) +
             ExpressionFormatter().format(astNode.right, configMap)

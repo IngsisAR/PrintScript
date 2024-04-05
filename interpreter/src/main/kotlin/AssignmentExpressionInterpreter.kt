@@ -1,8 +1,8 @@
-class AssigmentExpressionInterpreter(
+class AssignmentExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
-        require(node is AssigmentExpression) { "Node must be an AssignmentExpression" }
+        require(node is AssignmentExpression) { "Node must be an AssignmentExpression" }
         val id = node.left.name
         val variable = variableMap[id] ?: throw IllegalArgumentException("Variable not found")
         require(variable.isMutable == true) { "Variable is not mutable: $id" }

@@ -6,7 +6,7 @@ class InterpreterImpl(
 
         when (node) {
             is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(node)
-            is AssigmentExpression -> internalVariableMap = AssigmentExpressionInterpreter(variableMap).interpret(node)
+            is AssignmentExpression -> internalVariableMap = AssignmentExpressionInterpreter(variableMap).interpret(node)
             is CallExpression -> CallExpressionInterpreter(variableMap).interpret(node)
             is Identifier -> IdentifierInterpreter(variableMap).interpret(node)
             is ExpressionStatement -> return interpret(node.expression)

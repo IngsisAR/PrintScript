@@ -121,7 +121,7 @@ class FormatterTest {
         val ast =
             ExpressionStatement(
                 expression =
-                    AssigmentExpression(
+                    AssignmentExpression(
                         left = Identifier(name = "a", start = 0, end = 1),
                         right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
                         start = 0,

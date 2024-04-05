@@ -1,7 +1,7 @@
 package formatter
 
 import ASTNode
-import AssigmentExpression
+import AssignmentExpression
 import BinaryExpression
 import CallExpression
 import ExpressionStatement
@@ -22,7 +22,7 @@ class FormatterImpl(
             is VariableDeclaration -> VariableDeclarationFormatter().format(astNode, configMap)
             is VariableDeclarator -> VariableDeclaratorFormatter().format(astNode, configMap)
             is BinaryExpression -> BinaryExpressionFormatter().format(astNode, configMap)
-            is AssigmentExpression -> AssigmentExpressionFormatter().format(astNode, configMap)
+            is AssignmentExpression -> AssignmentExpressionFormatter().format(astNode, configMap)
             is CallExpression -> CallExpressionFormatter().format(astNode, configMap)
             is ExpressionStatement -> ExpressionStatementFormatter().format(astNode, configMap)
             else -> throw IllegalArgumentException("Unknown ASTNode type")

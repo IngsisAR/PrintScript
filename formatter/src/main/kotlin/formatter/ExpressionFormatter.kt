@@ -1,7 +1,7 @@
 package formatter
 
 import ASTNode
-import AssigmentExpression
+import AssignmentExpression
 import BinaryExpression
 import CallExpression
 import Expression
@@ -21,7 +21,7 @@ class ExpressionFormatter : FormatterInterface {
             is StringLiteral -> "\"${astNode.value}\""
             is CallExpression -> CallExpressionFormatter().format(astNode, configMap)
             is Identifier -> astNode.name
-            is AssigmentExpression -> AssigmentExpressionFormatter().format(astNode, configMap)
+            is AssignmentExpression -> AssignmentExpressionFormatter().format(astNode, configMap)
         }
     }
 }

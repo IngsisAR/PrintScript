@@ -1,4 +1,3 @@
-import java.lang.IllegalArgumentException
 import java.util.Locale
 import kotlin.system.exitProcess
 
