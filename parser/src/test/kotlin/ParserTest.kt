@@ -23,7 +23,7 @@ class ParserTest {
     @Test
     fun parseDeclareEmptyNumberVariable() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -50,13 +50,13 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseDeclareEmptyStringVariable() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -83,13 +83,13 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseDeclareStringVariable() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -118,13 +118,13 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseMultiplicationOperation() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
@@ -160,13 +160,13 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseDivisionOperation() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
@@ -202,13 +202,13 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parsePlusOperationInExpressionStatement() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
@@ -245,13 +245,13 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseMinusOperationInExpressionStatement() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
@@ -287,13 +287,13 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseBinaryExpressionWithAllOperatorsInStatementExpression() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
@@ -361,14 +361,14 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseBinaryExpressionsWithFunctionIdentifierAndNumbersInStatementExpression() {
         val parser = Parser()
         // function(1 + 2) * a / (4 + 5)
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
                 Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
@@ -431,13 +431,13 @@ class ParserTest {
                         end = 30,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseBinaryExpressionWithStringAndNumberInStatementExpression() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = STRING.toString(), position = Position(start = 0, end = 13), value = "Hello world"),
                 Token(type = PLUS.toString(), position = Position(start = 14, end = 15), value = "+"),
@@ -460,13 +460,13 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseBinaryExpressionWithMismatchedParenthesisInStatementExpressionReturnsFailure() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = OPAREN.toString(), position = Position(start = 0, end = 1), value = "("),
                 Token(type = NUMBER.toString(), position = Position(start = 1, end = 2), value = "1"),
@@ -476,14 +476,14 @@ class ParserTest {
                 Token(type = CPAREN.toString(), position = Position(start = 7, end = 8), value = ")"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 8, end = 9), value = ";"),
             )
-        val result = parser.parse(token, 0)
+        val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Mismatched parenthesis"))
     }
 
     @Test
     fun parseDeclareNumberVariable() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -512,13 +512,13 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parsePrintFunctionWithString() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
                 Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
@@ -546,14 +546,14 @@ class ParserTest {
                         end = 21,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseCallExpressionWithMultipleArguments() {
         val parser = Parser()
         // function(1,2,3,4);
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
                 Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
@@ -588,13 +588,13 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parsePrintFunctionWithNumber() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
                 Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
@@ -622,13 +622,13 @@ class ParserTest {
                         end = 9,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseMultipleVariableDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -675,13 +675,13 @@ class ParserTest {
                         end = 34,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseDeclareBinaryOperation() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -724,13 +724,13 @@ class ParserTest {
                         end = 22,
                     ),
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseErrorForMissingSemicolon() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -741,15 +741,15 @@ class ParserTest {
             )
 
         assert(
-            parser.parse(token, 0) is ASTBuilderFailure &&
-                (parser.parse(token, 0) as ASTBuilderFailure).errorMessage.contains("Missing semicolon"),
+            parser.parse(tokens, 0) is ASTBuilderFailure &&
+                (parser.parse(tokens, 0) as ASTBuilderFailure).errorMessage.contains("Missing semicolon"),
         )
     }
 
     @Test
     fun parseErrorForExtraSemicolon() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -759,7 +759,7 @@ class ParserTest {
                 Token(type = SEMICOLON.toString(), position = Position(start = 14, end = 15), value = ";"),
             )
         try {
-            parser.parse(token, 0)
+            parser.parse(tokens, 0)
         } catch (e: IllegalStateException) {
             assertEquals("Only one line of code is allowed at a time.", e.message)
         }
@@ -768,7 +768,7 @@ class ParserTest {
     @Test
     fun parseErrorForMissingColonInDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -777,56 +777,64 @@ class ParserTest {
                 Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "a"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
             )
-        val result = parser.parse(token, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Missing colon"))
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid variable declaration: Invalid declarator: Missing colon at (0, ${tokens[1].position.end})",
+            (result as ASTBuilderFailure).errorMessage,
+        )
     }
 
     @Test
     fun parseErrorForMultipleColonInDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
+                Token(type = ID.toString(), position = Position(start = 3, end = 4), value = "a"),
+                Token(type = COLON.toString(), position = Position(start = 4, end = 5), value = ":"),
                 Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = COLON.toString(), position = Position(start = 7, end = 8), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 9, end = 15), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
+                Token(type = TYPE.toString(), position = Position(start = 6, end = 12), value = "number"),
+                Token(type = SEMICOLON.toString(), position = Position(start = 12, end = 13), value = ";"),
             )
-        val result = parser.parse(token, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid type"))
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid variable declaration: Invalid declarator: Missing type at (0, ${tokens[2].position.end})",
+            (result as ASTBuilderFailure).errorMessage,
+        )
     }
 
     @Test
     fun parseErrorForInvalidStatementDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
                 Token(type = COLON.toString(), position = Position(start = 1, end = 2), value = ":"),
                 Token(type = TYPE.toString(), position = Position(start = 3, end = 9), value = "number"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
             )
-        val result = parser.parse(token, 0)
+        val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid start of variable declaration"))
     }
 
     @Test
     fun parseErrorForEmptyTokens() {
         val parser = Parser()
-        val token = listOf<Token>()
+        val tokens = listOf<Token>()
         val result =
             ASTBuilderFailure(
                 errorMessage =
                     "Empty tokens",
             )
-        assertEquals(result, parser.parse(token, 0))
+        assertEquals(result, parser.parse(tokens, 0))
     }
 
     @Test
     fun parseErrorExtraComasInDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
                 Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
@@ -836,57 +844,53 @@ class ParserTest {
                 Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
                 Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
             )
-        val result = parser.parse(token, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Not enough tokens for a variable declarator"))
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid variable declaration: not enough tokens for a variable declarator at " +
+                "(0, ${tokens[4].position.end})",
+            (result as ASTBuilderFailure).errorMessage,
+        )
     }
 
     @Test
     fun parseErrorFewerComasInDeclaration() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
-                Token(type = ID.toString(), position = Position(start = 18, end = 19), value = "b"),
-                Token(type = COLON.toString(), position = Position(start = 19, end = 20), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 21, end = 27), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 28, end = 29), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 30, end = 32), value = "10"),
+                Token(type = ID.toString(), position = Position(start = 3, end = 4), value = "a"),
+                Token(type = COLON.toString(), position = Position(start = 4, end = 5), value = ":"),
+                Token(type = TYPE.toString(), position = Position(start = 6, end = 12), value = "number"),
+                Token(type = ASSIGN.toString(), position = Position(start = 12, end = 13), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "5"),
+                Token(type = ID.toString(), position = Position(start = 14, end = 15), value = "b"),
+                Token(type = COLON.toString(), position = Position(start = 15, end = 16), value = ":"),
+                Token(type = TYPE.toString(), position = Position(start = 16, end = 22), value = "number"),
+                Token(type = ASSIGN.toString(), position = Position(start = 22, end = 23), value = "="),
+                Token(type = NUMBER.toString(), position = Position(start = 23, end = 32), value = "10"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 32, end = 33), value = ";"),
             )
-        val result = parser.parse(token, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid declarator: No valid assignable expression found"))
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid variable declaration: Invalid declarator: Invalid assigned expression at " +
+                "(0, ${tokens[5].position.start})",
+            (result as ASTBuilderFailure).errorMessage,
+        )
     }
 
     @Test
     fun parseErrorMissingCloseParenthesisInPrintFunction() {
         val parser = Parser()
-        val token =
+        val tokens =
             listOf(
                 Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
                 Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
                 Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
                 Token(type = SEMICOLON.toString(), position = Position(start = 19, end = 20), value = ";"),
             )
-        val result = parser.parse(token, 0)
+        val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have close parenthesis"))
-    }
-
-    @Test
-    fun parseErrorMissingOpenParenthesisInPrintFunction() {
-        val parser = Parser()
-        val token =
-            listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
-                Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
-                Token(type = CPAREN.toString(), position = Position(start = 19, end = 20), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 20, end = 21), value = ";"),
-            )
-        val result = parser.parse(token, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have open parenthesis"))
     }
 }

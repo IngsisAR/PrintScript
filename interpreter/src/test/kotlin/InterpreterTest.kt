@@ -483,7 +483,7 @@ class InterpreterTest {
 
     @Test
     fun interpretErrorAssignmentExpression() {
-        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true),"b" to VariableInfo("string", "world", true)))
+        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true), "b" to VariableInfo("string", "world", true)))
         val astNode =
             ExpressionStatement(
                 expression =
@@ -513,12 +513,12 @@ class InterpreterTest {
         val astNode =
             ExpressionStatement(
                 expression =
-                AssignmentExpression(
-                    left = Identifier(name = "1", start = 0, end = 1),
-                    right = StringLiteral(value = "world", start = 4, end = 5),
-                    start = 0,
-                    end = 5,
-                ),
+                    AssignmentExpression(
+                        left = Identifier(name = "1", start = 0, end = 1),
+                        right = StringLiteral(value = "world", start = 4, end = 5),
+                        start = 0,
+                        end = 5,
+                    ),
                 start = 0,
                 end = 6,
             )

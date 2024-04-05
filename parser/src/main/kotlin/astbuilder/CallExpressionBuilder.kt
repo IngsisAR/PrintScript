@@ -13,11 +13,15 @@ class CallExpressionBuilder(
     private var identifierResult: ASTBuilderResult = ASTBuilderFailure("")
 
     override fun verify(): ASTBuilderResult {
-        if (tokens.size < 3) {
+        if (tokens.size < 2) {
             return ASTBuilderFailure("Not enough members for call expression")
         }
 
         identifierResult = IdentifierBuilder(tokens.subList(0, 1), lineIndex).verifyAndBuild()
+
+        if (identifierResult is ASTBuilderFailure || identifierResult is ASTBuilderSuccess && tokens[1].type != "OPAREN") {
+            return ASTBuilderFailure("Not enough members for call expression")
+        }
         if (identifierResult is ASTBuilderSuccess && tokens[1].type == "OPAREN" && tokens.last().type != "CPAREN") {
             return ASTBuilderFailure("Call expression does not have close parenthesis at ($lineIndex, ${tokens.last().position.start})")
         }
@@ -29,7 +33,10 @@ class CallExpressionBuilder(
                     ExpressionProvider(tokens.subList(2, tokens.size - 1), lineIndex)
                         .getVerifiedExpressionResult()
                 if (expressionResult is ASTBuilderFailure) {
-                    return ASTBuilderFailure("Call expression does not have valid argument: ${expressionResult.errorMessage}")
+                    if (expressionResult.errorMessage.isNotBlank() || expressionResult.errorMessage.isNotEmpty()) {
+                        return ASTBuilderFailure("Call expression does not have valid argument: ${expressionResult.errorMessage}")
+                    }
+                    return ASTBuilderFailure("Call expression does not have valid argument")
                 }
                 arguments = listOf((expressionResult as ASTBuilderSuccess).astNode as Expression)
                 return expressionResult

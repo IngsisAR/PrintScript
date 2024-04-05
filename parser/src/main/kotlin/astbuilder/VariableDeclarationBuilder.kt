@@ -19,59 +19,66 @@ class VariableDeclarationBuilder(
             return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
         }
 
-        if (tokens.first().type != "LET" && tokens.first().type != "CONST") {
-            return ASTBuilderFailure("Invalid start of variable declaration")
-        }
+        if (tokens.any { it.type == "COLON" } || tokens.any { it.type == "LET" || it.type == "CONST" }) {
+            if (tokens.first().type != "LET" && tokens.first().type != "CONST") {
+                return ASTBuilderFailure(
+                    "Invalid start of variable declaration at " +
+                        "($lineIndex, ${tokens.first().position.start})",
+                )
+            }
 
-        val commaCount = tokens.count { it.type == "COMMA" }
-        if (commaCount == 0) {
-            if (tokens.size < 3) {
-                return ASTBuilderFailure(
-                    "Invalid variable declaration: not enough tokens for a variable declarator at " +
-                        "($lineIndex, ${tokens.first().position.end})",
-                )
-            }
-            val variableDeclaratorResult =
-                VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1), lineIndex)
-                    .verifyAndBuild()
-            if (variableDeclaratorResult is ASTBuilderFailure) {
-                return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
-            }
-            variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
-            return variableDeclaratorResult
-        }
-        var tokensAux = tokens.subList(1, tokens.size - 1)
-        var declaratorResult: ASTBuilderResult = ASTBuilderFailure("Invalid variable declaration")
-        for (i in 0 until commaCount + 1) {
-            if (tokensAux.size < 3) {
-                return ASTBuilderFailure(
-                    "Invalid variable declaration: not enough tokens for a variable declarator at " +
-                        "($lineIndex, ${tokens.first().position.end})",
-                )
-            }
-            if (i == commaCount) {
+            val commaCount = tokens.count { it.type == "COMMA" }
+            var tokensAux = tokens.subList(1, tokens.size - 1)
+            if (commaCount == 0) {
+                if (tokensAux.size < 3) {
+                    return ASTBuilderFailure(
+                        "Invalid variable declaration: not enough tokens for a variable declarator at " +
+                            "($lineIndex, ${tokens.first().position.end})",
+                    )
+                }
                 val variableDeclaratorResult =
-                    VariableDeclaratorBuilder(tokensAux, lineIndex)
+                    VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1), lineIndex)
+                        .verifyAndBuild()
+                if (variableDeclaratorResult is ASTBuilderFailure) {
+                    return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
+                }
+                variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
+                return variableDeclaratorResult
+            }
+            var declaratorResult: ASTBuilderResult = ASTBuilderFailure("Invalid variable declaration")
+            for (i in 0 until commaCount + 1) {
+                if (tokensAux.size < 3) {
+                    return ASTBuilderFailure(
+                        "Invalid variable declaration: not enough tokens for a variable declarator at " +
+                            "($lineIndex, ${tokensAux.first().position.start})",
+                    )
+                }
+                if (i == commaCount) {
+                    val variableDeclaratorResult =
+                        VariableDeclaratorBuilder(tokensAux, lineIndex)
+                            .verifyAndBuild()
+                    if (variableDeclaratorResult is ASTBuilderFailure) {
+                        return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
+                    }
+                    declaratorResult = variableDeclaratorResult
+                    variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
+                    break
+                }
+                val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
+                val variableDeclaratorResult =
+                    VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex), lineIndex)
                         .verifyAndBuild()
                 if (variableDeclaratorResult is ASTBuilderFailure) {
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
                 }
                 declaratorResult = variableDeclaratorResult
                 variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
-                break
+                tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
             }
-            val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
-            val variableDeclaratorResult =
-                VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex), lineIndex)
-                    .verifyAndBuild()
-            if (variableDeclaratorResult is ASTBuilderFailure) {
-                return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
-            }
-            declaratorResult = variableDeclaratorResult
-            variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
-            tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
+            return declaratorResult
+        } else {
+            return ASTBuilderFailure("Invalid variable declaration")
         }
-        return declaratorResult
     }
 
     override fun verifyAndBuild(): ASTBuilderResult {

@@ -36,7 +36,7 @@ class VariableDeclaratorBuilder(
 
         val typeBuilderResult = TypeReferenceBuilder(tokens.subList(2, 3), lineIndex).verifyAndBuild()
         if (typeBuilderResult is ASTBuilderFailure) {
-            return ASTBuilderFailure("Invalid declarator: Missing type at ($lineIndex, ${tokens.last().position.start})")
+            return ASTBuilderFailure("Invalid declarator: Missing type at ($lineIndex, ${tokens[2].position.start})")
         } else if (typeBuilderResult is ASTBuilderSuccess) {
             typeReference = typeBuilderResult.astNode as TypeReference
         }
@@ -44,7 +44,7 @@ class VariableDeclaratorBuilder(
             return ASTBuilderFailure("Invalid declarator: Missing assignment operator at ($lineIndex, ${tokens.last().position.end})")
         }
         if (tokens.size == 4) {
-            return ASTBuilderFailure("Invalid declarator: Missing assignment expression at ($lineIndex, ${tokens.last().position.end})")
+            return ASTBuilderFailure("Invalid declarator: Missing assigned expression at ($lineIndex, ${tokens.last().position.end})")
         }
         if (tokens.size > 4) {
             return if (tokens[3].type == "ASSIGN") {
@@ -54,7 +54,12 @@ class VariableDeclaratorBuilder(
                         lineIndex,
                     ).getAssignableExpressionResult()
                 if (assignableExpressionResult is ASTBuilderFailure) {
-                    ASTBuilderFailure("Invalid declarator: ${assignableExpressionResult.errorMessage}")
+                    val errorMessage = assignableExpressionResult.errorMessage
+                    return if (errorMessage.isNotBlank() || errorMessage.isNotEmpty()) {
+                        ASTBuilderFailure("Invalid declarator: $errorMessage")
+                    } else {
+                        ASTBuilderFailure("Invalid declarator: Invalid assigned expression at ($lineIndex, ${tokens[3].position.end})")
+                    }
                 } else {
                     init = (assignableExpressionResult as ASTBuilderSuccess).astNode as Expression
                     assignableExpressionResult

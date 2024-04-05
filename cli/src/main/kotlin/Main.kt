@@ -5,7 +5,7 @@ fun main() {
     println("\nReading from string\n")
     val input =
         """
-        a(;
+        a:number;
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
     val lines = printScriptLineReader.readLinesFromString(input)
@@ -25,7 +25,11 @@ private fun performFromLines(fileLines: List<String>) {
         val ast = parser.parse(tokens, index)
         println(ast)
         if (ast is ASTBuilderSuccess) {
-            interpreter = interpreter.interpret(ast.astNode)
+            try {
+                interpreter = interpreter.interpret(ast.astNode)
+            } catch (e: Exception) {
+                println(e.message)
+            }
         }
     }
 }

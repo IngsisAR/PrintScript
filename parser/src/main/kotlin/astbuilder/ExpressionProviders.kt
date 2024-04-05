@@ -40,7 +40,7 @@ class AssignableExpressionProvider(
                         it == "Not enough members for call expression" ||
                         it == "Binary expression must have at least 3 tokens"
                 }.joinToString("\n")
-        return ASTBuilderFailure("No valid assignable expression found")
+        return ASTBuilderFailure(errorMessages)
     }
 }
 
@@ -83,7 +83,7 @@ class ExpressionProvider(
                         it == "Not enough members for call expression" ||
                         it == "Binary expression must have at least 3 tokens"
                 }.joinToString("\n")
-        return ASTBuilderFailure("No valid expression found: \n$errorMessages")
+        return ASTBuilderFailure(errorMessages)
     }
 }
 
@@ -111,9 +111,11 @@ class StatementProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure) {
-                if (astBuilderResult.errorMessage != "Invalid start of variable declaration") {
+                if (astBuilderResult.errorMessage != "Invalid variable declaration" && statementBuilder is VariableDeclarationBuilder) {
                     errorMessages = astBuilderResult.errorMessage
                     break
+                } else if (statementBuilder is VariableDeclarationBuilder) {
+                    continue
                 }
                 errorMessages += astBuilderResult.errorMessage
             }
