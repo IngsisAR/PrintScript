@@ -13,7 +13,11 @@ class FormatterTest {
     private fun createTestConfigJson(configMap: Map<String, Any?>) {
         val jsonObject = JSONObject()
         configMap.forEach { (key, value) -> jsonObject.put(key, value) }
-        Files.write(Path(testConfigJsonPath), jsonObject.toString().toByteArray(), StandardOpenOption.CREATE)
+        try {
+            Files.write(Path(testConfigJsonPath), jsonObject.toString().toByteArray(), StandardOpenOption.CREATE_NEW)
+        } catch (e: Exception) {
+            Files.write(Path(testConfigJsonPath), jsonObject.toString().toByteArray(), StandardOpenOption.TRUNCATE_EXISTING)
+        }
     }
 
     @Test
