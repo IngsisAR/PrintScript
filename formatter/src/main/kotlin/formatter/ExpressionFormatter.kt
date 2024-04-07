@@ -9,7 +9,7 @@ import Identifier
 import NumberLiteral
 import StringLiteral
 
-class ExpressionFormatter : FormatterInterface {
+class ExpressionFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,

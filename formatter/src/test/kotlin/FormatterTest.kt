@@ -1,17 +1,32 @@
 import formatter.FormatterImpl
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertThrows
-import java.io.File
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class FormatterTest {
+    private val testConfigJsonPath = "src/test/resources/FormatterTestConfig.json"
+
+    private fun createTestConfigJson(configMap: Map<String, Any?>) {
+        val jsonObject = JSONObject()
+        configMap.forEach { (key, value) -> jsonObject.put(key, value) }
+        Files.write(Path(testConfigJsonPath), jsonObject.toString().toByteArray(), StandardOpenOption.CREATE)
+    }
+
     @Test
-    fun printWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1, 1, 1)
+    fun printWithOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+            ),
+        )
+
         val ast =
             ExpressionStatement(
                 expression =
@@ -33,14 +48,21 @@ class FormatterTest {
                 start = 0,
                 end = 13,
             )
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
+        val formatter = FormatterImpl(testConfigJsonPath)
         assertEquals("\nprint(5 + 4);\n", formatter.format(ast))
-        deleteTestJson()
     }
 
     @Test
-    fun printWithNoneValue() {
-        copyJsonAndModifyAttribute(1, 1, 1, 0)
+    fun printWithTwoSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 2,
+                "spaceAfterColon" to 2,
+                "spacesInAssignSymbol" to 2,
+                "lineJumpBeforePrintln" to 2,
+            ),
+        )
+
         val ast =
             ExpressionStatement(
                 expression =
@@ -62,14 +84,57 @@ class FormatterTest {
                 start = 0,
                 end = 13,
             )
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
-        assertEquals("print(5 + 4);\n", formatter.format(ast))
-        deleteTestJson()
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("\n\nprint(5 + 4);\n", formatter.format(ast))
     }
 
     @Test
-    fun numberVariableDeclaratorWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1, 1, 1)
+    fun printWithNoDefineSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+            ),
+        )
+
+        val ast =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "print", start = 0, end = 5),
+                        arguments =
+                            listOf(
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
+                                    operator = "+",
+                                    start = 6,
+                                    end = 11,
+                                ),
+                            ),
+                        start = 0,
+                        end = 12,
+                    ),
+                start = 0,
+                end = 13,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("print(5 + 4);\n", formatter.format(ast))
+    }
+
+    @Test
+    fun numberVariableDeclaratorWithOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+            ),
+        )
+
         val ast =
             VariableDeclaration(
                 declarations =
@@ -86,14 +151,83 @@ class FormatterTest {
                 start = 0,
                 end = 19,
             )
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
+        val formatter = FormatterImpl(testConfigJsonPath)
         assertEquals("let a : number = 1;\n", formatter.format(ast))
-        deleteTestJson()
     }
 
     @Test
-    fun stringVariableDeclaratorWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1, 1, 1)
+    fun numberVariableDeclaratorWithTwoSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 2,
+                "spaceAfterColon" to 2,
+                "spacesInAssignSymbol" to 2,
+                "lineJumpBeforePrintln" to 2,
+            ),
+        )
+
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "number", start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            start = 4,
+                            end = 18,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 19,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("let a  :  number  =  1;\n", formatter.format(ast))
+    }
+
+    @Test
+    fun numberVariableDeclaratorWithInvalidSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+            ),
+        )
+
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "number", start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            start = 4,
+                            end = 18,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 19,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("let a:number=1;\n", formatter.format(ast))
+    }
+
+    @Test
+    fun stringVariableDeclaratorWithOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+            ),
+        )
+
         val ast =
             VariableDeclaration(
                 declarations =
@@ -110,14 +244,83 @@ class FormatterTest {
                 start = 0,
                 end = 30,
             )
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
+        val formatter = FormatterImpl(testConfigJsonPath)
         assertEquals("let a : string = \"Hello World\";\n", formatter.format(ast))
-        deleteTestJson()
     }
 
     @Test
-    fun assignationStatementWithSingleValue() {
-        copyJsonAndModifyAttribute(1, 1, 1, 1)
+    fun stringVariableDeclaratorWithTwoSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 2,
+                "spaceAfterColon" to 2,
+                "spacesInAssignSymbol" to 2,
+                "lineJumpBeforePrintln" to 2,
+            ),
+        )
+
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "string", start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            start = 4,
+                            end = 29,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 30,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("let a  :  string  =  \"Hello World\";\n", formatter.format(ast))
+    }
+
+    @Test
+    fun stringVariableDeclaratorWithInvalidSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+            ),
+        )
+
+        val ast =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "string", start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            start = 4,
+                            end = 29,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 30,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("let a:string=\"Hello World\";\n", formatter.format(ast))
+    }
+
+    @Test
+    fun assignationStatementWithOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+            ),
+        )
+
         val ast =
             ExpressionStatement(
                 expression =
@@ -130,42 +333,51 @@ class FormatterTest {
                 start = 0,
                 end = 6,
             )
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
+        val formatter = FormatterImpl(testConfigJsonPath)
         assertEquals("a = 2;\n", formatter.format(ast))
-        deleteTestJson()
+    }
+
+    @Test
+    fun assignationStatementWithInvalidSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+            ),
+        )
+
+        val ast =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "a", start = 0, end = 1),
+                        right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
+                        start = 0,
+                        end = 5,
+                    ),
+                start = 0,
+                end = 6,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("a=2;\n", formatter.format(ast))
     }
 
     @Test
     fun errorUnknownASTNodeType() {
-        copyJsonAndModifyAttribute(1, 1, 1, 1)
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+            ),
+        )
         val ast = NumberLiteral(value = 2.toBigDecimal(), start = 0, end = 1)
-        val formatter = FormatterImpl("src/main/resources/FormatterTestConfig.json")
-        val expected = IllegalArgumentException("Unknown ASTNode type")
+        val formatter = FormatterImpl(testConfigJsonPath)
         assertThrows(IllegalArgumentException::class.java) {
             formatter.format(ast)
         }
-        deleteTestJson()
-    }
-
-    private fun copyJsonAndModifyAttribute(
-        spaceBeforeColonValue: Int,
-        spaceAfterColonValue: Int,
-        spacesInAssignSymbolValue: Int,
-        lineJumpBeforePrintlnValue: Int,
-    ) {
-        val path = Paths.get("src/main/resources/FormatterConfig.json")
-        val json = String(Files.readAllBytes(path))
-        val jsonObject = JSONObject(json)
-
-        jsonObject.put("spaceBeforeColon", spaceBeforeColonValue)
-        jsonObject.put("spaceAfterColon", spaceAfterColonValue)
-        jsonObject.put("spacesInAssignSymbol", spacesInAssignSymbolValue)
-        jsonObject.put("lineJumpBeforePrintln", lineJumpBeforePrintlnValue)
-        Files.write(Path("src/main/resources/FormatterTestConfig.json"), jsonObject.toString().toByteArray())
-    }
-
-    private fun deleteTestJson() {
-        val file = File("src/main/resources/FormatterTestConfig.json")
-        file.delete()
     }
 }

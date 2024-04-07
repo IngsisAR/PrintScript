@@ -48,11 +48,12 @@ fi
 echo "Checking format"
 
 ./gradlew ktlintFormat
-git add .
+
 if [ $? -ne 0 ]; then
   echo "ktlintFormat task failed, aborting commit."
   exit 1
 fi
+git add .
 
 echo "Checking build"
 

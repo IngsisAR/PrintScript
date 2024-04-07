@@ -3,7 +3,7 @@ package formatter
 import ASTNode
 import BinaryExpression
 
-class BinaryExpressionFormatter : FormatterInterface {
+class BinaryExpressionFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
