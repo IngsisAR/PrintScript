@@ -3,7 +3,7 @@ package formatter
 import ASTNode
 import VariableDeclaration
 
-class VariableDeclarationFormatter : FormatterInterface {
+class VariableDeclarationFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,

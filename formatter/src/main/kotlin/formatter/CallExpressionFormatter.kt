@@ -3,17 +3,17 @@ package formatter
 import ASTNode
 import CallExpression
 
-class CallExpressionFormatter : FormatterInterface {
+class CallExpressionFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
     ): String {
         astNode as CallExpression
-        val lineJumpBeforePrintln = configMap["lineJumpBeforePrintln"]?.let { it as Int } ?: 0
+        val lineJumpBeforePrintln = (configMap["lineJumpBeforePrintln"] as? Int)?.takeIf { it > 0 } ?: 0
         val lineJump =
-            when (lineJumpBeforePrintln > 0) {
-                true -> jumpLine(lineJumpBeforePrintln)
-                false -> ""
+            when (lineJumpBeforePrintln == 0) {
+                false -> jumpLine(lineJumpBeforePrintln)
+                true -> ""
             }
         return lineJump + astNode.callee.name + "(" +
             astNode.arguments.joinToString(", ") {

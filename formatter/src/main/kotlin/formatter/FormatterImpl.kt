@@ -12,7 +12,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
 
 class FormatterImpl(
-    val jsonPath: String,
+    jsonPath: String,
 ) {
     private val mapper = jacksonObjectMapper()
     private val configMap: Map<String, Any?> = mapper.readValue(File(jsonPath).readText())
