@@ -17,8 +17,9 @@ class FormatterImpl(
     private val mapper = jacksonObjectMapper()
     private val configMap: Map<String, Any?> = mapper.readValue(File(jsonPath).readText())
 
-    fun format(astNode: ASTNode): String =
-        when (astNode) {
+    fun format(astNode: ASTNode): String {
+
+        return when (astNode) {
             is VariableDeclaration -> VariableDeclarationFormatter().format(astNode, configMap)
             is VariableDeclarator -> VariableDeclaratorFormatter().format(astNode, configMap)
             is BinaryExpression -> BinaryExpressionFormatter().format(astNode, configMap)
@@ -27,4 +28,5 @@ class FormatterImpl(
             is ExpressionStatement -> ExpressionStatementFormatter().format(astNode, configMap)
             else -> throw IllegalArgumentException("Unknown ASTNode type")
         }
+    }
 }

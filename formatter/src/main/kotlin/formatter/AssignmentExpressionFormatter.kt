@@ -9,7 +9,7 @@ class AssignmentExpressionFormatter : FormatterInterface {
         configMap: Map<String, Any?>,
     ): String {
         astNode as AssignmentExpression
-        val spacesInAssignSymbol = configMap["spacesInAssignSymbol"]?.let { it as Int } ?: 0
+        val spacesInAssignSymbol = (configMap["spacesInAssignSymbol"] as? Number)?.toInt()?.takeIf { it >= 0 } ?: 0
         return astNode.left.name + spaces(spacesInAssignSymbol) + '=' + spaces(spacesInAssignSymbol) +
             ExpressionFormatter().format(astNode.right, configMap)
     }
