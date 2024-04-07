@@ -2,7 +2,7 @@ package formatter
 
 import ASTNode
 
-interface FormatterInterface {
+interface Formatter {
     fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,

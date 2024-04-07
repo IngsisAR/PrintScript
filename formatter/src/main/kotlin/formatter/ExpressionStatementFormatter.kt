@@ -3,7 +3,7 @@ package formatter
 import ASTNode
 import ExpressionStatement
 
-class ExpressionStatementFormatter : FormatterInterface {
+class ExpressionStatementFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
