@@ -2,6 +2,7 @@ val ktlint by configurations.creating
 
 plugins {
     kotlin("jvm") version "1.9.22"
+    `maven-publish`
 }
 
 group = "australfi.ingsis7"
@@ -62,4 +63,22 @@ tasks.build {
 }
 kotlin {
     jvmToolchain(20)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/brarios/printscript")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
 }
