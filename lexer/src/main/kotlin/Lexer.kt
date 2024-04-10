@@ -1,7 +1,15 @@
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import java.io.File
+
 class Lexer(
     private val input: String,
+    private val lineIndex: Int,
+    tokenRegexJsonPath: String,
 ) {
     private var currentPosition = 0
+    private val mapper = jacksonObjectMapper()
+    private val tokensRegex: List<TokenRegex> = mapper.readValue(File(tokenRegexJsonPath))
 
     @Throws(IllegalStateException::class)
     fun tokenize(): List<Token> {
@@ -24,11 +32,11 @@ class Lexer(
     private fun getNextToken(): Token? {
         val remainingInput = input.substring(currentPosition)
 
-        for (regexToken in tokenReg) {
-            val matchResult = regexToken.regex.toRegex().find(remainingInput)
+        for (tokenRegex in tokensRegex) {
+            val matchResult = tokenRegex.regex.toRegex().find(remainingInput)
             if (matchResult != null && matchResult.range.first == 0) {
                 val matchedValue = matchResult.value
-                val token = createToken(matchedValue, regexToken)
+                val token = createToken(matchedValue, tokenRegex)
                 currentPosition += matchedValue.length
                 return token
             }
@@ -41,17 +49,23 @@ class Lexer(
         }
 
         // Handle unexpected characters
-        error("Unexpected character at position $currentPosition: ${remainingInput[0]}")
+        error("Unexpected character at ($lineIndex,$currentPosition): ${remainingInput[0]}")
     }
 
     private fun createToken(
         matchedValue: String,
-        tokenType: RegexToken,
+        tokenType: TokenRegex,
     ): Token {
         val startPosition = currentPosition
         val endPosition = currentPosition + matchedValue.length
         val position = Position(startPosition, endPosition)
-        val trimmedVal = if (tokenType.token == TokenType.STRING) matchedValue.substring(1, matchedValue.length - 1) else matchedValue
-        return Token(tokenType.token.toString(), position, trimmedVal)
+        val trimmedVal = if (tokenType.token == "STRING") matchedValue.substring(1, matchedValue.length - 1) else matchedValue
+        return Token(tokenType.token, position, trimmedVal)
     }
+}
+
+fun main() {
+    val lexer = Lexer("let a: number = 10;", 0, "utils/src/main/resources/tokenRegex.json")
+    val tokens = lexer.tokenize()
+    tokens.forEach { println(it) }
 }
