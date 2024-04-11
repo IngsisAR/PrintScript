@@ -391,7 +391,7 @@ class StaticCodeAnalyzerTest {
     }
 
     @Test
-    fun analusisOf_printlnCallExpression_with_NoConfigurationForExpressionsInArguments_expectsTrueByDefault() {
+    fun analysisOf_printlnCallExpression_with_NoConfigurationForExpressionsInArguments_expectsTrueByDefault() {
         createTestConfigJson(
             emptyMap(),
         )

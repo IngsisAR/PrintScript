@@ -15,6 +15,7 @@ class AssignableExpressionProvider(
             NumberLiteralBuilder(tokens, lineIndex),
             StringLiteralBuilder(tokens, lineIndex),
             IdentifierBuilder(tokens, lineIndex),
+            BooleanLiteralBuilder(tokens, lineIndex),
         )
 
     fun getAssignableExpressionResult(): ASTBuilderResult {
@@ -25,8 +26,7 @@ class AssignableExpressionProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is StringLiteralBuilder &&
-                expressionBuilder !is NumberLiteralBuilder &&
+                expressionBuilder !is LiteralBuilder &&
                 expressionBuilder !is IdentifierBuilder
             ) {
                 errorMessages += astBuilderResult.errorMessage + "\n"
@@ -56,6 +56,7 @@ class ExpressionProvider(
             NumberLiteralBuilder(tokens, lineIndex),
             StringLiteralBuilder(tokens, lineIndex),
             IdentifierBuilder(tokens, lineIndex),
+            BooleanLiteralBuilder(tokens, lineIndex),
         )
 
     fun getVerifiedExpressionResult(): ASTBuilderResult {
@@ -66,8 +67,7 @@ class ExpressionProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is StringLiteralBuilder &&
-                expressionBuilder !is NumberLiteralBuilder &&
+                expressionBuilder !is LiteralBuilder &&
                 expressionBuilder !is IdentifierBuilder
             ) {
                 errorMessages += astBuilderResult.errorMessage + "\n"
