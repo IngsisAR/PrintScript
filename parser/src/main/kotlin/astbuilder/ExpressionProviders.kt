@@ -25,8 +25,7 @@ class AssignableExpressionProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is StringLiteralBuilder &&
-                expressionBuilder !is NumberLiteralBuilder &&
+                expressionBuilder !is LiteralBuilder &&
                 expressionBuilder !is IdentifierBuilder
             ) {
                 errorMessages += astBuilderResult.errorMessage + "\n"
@@ -66,8 +65,7 @@ class ExpressionProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is StringLiteralBuilder &&
-                expressionBuilder !is NumberLiteralBuilder &&
+                expressionBuilder !is LiteralBuilder &&
                 expressionBuilder !is IdentifierBuilder
             ) {
                 errorMessages += astBuilderResult.errorMessage + "\n"

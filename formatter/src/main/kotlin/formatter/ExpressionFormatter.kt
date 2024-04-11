@@ -3,6 +3,7 @@ package formatter
 import ASTNode
 import AssignmentExpression
 import BinaryExpression
+import BooleanLiteral
 import CallExpression
 import Expression
 import Identifier
@@ -22,6 +23,7 @@ class ExpressionFormatter : Formatter {
             is CallExpression -> CallExpressionFormatter().format(astNode, configMap)
             is Identifier -> astNode.name
             is AssignmentExpression -> AssignmentExpressionFormatter().format(astNode, configMap)
+            is BooleanLiteral -> ""
         }
     }
 }
