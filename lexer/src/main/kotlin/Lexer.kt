@@ -63,9 +63,3 @@ class Lexer(
         return Token(tokenType.token, position, trimmedVal)
     }
 }
-
-fun main() {
-    val lexer = Lexer("let a: number = 10;", 0, "utils/src/main/resources/tokenRegex.json")
-    val tokens = lexer.tokenize()
-    tokens.forEach { println(it) }
-}
