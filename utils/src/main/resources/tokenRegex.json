@@ -60,10 +60,10 @@
   "regex" : "[a-zA-Z_][a-zA-Z0-9_]*"
 }, {
   "token" : "NUMBER",
-  "regex" : "[0-9]+"
+  "regex" : "\\d+(\\.\\d+)?"
 }, {
   "token" : "STRING",
-  "regex" : "\"[^\"]*\""
+  "regex" : "\"[^\"]*\"|'[^']*'"
 }, {
   "token" : "BOOLEAN",
   "regex" : "true|false"

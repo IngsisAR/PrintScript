@@ -1,0 +1,3 @@
+rootProject.name = "printscript"
+include("cli", "interpreter", "lexer", "parser", "utils", "formatter")
+include("sca")

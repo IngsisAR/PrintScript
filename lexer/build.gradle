@@ -1,25 +1,10 @@
 plugins {
-    kotlin("jvm")
-    jacoco
-}
-
-group = "australfi.ingsis7"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
+  id 'printscript-conventions'
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    api(project(":utils"))
+    implementation project(':utils')
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
-    implementation("org.json:json:20240303")
-}
-
-tasks.test {
-    useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -29,12 +14,12 @@ tasks.jacocoTestCoverageVerification {
             limit {
                 counter = "INSTRUCTION"
                 value = "COVEREDRATIO"
-                minimum = "0.70".toBigDecimal()
+                minimum = 0.70
             }
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                minimum = "0.69".toBigDecimal()
+                minimum = 0.69
             }
         }
     }
@@ -44,6 +29,4 @@ tasks.check {
     dependsOn(tasks.jacocoTestCoverageVerification)
 }
 
-kotlin {
-    jvmToolchain(20)
-}
+version "1.0-SNAPSHOT"
