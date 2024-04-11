@@ -5,7 +5,7 @@ fun main() {
     println("\nReading from string\n")
     val input =
         """
-        a:number;
+        let a:string = "hola";
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
     val lines = printScriptLineReader.readLinesFromString(input)
@@ -18,7 +18,7 @@ fun main() {
 private fun performFromLines(fileLines: List<String>) {
     var interpreter = InterpreterImpl()
     for ((index, line) in fileLines.withIndex()) {
-        val lexer = Lexer(line)
+        val lexer = Lexer(line, 0, "utils/src/main/resources/tokenRegex.json")
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()

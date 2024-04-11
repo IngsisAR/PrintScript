@@ -1,19 +1,3 @@
-import TokenType.ASSIGN
-import TokenType.COLON
-import TokenType.COMMA
-import TokenType.CPAREN
-import TokenType.DIV
-import TokenType.ID
-import TokenType.LET
-import TokenType.MINUS
-import TokenType.MODULE
-import TokenType.MUL
-import TokenType.NUMBER
-import TokenType.OPAREN
-import TokenType.PLUS
-import TokenType.SEMICOLON
-import TokenType.STRING
-import TokenType.TYPE
 import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderSuccess
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,12 +8,13 @@ class ParserTest {
     fun parseDeclareEmptyNumberVariable() {
         val parser = Parser()
         val tokens =
+
             listOf(
-                Token(LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 13, end = 14), value = ";"),
+                Token("LET", position = Position(start = 0, end = 3), value = "let"),
+                Token("ID", position = Position(start = 4, end = 5), value = "a"),
+                Token("COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "SEMICOLON", position = Position(start = 13, end = 14), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -58,11 +43,11 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "string"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 13, end = 14), value = ";"),
+                Token("LET", position = Position(start = 0, end = 3), value = "let"),
+                Token("ID", position = Position(start = 4, end = 5), value = "a"),
+                Token("COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "string"),
+                Token(type = "SEMICOLON", position = Position(start = 13, end = 14), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -91,13 +76,13 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "string"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = STRING.toString(), position = Position(start = 16, end = 17), value = "A"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+                Token("LET", position = Position(start = 0, end = 3), value = "let"),
+                Token("ID", position = Position(start = 4, end = 5), value = "a"),
+                Token("COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "string"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "STRING", position = Position(start = 16, end = 17), value = "A"),
+                Token(type = "SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -126,12 +111,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
-                Token(type = MUL.toString(), position = Position(start = 6, end = 7), value = "*"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("NUMBER", position = Position(start = 4, end = 5), value = "5"),
+                Token("MUL", position = Position(start = 6, end = 7), value = "*"),
+                Token("NUMBER", position = Position(start = 8, end = 9), value = "5"),
+                Token("SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -168,12 +153,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
-                Token(type = DIV.toString(), position = Position(start = 6, end = 7), value = "/"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("NUMBER", position = Position(start = 4, end = 5), value = "5"),
+                Token("DIV", position = Position(start = 6, end = 7), value = "/"),
+                Token("NUMBER", position = Position(start = 8, end = 9), value = "5"),
+                Token("SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -210,12 +195,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
-                Token(type = PLUS.toString(), position = Position(start = 6, end = 7), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 1), value = "a"),
+                Token(type = "ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token(type = "NUMBER", position = Position(start = 4, end = 5), value = "5"),
+                Token(type = "PLUS", position = Position(start = 6, end = 7), value = "+"),
+                Token(type = "NUMBER", position = Position(start = 8, end = 9), value = "5"),
+                Token(type = "SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -253,12 +238,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "5"),
-                Token(type = MINUS.toString(), position = Position(start = 6, end = 7), value = "-"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("NUMBER", position = Position(start = 4, end = 5), value = "5"),
+                Token("MINUS", position = Position(start = 6, end = 7), value = "-"),
+                Token("NUMBER", position = Position(start = 8, end = 9), value = "5"),
+                Token("SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -295,20 +280,20 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = ASSIGN.toString(), position = Position(start = 2, end = 3), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 4, end = 5), value = "1"),
-                Token(type = PLUS.toString(), position = Position(start = 6, end = 7), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 8, end = 9), value = "2"),
-                Token(type = MUL.toString(), position = Position(start = 10, end = 11), value = "*"),
-                Token(type = NUMBER.toString(), position = Position(start = 12, end = 13), value = "3"),
-                Token(type = DIV.toString(), position = Position(start = 14, end = 15), value = "/"),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "4"),
-                Token(type = MINUS.toString(), position = Position(start = 17, end = 18), value = "-"),
-                Token(type = NUMBER.toString(), position = Position(start = 19, end = 20), value = "5"),
-                Token(type = MODULE.toString(), position = Position(start = 21, end = 22), value = "%"),
-                Token(type = NUMBER.toString(), position = Position(start = 23, end = 24), value = "6"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 24, end = 25), value = ";"),
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("NUMBER", position = Position(start = 4, end = 5), value = "1"),
+                Token("PLUS", position = Position(start = 6, end = 7), value = "+"),
+                Token("NUMBER", position = Position(start = 8, end = 9), value = "2"),
+                Token("MUL", position = Position(start = 10, end = 11), value = "*"),
+                Token("NUMBER", position = Position(start = 12, end = 13), value = "3"),
+                Token("DIV", position = Position(start = 14, end = 15), value = "/"),
+                Token("NUMBER", position = Position(start = 16, end = 17), value = "4"),
+                Token("MINUS", position = Position(start = 17, end = 18), value = "-"),
+                Token("NUMBER", position = Position(start = 19, end = 20), value = "5"),
+                Token("MODULE", position = Position(start = 21, end = 22), value = "%"),
+                Token("NUMBER", position = Position(start = 23, end = 24), value = "6"),
+                Token("SEMICOLON", position = Position(start = 24, end = 25), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -370,21 +355,21 @@ class ParserTest {
         // function(1 + 2) * a / (4 + 5)
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
-                Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
-                Token(type = NUMBER.toString(), position = Position(start = 9, end = 10), value = "1"),
-                Token(type = PLUS.toString(), position = Position(start = 11, end = 12), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "2"),
-                Token(type = CPAREN.toString(), position = Position(start = 14, end = 15), value = ")"),
-                Token(type = MUL.toString(), position = Position(start = 16, end = 17), value = "*"),
-                Token(type = ID.toString(), position = Position(start = 18, end = 19), value = "a"),
-                Token(type = DIV.toString(), position = Position(start = 20, end = 21), value = "/"),
-                Token(type = OPAREN.toString(), position = Position(start = 22, end = 23), value = "("),
-                Token(type = NUMBER.toString(), position = Position(start = 23, end = 24), value = "4"),
-                Token(type = PLUS.toString(), position = Position(start = 25, end = 26), value = "-"),
-                Token(type = NUMBER.toString(), position = Position(start = 27, end = 28), value = "5"),
-                Token(type = CPAREN.toString(), position = Position(start = 28, end = 29), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 29, end = 30), value = ";"),
+                Token("ID", position = Position(start = 0, end = 8), value = "function"),
+                Token("OPAREN", position = Position(start = 8, end = 9), value = "("),
+                Token("NUMBER", position = Position(start = 9, end = 10), value = "1"),
+                Token("PLUS", position = Position(start = 11, end = 12), value = "+"),
+                Token("NUMBER", position = Position(start = 13, end = 14), value = "2"),
+                Token("CPAREN", position = Position(start = 14, end = 15), value = ")"),
+                Token("MUL", position = Position(start = 16, end = 17), value = "*"),
+                Token("ID", position = Position(start = 18, end = 19), value = "a"),
+                Token("DIV", position = Position(start = 20, end = 21), value = "/"),
+                Token("OPAREN", position = Position(start = 22, end = 23), value = "("),
+                Token("NUMBER", position = Position(start = 23, end = 24), value = "4"),
+                Token("PLUS", position = Position(start = 25, end = 26), value = "-"),
+                Token("NUMBER", position = Position(start = 27, end = 28), value = "5"),
+                Token("CPAREN", position = Position(start = 28, end = 29), value = ")"),
+                Token("SEMICOLON", position = Position(start = 29, end = 30), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -439,10 +424,10 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = STRING.toString(), position = Position(start = 0, end = 13), value = "Hello world"),
-                Token(type = PLUS.toString(), position = Position(start = 14, end = 15), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+                Token("STRING", position = Position(start = 0, end = 13), value = "Hello world"),
+                Token("PLUS", position = Position(start = 14, end = 15), value = "+"),
+                Token("NUMBER", position = Position(start = 16, end = 17), value = "5"),
+                Token("SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -468,13 +453,13 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = OPAREN.toString(), position = Position(start = 0, end = 1), value = "("),
-                Token(type = NUMBER.toString(), position = Position(start = 1, end = 2), value = "1"),
-                Token(type = PLUS.toString(), position = Position(start = 3, end = 4), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 5, end = 6), value = "2"),
-                Token(type = CPAREN.toString(), position = Position(start = 6, end = 7), value = ")"),
-                Token(type = CPAREN.toString(), position = Position(start = 7, end = 8), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 8, end = 9), value = ";"),
+                Token("OPAREN", position = Position(start = 0, end = 1), value = "("),
+                Token("NUMBER", position = Position(start = 1, end = 2), value = "1"),
+                Token("PLUS", position = Position(start = 3, end = 4), value = "+"),
+                Token("NUMBER", position = Position(start = 5, end = 6), value = "2"),
+                Token("CPAREN", position = Position(start = 6, end = 7), value = ")"),
+                Token("CPAREN", position = Position(start = 7, end = 8), value = ")"),
+                Token("SEMICOLON", position = Position(start = 8, end = 9), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Mismatched parenthesis"))
@@ -485,13 +470,13 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "string"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+                Token("LET", position = Position(start = 0, end = 3), value = "let"),
+                Token("ID", position = Position(start = 4, end = 5), value = "a"),
+                Token("COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token("TYPE", position = Position(start = 7, end = 13), value = "string"),
+                Token("ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token("NUMBER", position = Position(start = 16, end = 17), value = "5"),
+                Token("SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -520,11 +505,11 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
-                Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
-                Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
-                Token(type = CPAREN.toString(), position = Position(start = 19, end = 20), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 20, end = 21), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 5), value = "print"),
+                Token(type = "OPAREN", position = Position(start = 5, end = 6), value = "("),
+                Token(type = "STRING", position = Position(start = 6, end = 19), value = "Hello world"),
+                Token(type = "CPAREN", position = Position(start = 19, end = 20), value = ")"),
+                Token(type = "SEMICOLON", position = Position(start = 20, end = 21), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -555,17 +540,17 @@ class ParserTest {
         // function(1,2,3,4);
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 8), value = "function"),
-                Token(type = OPAREN.toString(), position = Position(start = 8, end = 9), value = "("),
-                Token(type = NUMBER.toString(), position = Position(start = 9, end = 10), value = "1"),
-                Token(type = COMMA.toString(), position = Position(start = 10, end = 11), value = ","),
-                Token(type = NUMBER.toString(), position = Position(start = 11, end = 12), value = "2"),
-                Token(type = COMMA.toString(), position = Position(start = 12, end = 13), value = ","),
-                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "3"),
-                Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
-                Token(type = NUMBER.toString(), position = Position(start = 15, end = 16), value = "4"),
-                Token(type = CPAREN.toString(), position = Position(start = 16, end = 17), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 8), value = "function"),
+                Token(type = "OPAREN", position = Position(start = 8, end = 9), value = "("),
+                Token(type = "NUMBER", position = Position(start = 9, end = 10), value = "1"),
+                Token(type = "COMMA", position = Position(start = 10, end = 11), value = ","),
+                Token(type = "NUMBER", position = Position(start = 11, end = 12), value = "2"),
+                Token(type = "COMMA", position = Position(start = 12, end = 13), value = ","),
+                Token(type = "NUMBER", position = Position(start = 13, end = 14), value = "3"),
+                Token(type = "COMMA", position = Position(start = 14, end = 15), value = ","),
+                Token(type = "NUMBER", position = Position(start = 15, end = 16), value = "4"),
+                Token(type = "CPAREN", position = Position(start = 16, end = 17), value = ")"),
+                Token(type = "SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -596,11 +581,11 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
-                Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
-                Token(type = NUMBER.toString(), position = Position(start = 6, end = 7), value = "1"),
-                Token(type = CPAREN.toString(), position = Position(start = 7, end = 8), value = ")"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 8, end = 9), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 5), value = "print"),
+                Token(type = "OPAREN", position = Position(start = 5, end = 6), value = "("),
+                Token(type = "NUMBER", position = Position(start = 6, end = 7), value = "1"),
+                Token(type = "CPAREN", position = Position(start = 7, end = 8), value = ")"),
+                Token(type = "SEMICOLON", position = Position(start = 8, end = 9), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -630,19 +615,19 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
-                Token(type = COMMA.toString(), position = Position(start = 17, end = 18), value = ","),
-                Token(type = ID.toString(), position = Position(start = 19, end = 20), value = "b"),
-                Token(type = COLON.toString(), position = Position(start = 20, end = 21), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 22, end = 28), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 29, end = 30), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 31, end = 33), value = "10"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 33, end = 34), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "NUMBER", position = Position(start = 16, end = 17), value = "5"),
+                Token(type = "COMMA", position = Position(start = 17, end = 18), value = ","),
+                Token(type = "ID", position = Position(start = 19, end = 20), value = "b"),
+                Token(type = "COLON", position = Position(start = 20, end = 21), value = ":"),
+                Token(type = "TYPE", position = Position(start = 22, end = 28), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 29, end = 30), value = "="),
+                Token(type = "NUMBER", position = Position(start = 31, end = 33), value = "10"),
+                Token(type = "SEMICOLON", position = Position(start = 33, end = 34), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -683,15 +668,15 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
-                Token(type = PLUS.toString(), position = Position(start = 18, end = 19), value = "+"),
-                Token(type = NUMBER.toString(), position = Position(start = 20, end = 21), value = "5"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 21, end = 22), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "NUMBER", position = Position(start = 16, end = 17), value = "5"),
+                Token(type = "PLUS", position = Position(start = 18, end = 19), value = "+"),
+                Token(type = "NUMBER", position = Position(start = 20, end = 21), value = "5"),
+                Token(type = "SEMICOLON", position = Position(start = 21, end = 22), value = ";"),
             )
         val result =
             ASTBuilderSuccess(
@@ -732,12 +717,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "5"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "NUMBER", position = Position(start = 16, end = 17), value = "5"),
             )
 
         assert(
@@ -751,12 +736,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 13, end = 14), value = ";"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 14, end = 15), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "SEMICOLON", position = Position(start = 13, end = 14), value = ";"),
+                Token(type = "SEMICOLON", position = Position(start = 14, end = 15), value = ";"),
             )
         try {
             parser.parse(tokens, 0)
@@ -770,12 +755,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 14, end = 15), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 16, end = 17), value = "a"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 17, end = 18), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "NUMBER", position = Position(start = 16, end = 17), value = "a"),
+                Token(type = "SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure)
@@ -790,12 +775,12 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 3, end = 4), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 4, end = 5), value = ":"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 6, end = 12), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 12, end = 13), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+                Token(type = "COLON", position = Position(start = 4, end = 5), value = ":"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 6, end = 12), value = "number"),
+                Token(type = "SEMICOLON", position = Position(start = 12, end = 13), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure)
@@ -810,10 +795,10 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 1), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 1, end = 2), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 3, end = 9), value = "number"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 9, end = 10), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 1), value = "a"),
+                Token(type = "COLON", position = Position(start = 1, end = 2), value = ":"),
+                Token(type = "TYPE", position = Position(start = 3, end = 9), value = "number"),
+                Token(type = "SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid start of variable declaration"))
@@ -836,13 +821,13 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 4, end = 5), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 5, end = 6), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 7, end = 13), value = "number"),
-                Token(type = COMMA.toString(), position = Position(start = 13, end = 14), value = ","),
-                Token(type = COMMA.toString(), position = Position(start = 14, end = 15), value = ","),
-                Token(type = SEMICOLON.toString(), position = Position(start = 15, end = 16), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "COMMA", position = Position(start = 13, end = 14), value = ","),
+                Token(type = "COMMA", position = Position(start = 14, end = 15), value = ","),
+                Token(type = "SEMICOLON", position = Position(start = 15, end = 16), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure)
@@ -858,18 +843,18 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = LET.toString(), position = Position(start = 0, end = 3), value = "let"),
-                Token(type = ID.toString(), position = Position(start = 3, end = 4), value = "a"),
-                Token(type = COLON.toString(), position = Position(start = 4, end = 5), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 6, end = 12), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 12, end = 13), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 13, end = 14), value = "5"),
-                Token(type = ID.toString(), position = Position(start = 14, end = 15), value = "b"),
-                Token(type = COLON.toString(), position = Position(start = 15, end = 16), value = ":"),
-                Token(type = TYPE.toString(), position = Position(start = 16, end = 22), value = "number"),
-                Token(type = ASSIGN.toString(), position = Position(start = 22, end = 23), value = "="),
-                Token(type = NUMBER.toString(), position = Position(start = 23, end = 32), value = "10"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 32, end = 33), value = ";"),
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+                Token(type = "COLON", position = Position(start = 4, end = 5), value = ":"),
+                Token(type = "TYPE", position = Position(start = 6, end = 12), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 12, end = 13), value = "="),
+                Token(type = "NUMBER", position = Position(start = 13, end = 14), value = "5"),
+                Token(type = "ID", position = Position(start = 14, end = 15), value = "b"),
+                Token(type = "COLON", position = Position(start = 15, end = 16), value = ":"),
+                Token(type = "TYPE", position = Position(start = 16, end = 22), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 22, end = 23), value = "="),
+                Token(type = "NUMBER", position = Position(start = 23, end = 32), value = "10"),
+                Token(type = "SEMICOLON", position = Position(start = 32, end = 33), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure)
@@ -885,10 +870,10 @@ class ParserTest {
         val parser = Parser()
         val tokens =
             listOf(
-                Token(type = ID.toString(), position = Position(start = 0, end = 5), value = "print"),
-                Token(type = OPAREN.toString(), position = Position(start = 5, end = 6), value = "("),
-                Token(type = STRING.toString(), position = Position(start = 6, end = 19), value = "Hello world"),
-                Token(type = SEMICOLON.toString(), position = Position(start = 19, end = 20), value = ";"),
+                Token(type = "ID", position = Position(start = 0, end = 5), value = "print"),
+                Token(type = "OPAREN", position = Position(start = 5, end = 6), value = "("),
+                Token(type = "STRING", position = Position(start = 6, end = 19), value = "Hello world"),
+                Token(type = "SEMICOLON", position = Position(start = 19, end = 20), value = ";"),
             )
         val result = parser.parse(tokens, 0)
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have close parenthesis"))
