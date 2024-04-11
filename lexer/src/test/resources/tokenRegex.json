@@ -64,4 +64,7 @@
 }, {
   "token" : "STRING",
   "regex" : "\"[^\"]*\""
+}, {
+  "token" : "BOOLEAN",
+  "regex" : "true|false"
 } ]
