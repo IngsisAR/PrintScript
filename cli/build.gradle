@@ -1,0 +1,13 @@
+plugins {
+  id 'printscript-conventions'
+}
+
+dependencies {
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':interpreter')
+    implementation project(':formatter')
+    implementation project(':utils')
+}
+
+version "1.0-SNAPSHOT"

@@ -1,0 +1,5 @@
+plugins {
+  id 'printscript-conventions'
+}
+
+version "1.0-SNAPSHOT"
