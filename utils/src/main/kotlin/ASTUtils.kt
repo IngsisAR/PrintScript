@@ -90,3 +90,11 @@ data class VariableDeclarator(
     override val start: Int,
     override val end: Int,
 ) : ASTNode
+
+data class ConditionalExpression(
+    val test: Identifier,
+    val consequent: List<Expression>,
+    val alternate: List<Expression>,
+    override val start: Int,
+    override val end: Int,
+) : Expression

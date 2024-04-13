@@ -5,6 +5,15 @@
   "token" : "CONST",
   "regex" : "const"
 }, {
+  "token" : "BOOLEAN",
+  "regex" : "true|false"
+}, {
+  "token" : "IF",
+  "regex" : "if"
+}, {
+  "token" : "ELSE",
+  "regex"  : "else"
+}, {
   "token" : "COLON",
   "regex" : ":"
 }, {
@@ -64,7 +73,4 @@
 }, {
   "token" : "STRING",
   "regex" : "\"[^\"]*\"|'[^']*'"
-}, {
-  "token" : "BOOLEAN",
-  "regex" : "true|false"
 }]
