@@ -1,15 +1,11 @@
-import utils.PrintScriptLineReader
-
 fun main() {
     println("\nReading from string\n")
     val input =
         """
-        const a:bool = true;
-        let b:int;
-        if(a){
-            b = 2;
+        if (a) {
+            if (b) {
+            } else {
         } else {
-            b = 3;
         }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()

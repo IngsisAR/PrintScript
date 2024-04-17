@@ -13,9 +13,6 @@ class Lexer(
 
     @Throws(IllegalStateException::class)
     fun tokenize(): List<Token> {
-        if (input.count { it == ';' } > 1) {
-            error("Only one line of code is allowed at a time.")
-        }
         val tokens = mutableListOf<Token>()
         while (hasNext()) {
             val token = getNextToken()

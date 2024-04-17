@@ -107,6 +107,72 @@ class ParserTest {
     }
 
     @Test
+    fun parsingGoodAssignmentExpressionShouldBeASTBuilderSuccess() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("NUMBER", position = Position(start = 4, end = 5), value = "5"),
+                Token("SEMICOLON", position = Position(start = 5, end = 6), value = ";"),
+            )
+        val result =
+            ASTBuilderSuccess(
+                astNode =
+                    ExpressionStatement(
+                        expression =
+                            AssignmentExpression(
+                                left =
+                                    Identifier(
+                                        name = "a",
+                                        start = 0,
+                                        end = 1,
+                                    ),
+                                right =
+                                    NumberLiteral(
+                                        value = 5.toBigDecimal(),
+                                        start = 4,
+                                        end = 5,
+                                    ),
+                                start = 0,
+                                end = 5,
+                            ),
+                        start = 0,
+                        end = 6,
+                    ),
+            )
+        assertEquals(result, parser.parse(tokens, 0))
+    }
+
+    @Test
+    fun parsingAssignmentExpressionWithMissingIdentifierShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token("ASSIGN", position = Position(start = 0, end = 1), value = "="),
+                Token("NUMBER", position = Position(start = 2, end = 3), value = "5"),
+                Token("SEMICOLON", position = Position(start = 3, end = 4), value = ";"),
+            )
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals("Invalid expression: missing identifier at (0, 0)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingAssignmentExpressionWithMissingAssignmentExpressionShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token("ID", position = Position(start = 0, end = 1), value = "a"),
+                Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
+                Token("SEMICOLON", position = Position(start = 3, end = 4), value = ";"),
+            )
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals("Invalid expression: missing expression after assignment at (0, 3)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
     fun parseMultiplicationOperation() {
         val parser = Parser()
         val tokens =
@@ -462,7 +528,8 @@ class ParserTest {
                 Token("SEMICOLON", position = Position(start = 8, end = 9), value = ";"),
             )
         val result = parser.parse(tokens, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Mismatched parenthesis"))
+        assert(result is ASTBuilderFailure)
+        assertEquals("Invalid expression: Mismatched parenthesis at (0, 7)", (result as ASTBuilderFailure).errorMessage)
     }
 
     @Test
@@ -805,6 +872,27 @@ class ParserTest {
     }
 
     @Test
+    fun parsingVariableDeclarationWithMissingAssignedExpression() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "LET", position = Position(start = 0, end = 3), value = "let"),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "COLON", position = Position(start = 5, end = 6), value = ":"),
+                Token(type = "TYPE", position = Position(start = 7, end = 13), value = "number"),
+                Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
+                Token(type = "SEMICOLON", position = Position(start = 15, end = 16), value = ";"),
+            )
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid variable declaration: Invalid declarator: Missing assigned expression at " +
+                "(0, ${tokens[4].position.end})",
+            (result as ASTBuilderFailure).errorMessage,
+        )
+    }
+
+    @Test
     fun parseErrorForEmptyTokens() {
         val parser = Parser()
         val tokens = listOf<Token>()
@@ -876,6 +964,439 @@ class ParserTest {
                 Token(type = "SEMICOLON", position = Position(start = 19, end = 20), value = ";"),
             )
         val result = parser.parse(tokens, 0)
-        assert(result is ASTBuilderFailure && result.errorMessage.contains("Call expression does not have close parenthesis"))
+        assert(result is ASTBuilderFailure)
+        assertEquals(
+            "Invalid expression: Call expression does not have close parenthesis at (0, 19)",
+            (result as ASTBuilderFailure).errorMessage,
+        )
+    }
+
+    @Test
+    fun parsingSimpleConditionalStatementShouldBeAstBuilderSuccess() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 4, end = 5), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 5, end = 6), value = "{"),
+                Token(type = "ID", position = Position(start = 11, end = 12), value = "a"),
+                Token(type = "ASSIGN", position = Position(start = 13, end = 14), value = "="),
+                Token(type = "NUMBER", position = Position(start = 15, end = 16), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 16, end = 17), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 18, end = 19), value = "}"),
+                Token(type = "ELSE", position = Position(start = 20, end = 24), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 25, end = 26), value = "{"),
+                Token(type = "ID", position = Position(start = 31, end = 32), value = "b"),
+                Token(type = "ASSIGN", position = Position(start = 33, end = 34), value = "="),
+                Token(type = "NUMBER", position = Position(start = 35, end = 36), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 36, end = 37), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 38, end = 39), value = "}"),
+            )
+        val expected =
+            ASTBuilderSuccess(
+                astNode =
+                    ConditionalStatement(
+                        test = Identifier(name = "a", start = 3, end = 4),
+                        consequent =
+                            listOf(
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "a", start = 11, end = 12),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 15, end = 16),
+                                            start = 11,
+                                            end = 16,
+                                        ),
+                                    start = 11,
+                                    end = 17,
+                                ),
+                            ),
+                        alternate =
+                            listOf(
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "b", start = 31, end = 32),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 35, end = 36),
+                                            start = 31,
+                                            end = 36,
+                                        ),
+                                    start = 31,
+                                    end = 37,
+                                ),
+                            ),
+                        start = 5,
+                        end = 39,
+                    ),
+            )
+
+        assertEquals(expected, parser.parse(tokens, 0))
+    }
+
+    @Test
+    fun parsingSimpleConditionalStatementWithMultipleStatementsShouldBeAstBuilderSuccess() {
+        val parser = Parser()
+        /*
+        if (a) {
+            a = 3;
+            b = 3;
+            c = 3;
+        } else {
+            b = 3;
+            c = 3;
+            d = 3;
+        }
+         */
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 3, end = 4), value = "("),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 5, end = 6), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 7, end = 8), value = "{"),
+                Token(type = "ID", position = Position(start = 13, end = 14), value = "a"),
+                Token(type = "ASSIGN", position = Position(start = 15, end = 16), value = "="),
+                Token(type = "NUMBER", position = Position(start = 17, end = 18), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 18, end = 19), value = ";"),
+                Token(type = "ID", position = Position(start = 24, end = 25), value = "b"),
+                Token(type = "ASSIGN", position = Position(start = 26, end = 27), value = "="),
+                Token(type = "NUMBER", position = Position(start = 28, end = 29), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 29, end = 30), value = ";"),
+                Token(type = "ID", position = Position(start = 35, end = 36), value = "c"),
+                Token(type = "ASSIGN", position = Position(start = 37, end = 38), value = "="),
+                Token(type = "NUMBER", position = Position(start = 39, end = 40), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 40, end = 41), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 42, end = 43), value = "}"),
+                Token(type = "ELSE", position = Position(start = 44, end = 48), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 49, end = 50), value = "{"),
+                Token(type = "ID", position = Position(start = 55, end = 56), value = "b"),
+                Token(type = "ASSIGN", position = Position(start = 57, end = 58), value = "="),
+                Token(type = "NUMBER", position = Position(start = 59, end = 60), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 60, end = 61), value = ";"),
+                Token(type = "ID", position = Position(start = 66, end = 67), value = "c"),
+                Token(type = "ASSIGN", position = Position(start = 68, end = 69), value = "="),
+                Token(type = "NUMBER", position = Position(start = 70, end = 71), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 71, end = 72), value = ";"),
+                Token(type = "ID", position = Position(start = 77, end = 78), value = "d"),
+                Token(type = "ASSIGN", position = Position(start = 79, end = 80), value = "="),
+                Token(type = "NUMBER", position = Position(start = 81, end = 82), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 82, end = 83), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 84, end = 85), value = "}"),
+            )
+        val expected =
+            ASTBuilderSuccess(
+                astNode =
+                    ConditionalStatement(
+                        test = Identifier(name = "a", start = 4, end = 5),
+                        consequent =
+                            listOf(
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "a", start = 13, end = 14),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 17, end = 18),
+                                            start = 13,
+                                            end = 18,
+                                        ),
+                                    start = 13,
+                                    end = 19,
+                                ),
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "b", start = 24, end = 25),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 28, end = 29),
+                                            start = 24,
+                                            end = 29,
+                                        ),
+                                    start = 24,
+                                    end = 30,
+                                ),
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "c", start = 35, end = 36),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 39, end = 40),
+                                            start = 35,
+                                            end = 40,
+                                        ),
+                                    start = 35,
+                                    end = 41,
+                                ),
+                            ),
+                        alternate =
+                            listOf(
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "b", start = 55, end = 56),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 59, end = 60),
+                                            start = 55,
+                                            end = 60,
+                                        ),
+                                    start = 55,
+                                    end = 61,
+                                ),
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "c", start = 66, end = 67),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 70, end = 71),
+                                            start = 66,
+                                            end = 71,
+                                        ),
+                                    start = 66,
+                                    end = 72,
+                                ),
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "d", start = 77, end = 78),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 81, end = 82),
+                                            start = 77,
+                                            end = 82,
+                                        ),
+                                    start = 77,
+                                    end = 83,
+                                ),
+                            ),
+                        start = 7,
+                        end = 85,
+                    ),
+            )
+
+        assertEquals(expected, parser.parse(tokens, 0))
+    }
+
+    @Test
+    fun parsingCorrectlyNestedConditionalStatementShouldBeAstBuilderSuccess() {
+        val parser = Parser()
+        /*
+        if (a) {
+            if (b) {
+                a = 3;
+            } else {
+                b = 3;
+            }
+        } else {
+            b = 3;
+        }
+         */
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 3, end = 4), value = "("),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 5, end = 6), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 7, end = 8), value = "{"),
+                Token(type = "IF", position = Position(start = 13, end = 15), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 16, end = 17), value = "("),
+                Token(type = "ID", position = Position(start = 17, end = 18), value = "b"),
+                Token(type = "CPAREN", position = Position(start = 18, end = 19), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 20, end = 21), value = "{"),
+                Token(type = "ID", position = Position(start = 30, end = 31), value = "a"),
+                Token(type = "ASSIGN", position = Position(start = 32, end = 33), value = "="),
+                Token(type = "NUMBER", position = Position(start = 34, end = 35), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 35, end = 36), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 41, end = 42), value = "}"),
+                Token(type = "ELSE", position = Position(start = 43, end = 47), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 48, end = 49), value = "{"),
+                Token(type = "ID", position = Position(start = 58, end = 59), value = "b"),
+                Token(type = "ASSIGN", position = Position(start = 60, end = 61), value = "="),
+                Token(type = "NUMBER", position = Position(start = 62, end = 63), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 63, end = 64), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 69, end = 70), value = "}"),
+                Token(type = "CBRACE", position = Position(start = 71, end = 72), value = "}"),
+                Token(type = "ELSE", position = Position(start = 73, end = 77), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 78, end = 79), value = "{"),
+                Token(type = "ID", position = Position(start = 84, end = 85), value = "b"),
+                Token(type = "ASSIGN", position = Position(start = 86, end = 87), value = "="),
+                Token(type = "NUMBER", position = Position(start = 88, end = 89), value = "3"),
+                Token(type = "SEMICOLON", position = Position(start = 89, end = 90), value = ";"),
+                Token(type = "CBRACE", position = Position(start = 91, end = 92), value = "}"),
+            )
+
+        val expected =
+            ASTBuilderSuccess(
+                astNode =
+                    ConditionalStatement(
+                        test = Identifier(name = "a", start = 4, end = 5),
+                        consequent =
+                            listOf(
+                                ConditionalStatement(
+                                    test = Identifier(name = "b", start = 17, end = 18),
+                                    consequent =
+                                        listOf(
+                                            ExpressionStatement(
+                                                expression =
+                                                    AssignmentExpression(
+                                                        left = Identifier(name = "a", start = 30, end = 31),
+                                                        right = NumberLiteral(value = 3.toBigDecimal(), start = 34, end = 35),
+                                                        start = 30,
+                                                        end = 35,
+                                                    ),
+                                                start = 30,
+                                                end = 36,
+                                            ),
+                                        ),
+                                    alternate =
+                                        listOf(
+                                            ExpressionStatement(
+                                                expression =
+                                                    AssignmentExpression(
+                                                        left = Identifier(name = "b", start = 58, end = 59),
+                                                        right = NumberLiteral(value = 3.toBigDecimal(), start = 62, end = 63),
+                                                        start = 58,
+                                                        end = 63,
+                                                    ),
+                                                start = 58,
+                                                end = 64,
+                                            ),
+                                        ),
+                                    start = 20,
+                                    end = 70,
+                                ),
+                            ),
+                        alternate =
+                            listOf(
+                                ExpressionStatement(
+                                    expression =
+                                        AssignmentExpression(
+                                            left = Identifier(name = "b", start = 84, end = 85),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), start = 88, end = 89),
+                                            start = 84,
+                                            end = 89,
+                                        ),
+                                    start = 84,
+                                    end = 90,
+                                ),
+                            ),
+                        start = 7,
+                        end = 92,
+                    ),
+            )
+
+        assertEquals(expected, parser.parse(tokens, 0))
+    }
+
+    @Test
+    fun parsingIncompleteConditionalStatementWithMissingOParenAtStartShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+            )
+        val result = parser.parse(tokens, 0)
+        assertEquals("Invalid conditional expression: expected '(' after 'if' at (0, 2)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingIncompleteConditionalStatementWithMissingIdentifierInArgumentShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
+                Token(type = "CPAREN", position = Position(start = 3, end = 4), value = ")"),
+            )
+        val result = parser.parse(tokens, 0)
+        assertEquals("Invalid conditional expression: expected identifier after '(' at (0, 3)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingIncompleteConditionalStatementWithMissingCParenAtEndShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+            )
+        val result = parser.parse(tokens, 0)
+        assertEquals("Invalid conditional expression: expected ')' after identifier at (0, 4)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingConditionalStatementWithUnsupportedExpressionTestShouldBeASTBuilderFailure() {
+        val parser = Parser()
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
+                Token(type = "NUMBER", position = Position(start = 3, end = 4), value = "3"),
+                Token(type = "CPAREN", position = Position(start = 4, end = 5), value = ")"),
+            )
+        val result = parser.parse(tokens, 0)
+        assertEquals("Invalid conditional expression: expected identifier after '(' at (0, 3)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingBadNestedConditionalStatementWithAdditionalElseTokenShouldBeAstBuilderFailure() {
+        val parser = Parser()
+        /*
+        if (a) {
+            if (b) {
+            } else {
+        } else {
+        }
+         */
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 3, end = 4), value = "("),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 5, end = 6), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 7, end = 8), value = "{"),
+                Token(type = "IF", position = Position(start = 13, end = 15), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 16, end = 17), value = "("),
+                Token(type = "ID", position = Position(start = 17, end = 18), value = "b"),
+                Token(type = "CPAREN", position = Position(start = 18, end = 19), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 20, end = 21), value = "{"),
+                Token(type = "CBRACE", position = Position(start = 26, end = 27), value = "}"),
+                Token(type = "ELSE", position = Position(start = 28, end = 32), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 33, end = 34), value = "{"),
+                Token(type = "CBRACE", position = Position(start = 35, end = 36), value = "}"),
+                Token(type = "ELSE", position = Position(start = 37, end = 41), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 42, end = 43), value = "{"),
+                Token(type = "CBRACE", position = Position(start = 44, end = 45), value = "}"),
+            )
+
+        val result = parser.parse(tokens, 0)
+        assertEquals("Unexpected 'else' at (0, 37)", (result as ASTBuilderFailure).errorMessage)
+    }
+
+    @Test
+    fun parsingBadNestedConditionalStatementWithMismatchedBracesShouldBeAstBuilderFailure() {
+        val parser = Parser()
+        /*
+        if (a) {
+            if (b) {
+            } else {
+        }
+         */
+
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 3, end = 4), value = "("),
+                Token(type = "ID", position = Position(start = 4, end = 5), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 5, end = 6), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 7, end = 8), value = "{"),
+                Token(type = "IF", position = Position(start = 13, end = 15), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 16, end = 17), value = "("),
+                Token(type = "ID", position = Position(start = 17, end = 18), value = "b"),
+                Token(type = "CPAREN", position = Position(start = 18, end = 19), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 20, end = 21), value = "{"),
+                Token(type = "CBRACE", position = Position(start = 26, end = 27), value = "}"),
+                Token(type = "ELSE", position = Position(start = 28, end = 32), value = "else"),
+                Token(type = "OBRACE", position = Position(start = 33, end = 34), value = "{"),
+                Token(type = "CBRACE", position = Position(start = 35, end = 36), value = "}"),
+            )
+
+        val result = parser.parse(tokens, 0)
+        assertEquals("Unmatched braces in expression at (0, 36)", (result as ASTBuilderFailure).errorMessage)
     }
 }
