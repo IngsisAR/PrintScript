@@ -16,7 +16,7 @@ class VariableDeclarationBuilder(
         }
 
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.end})")
         }
 
         if (tokens.any { it.type == "COLON" } || tokens.any { it.type == "LET" || it.type == "CONST" }) {
