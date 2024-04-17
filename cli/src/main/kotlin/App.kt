@@ -109,13 +109,15 @@ private fun analyze(fileLines: List<String>) {
     for ((index, line) in fileLines.withIndex()) {
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
-            try {
-                printRed(sca.analyze(ast.astNode, index))
-            } catch (e: Exception) {
-                println(e.message)
+            val response: String = sca.analyze(ast.astNode, index)
+            if (response.isEmpty()) {
+                printGreen("*")
+            } else {
+                return printRed(response)
             }
         }
     }
+    printGreen("File analyzed successfully")
 }
 
 private fun processLine(
