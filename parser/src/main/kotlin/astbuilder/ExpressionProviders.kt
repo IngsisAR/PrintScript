@@ -103,7 +103,7 @@ class StatementProvider(
             return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start})")
         }
         for (statementBuilder in statementBuilders) {
             val astBuilderResult = statementBuilder.verifyAndBuild()

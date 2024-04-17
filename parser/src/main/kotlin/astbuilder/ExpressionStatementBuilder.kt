@@ -13,7 +13,7 @@ class ExpressionStatementBuilder(
             return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start})")
         }
         if (tokens.size == 1) {
             return ASTBuilderFailure("No expression found at ($lineIndex, ${tokens.first().position.start})")
