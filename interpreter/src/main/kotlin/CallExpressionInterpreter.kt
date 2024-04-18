@@ -12,7 +12,7 @@ class CallExpressionInterpreter(
         }
     }
 
-    private fun readEnvironmentVariables(key: StringLiteral): String{
+    private fun readEnvironmentVariables(key: StringLiteral): String {
         return System.getenv(key.value)
     }
 }

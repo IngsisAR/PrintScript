@@ -2,7 +2,6 @@ import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderResult
 import astbuilder.ASTBuilderSuccess
 import formatter.FormatterImpl
-import utils.PrintScriptLineReader
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -121,7 +120,10 @@ private fun analyze(fileLines: List<String>) {
     printGreen("✓ File analyzed successfully")
 }
 
-private fun functionProgress(totalLines: Int, index: Int): Double {
+private fun functionProgress(
+    totalLines: Int,
+    index: Int,
+): Double {
     return (index + 1).toDouble() / totalLines * 100
 }
 private fun processLine(
