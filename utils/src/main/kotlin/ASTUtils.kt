@@ -7,6 +7,8 @@ sealed interface Statement : ASTNode
 
 sealed interface Expression : ASTNode
 
+sealed interface Literal : Expression
+
 // data class Program(
 //    val body: List<Statement>,
 //    val sourceType: String,
@@ -53,13 +55,13 @@ data class NumberLiteral(
     val value: Number,
     override val start: Int,
     override val end: Int,
-) : Expression
+) : Literal
 
 data class StringLiteral(
     val value: String,
     override val start: Int,
     override val end: Int,
-) : Expression
+) : Literal
 
 data class Identifier(
     val name: String,
