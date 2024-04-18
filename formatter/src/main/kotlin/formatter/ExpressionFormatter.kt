@@ -4,7 +4,6 @@ import ASTNode
 import AssignmentExpression
 import BinaryExpression
 import CallExpression
-import ConditionalStatement
 import Expression
 import Identifier
 import Literal
@@ -22,7 +21,6 @@ class ExpressionFormatter : Formatter {
             is CallExpression -> CallExpressionFormatter().format(astNode, configMap)
             is Identifier -> astNode.name
             is AssignmentExpression -> AssignmentExpressionFormatter().format(astNode, configMap)
-            is ConditionalStatement -> TODO()
         }
     }
 }

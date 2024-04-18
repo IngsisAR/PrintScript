@@ -4,6 +4,7 @@ import ASTNode
 import AssignmentExpression
 import BinaryExpression
 import CallExpression
+import ConditionalStatement
 import ExpressionStatement
 import VariableDeclaration
 import VariableDeclarator
@@ -25,6 +26,7 @@ class FormatterImpl(
             is AssignmentExpression -> AssignmentExpressionFormatter().format(astNode, configMap)
             is CallExpression -> CallExpressionFormatter().format(astNode, configMap)
             is ExpressionStatement -> ExpressionStatementFormatter().format(astNode, configMap)
+            is ConditionalStatement -> ConditionalStatementFormatter().format(astNode, configMap)
             else -> throw IllegalArgumentException("Unknown ASTNode type")
         }
 }
