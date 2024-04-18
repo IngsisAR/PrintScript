@@ -15,12 +15,12 @@ tasks.jacocoTestCoverageVerification {
             limit {
                 counter = "INSTRUCTION"
                 value = "COVEREDRATIO"
-                minimum = 0.70
+                minimum = 0.80
             }
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                minimum = 0.69
+                minimum = 0.70
             }
         }
     }
