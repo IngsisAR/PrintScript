@@ -49,8 +49,8 @@ class PrintScriptLineReader {
         }
 
         // Agrega cualquier línea restante
-        if (currentLine.isNotEmpty()) {
-            lines.add(currentLine.trim())
+        if (currentLine.trim().isNotEmpty()) {
+            lines.add(currentLine)
         }
 
         return lines

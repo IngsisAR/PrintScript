@@ -3,6 +3,7 @@ import astbuilder.ASTBuilderResult
 import astbuilder.ASTBuilderSuccess
 import formatter.FormatterImpl
 import java.io.File
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
@@ -42,33 +43,40 @@ private fun handleCommand(
     }
 }
 
-private fun validate(fileLines: List<String>) {
+private fun validate(fileLines: List<String>): List<ASTNode> {
+    val successfulASTs = mutableListOf<ASTNode>()
     for ((index, line) in fileLines.withIndex()) {
         val lexer = Lexer(line, 0, TOKEN_REGEX)
         val tokens = lexer.tokenize()
         val parser = Parser()
         when (val ast = parser.parse(tokens, index)) {
-            is ASTBuilderSuccess -> printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
-            is ASTBuilderFailure -> return printRed(ast.errorMessage)
+            is ASTBuilderSuccess -> {
+                successfulASTs.add(ast.astNode)
+                printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
+            }
+            is ASTBuilderFailure -> {
+                printRed(ast.errorMessage)
+                return emptyList()
+            }
         }
     }
     printGreen("✓ File validated successfully")
+    return successfulASTs
 }
 
 private fun execute(fileLines: List<String>) {
     var interpreter = InterpreterImpl()
-
-    for ((index, line) in fileLines.withIndex()) {
-        val ast = processLine(line, index)
-        if (ast is ASTBuilderSuccess) {
-            try {
-                interpreter = interpreter.interpret(ast.astNode)
-            } catch (e: Exception) {
-                println(e.message)
-            }
+    val astNodes = validate(fileLines)
+    if (astNodes.isEmpty()) return
+    for (ast in astNodes) {
+        try {
+            interpreter = interpreter.interpret(ast)
+        } catch (e: Exception) {
+            println(e.message)
+            return
         }
-        printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
     }
+    printGreen("✓ File executed successfully")
 }
 
 private fun format(
@@ -123,8 +131,8 @@ private fun analyze(fileLines: List<String>) {
 private fun functionProgress(
     totalLines: Int,
     index: Int,
-): Double {
-    return (index + 1).toDouble() / totalLines * 100
+): Int {
+    return ((index + 1).toDouble() / totalLines * 100).roundToInt()
 }
 private fun processLine(
     line: String,

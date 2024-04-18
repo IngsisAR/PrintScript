@@ -1,17 +1,14 @@
 let a : string = 8 + "th";
 a = readEnv("PATH");
 println(a);
-a = "hello";
+a = readInput("input string: ");
 println(a);
-b = "world";
-println(b);
-b = 5;
-println(b);
+let b : bool = true;
 
 
-if (a) {
+if (b) {
     println("a is 4");
-    if(a){
+    if(b){
         println("a is 4");
     } else {
         println("a is not 4");
