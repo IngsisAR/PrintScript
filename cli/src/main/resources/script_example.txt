@@ -1,12 +1,15 @@
-let a: number = 1;
-let b: string = 8 + "th";
-let c : number = (5 / 5) - (a * a);
-let d : number = 3;
-a = 4;
-println(a);
-a = "hello";
-println(a);
-b = "world";
-println(b);
-b = 5;
-println(b);
+let aNumber  :
+   number = 1  ;
+let    b: string =
+  8 +
+  "th"
+  ;
+let
+ d
+
+  :
+  number
+
+   =  3
+    ;
+println(aNumber);
