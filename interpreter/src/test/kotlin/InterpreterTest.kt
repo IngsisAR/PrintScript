@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 
@@ -515,6 +516,36 @@ class InterpreterTest {
     }
 
     @Test
+    fun interpretFunctionAssignmentExpression() {
+        var interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", null, true)))
+
+        val input = "Name"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "a", start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readInput", start = 0, end = 7),
+                                arguments = listOf(StringLiteral(value = "Enter a value:", start = 16, end = 30)),
+                                start = 0,
+                                end = 10,
+                            ),
+                        start = 0,
+                        end = 5,
+                    ),
+                start = 0,
+                end = 6,
+            )
+
+        interpreter = interpreter.interpret(astNode)
+        assertVariableInfo(interpreter.variableMap, "a", "string", true, "Name")
+    }
+
+    @Test
     fun interpretNotFoundAssignmentExpression() {
         val interpreter = InterpreterImpl()
         val astNodeB =
@@ -531,6 +562,18 @@ class InterpreterTest {
             )
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNodeB)
+        }
+    }
+
+    @Test
+    fun interpretNullAssignmentExpression() {
+        val variableMap = mapOf("nullVar" to VariableInfo("string", null, true))
+        val interpreter = IdentifierInterpreter(variableMap)
+
+        val astNode = Identifier(name = "nullVar", start = 0, end = 7)
+
+        assertThrows(IllegalArgumentException::class.java) {
+            interpreter.interpret(astNode)
         }
     }
 
@@ -921,5 +964,96 @@ class InterpreterTest {
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
+    }
+
+    @Test
+    fun getEnvironmentVariable() {
+        System.setProperty("TEST_PATH", "/mocked/path")
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "true", true),
+                ),
+            )
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "readEnv", start = 0, end = 7),
+                        arguments = listOf(StringLiteral(value = "PATH", start = 16, end = 23)),
+                        start = 0,
+                        end = 10,
+                    ),
+                start = 0,
+                end = 11,
+            )
+        val response = interpreter.interpret(astNode)
+        println(response)
+    }
+
+    @Test
+    fun getUserInput() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "true", true),
+                ),
+            )
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "readInput", start = 0, end = 7),
+                        arguments = listOf(StringLiteral(value = "", start = 16, end = 23)),
+                        start = 0,
+                        end = 10,
+                    ),
+                start = 0,
+                end = 11,
+            )
+        val response = interpreter.interpret(astNode)
+        println(response)
+    }
+
+    @Test
+    fun callExpressionPrintln() {
+        val variableMap = mapOf("b" to VariableInfo("string", "true", true))
+        val interpreter = CallExpressionInterpreter(variableMap)
+
+        val outContent = ByteArrayOutputStream()
+        System.setOut(PrintStream(outContent))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "println", start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Hello, World!", start = 16, end = 30)),
+                start = 0,
+                end = 11,
+            )
+
+        interpreter.interpret(astNode)
+
+        assertEquals("Hello, World!\n", outContent.toString())
+    }
+
+    @Test
+    fun callExpressionReadUserInput() {
+        val variableMap = mapOf("b" to VariableInfo("string", "true", true))
+        val interpreter = CallExpressionInterpreter(variableMap)
+
+        val input = "true"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "readInput", start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Enter a value:", start = 16, end = 30)),
+                start = 0,
+                end = 11,
+            )
+
+        val result = interpreter.interpret(astNode)
+
+        assertEquals(true, result)
     }
 }
