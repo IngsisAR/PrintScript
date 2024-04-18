@@ -287,6 +287,77 @@ class InterpreterTest {
     }
 
     @Test
+    fun interpretStringNumberBinaryExpression() {
+        var interpreter = InterpreterImpl()
+        val astNode =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "a", start = 4, end = 5),
+                            type = TypeReference(type = "string", start = 7, end = 13),
+                            init =
+                                BinaryExpression(
+                                    left = StringLiteral(value = "n°", start = 16, end = 17),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 20, end = 24),
+                                    operator = "+",
+                                    start = 16,
+                                    end = 24,
+                                ),
+                            start = 4,
+                            end = 24,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 25,
+            )
+
+        interpreter = interpreter.interpret(astNode)
+        val resultVariableMap = interpreter.variableMap
+
+        assertVariableInfo(resultVariableMap, "a", "string", true, "n°1")
+    }
+
+    @Test
+    fun interpretingStringIdentifiersInPlusOperationShouldResultInConcatenation() {
+        var interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("string", "hello ", true),
+                    "b" to VariableInfo("string", "world", true),
+                ),
+            )
+        val astNode =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "c", start = 4, end = 5),
+                            type = TypeReference(type = "string", start = 7, end = 13),
+                            init =
+                                BinaryExpression(
+                                    left = Identifier(name = "a", start = 16, end = 20),
+                                    right = Identifier(name = "b", start = 23, end = 28),
+                                    operator = "+",
+                                    start = 16,
+                                    end = 28,
+                                ),
+                            start = 4,
+                            end = 28,
+                        ),
+                    ),
+                kind = "let",
+                start = 0,
+                end = 29,
+            )
+        interpreter = interpreter.interpret(astNode)
+        val resultVariableMap = interpreter.variableMap
+
+        assertVariableInfo(resultVariableMap, "c", "string", true, "hello world")
+    }
+
+    @Test
     fun interpretBinaryExpression() {
         var interpreter = InterpreterImpl(mapOf("a" to VariableInfo("number", "2", true), "b" to VariableInfo("number", "4", true)))
         val astNode =
@@ -589,6 +660,103 @@ class InterpreterTest {
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
+    }
+
+    @Test
+    fun givenPrintlnWithNumber_when_interpretingPrintlnCallExpression_then_ShouldPrintNumber() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+
+        val interpreter = InterpreterImpl()
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "println", start = 0, end = 7),
+                        arguments = listOf(NumberLiteral(value = 2.toBigDecimal(), start = 8, end = 9)),
+                        start = 0,
+                        end = 10,
+                    ),
+                start = 0,
+                end = 11,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("2\n", consoleOutputCapture.toString())
+    }
+
+    @Test
+    fun givenPrintlnWithString_when_interpretingPrintlnCallExpression_then_ShouldPrintString() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+
+        val interpreter = InterpreterImpl()
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "println", start = 0, end = 7),
+                        arguments = listOf(StringLiteral(value = "hello", start = 8, end = 13)),
+                        start = 0,
+                        end = 14,
+                    ),
+                start = 0,
+                end = 15,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("hello\n", consoleOutputCapture.toString())
+    }
+
+    @Test
+    fun givenPrintlnWithIdentifier_when_interpretingPrintlnCallExpression_then_ShouldPrintVariableValue() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+
+        val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true)))
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "println", start = 0, end = 7),
+                        arguments = listOf(Identifier(name = "a", start = 8, end = 9)),
+                        start = 0,
+                        end = 10,
+                    ),
+                start = 0,
+                end = 11,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("hello\n", consoleOutputCapture.toString())
+    }
+
+    @Test
+    fun givenPrintlnWithSumOfTwoNumbers_when_interpretingPrintlnCallExpression_then_ShouldPrintSum() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+
+        val interpreter = InterpreterImpl()
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    CallExpression(
+                        callee = Identifier(name = "println", start = 0, end = 7),
+                        arguments =
+                            listOf(
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 2.toBigDecimal(), start = 8, end = 9),
+                                    right = NumberLiteral(value = 3.toBigDecimal(), start = 12, end = 13),
+                                    operator = "+",
+                                    start = 8,
+                                    end = 13,
+                                ),
+                            ),
+                        start = 0,
+                        end = 14,
+                    ),
+                start = 0,
+                end = 15,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("5\n", consoleOutputCapture.toString())
     }
 
     @Test
