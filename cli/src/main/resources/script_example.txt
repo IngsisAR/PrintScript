@@ -1,15 +1,3 @@
-let aNumber  :
-   number = 1  ;
-let    b: string =
-  8 +
-  "th"
-  ;
-let
- d
-
-  :
-  number
-
-   =  3
-    ;
-println(aNumber);
+let a : string = 8 + "th";
+a = readEnv("PATH");
+println(a);
