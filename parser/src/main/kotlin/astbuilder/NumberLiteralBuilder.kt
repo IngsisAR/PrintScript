@@ -6,7 +6,7 @@ import Token
 class NumberLiteralBuilder(
     tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
+) : AbstractASTBuilder(tokens, lineIndex), LiteralBuilder {
     override fun verify(): ASTBuilderResult =
         if (tokens.size == 1 && tokens[0].type == "NUMBER") {
             ASTBuilderSuccess(
