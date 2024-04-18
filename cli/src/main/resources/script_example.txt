@@ -1,6 +1,8 @@
 let a : string = 8 + "th";
 a = readEnv("PATH");
 println(a);
+a = readInput("user input: ");
+println(a);
 a = "hello";
 println(a);
 b = "world";
