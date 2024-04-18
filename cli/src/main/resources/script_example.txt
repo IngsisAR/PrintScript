@@ -1,8 +1,5 @@
-let a: number = 1;
-let b: string = 8 + "th";
-let c : number = (5 / 5) - (a * a);
-let d : number = 3;
-a = 4;
+let a : string = 8 + "th";
+a = readEnv("PATH");
 println(a);
 a = "hello";
 println(a);

@@ -18,11 +18,11 @@ fun main() {
         }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
-    val lines = printScriptLineReader.readLinesFromString(input)
-    performFromLines(lines)
-//    println("\nReading from file\n")
-//    val fileLines = printScriptLineReader.readLinesFromFile("app/src/main/resources/script_example.txt")
-//    performFromLines(fileLines)
+    // val lines = printScriptLineReader.readLinesFromString(input)
+    // performFromLines(lines)
+    println("\nReading from file\n")
+    val fileLines = printScriptLineReader.readLinesFromFile("cli/src/main/resources/script_example.txt")
+    performFromLines(fileLines)
 }
 
 private fun performFromLines(fileLines: List<String>) {

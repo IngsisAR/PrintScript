@@ -8,10 +8,10 @@ class AssignmentExpressionInterpreter(
         require(variable.isMutable == true) { "Variable is not mutable: $id" }
         val newValue =
             when (val right = node.right) {
-                is NumberLiteral -> right.value
-                is StringLiteral -> right.value
+                is Literal -> right.value
                 is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(right)
                 is Identifier -> IdentifierInterpreter(variableMap).interpret(right)
+                is CallExpression -> CallExpressionInterpreter(variableMap).interpret(right)
                 else -> throw IllegalArgumentException("Node not found")
             }
         checkTypeMatches(variable, newValue)
