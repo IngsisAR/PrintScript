@@ -4,7 +4,7 @@ fun main() {
     println("\nReading from string\n")
     val input =
         """
-        let a:number = 1;
+        let a:bool = true;
         let b:bool = true;
         let c:bool = true;
         if(b) {
