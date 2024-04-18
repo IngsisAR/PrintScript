@@ -49,11 +49,11 @@ private fun validate(fileLines: List<String>) {
         val tokens = lexer.tokenize()
         val parser = Parser()
         when (val ast = parser.parse(tokens, index)) {
-            is ASTBuilderSuccess -> printGreen("*")
+            is ASTBuilderSuccess -> printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
             is ASTBuilderFailure -> return printRed(ast.errorMessage)
         }
     }
-    printGreen("File validated successfully")
+    printGreen("✓ File validated successfully")
 }
 
 private fun execute(fileLines: List<String>) {
@@ -68,6 +68,7 @@ private fun execute(fileLines: List<String>) {
                 println(e.message)
             }
         }
+        printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
     }
 }
 
@@ -96,6 +97,7 @@ private fun format(
                 println(e.message)
             }
         }
+        printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
     }
     createFormattedFile(newFilePath, formattedContent.toString())
 }
@@ -110,16 +112,18 @@ private fun analyze(fileLines: List<String>) {
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
             val response: String = sca.analyze(ast.astNode, index)
-            if (response.isEmpty()) {
-                printGreen("*")
-            } else {
+            if (response.isNotEmpty()) {
                 return printRed(response)
             }
+            printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
         }
     }
-    printGreen("File analyzed successfully")
+    printGreen("✓ File analyzed successfully")
 }
 
+private fun functionProgress(totalLines: Int, index: Int): Double {
+    return (index + 1).toDouble() / totalLines * 100
+}
 private fun processLine(
     line: String,
     index: Int,
@@ -136,7 +140,7 @@ private fun createFormattedFile(
 ) {
     val file = File(filePath)
     file.writeText(content)
-    printGreen("Formatted file created at: $filePath")
+    printGreen("✓ Formatted file created at: $filePath")
 }
 
 private fun getFile(path: String): List<String> {
