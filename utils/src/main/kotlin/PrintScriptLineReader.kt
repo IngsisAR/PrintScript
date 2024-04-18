@@ -58,22 +58,3 @@ class PrintScriptLineReader {
 
     fun readLinesFromFile(fileName: String): List<String> = readLinesFromString(File(fileName).readText())
 }
-
-fun main() {
-    println("\nReading from string\n")
-    val input =
-        """
-        if(a){
-            if(n){
-                a = 2;
-
-        else {
-            b = 3;
-        }
-        let a = 2;
-        let b = 2;
-        """.trimIndent()
-    val printScriptLineReader = PrintScriptLineReader()
-    val lines = printScriptLineReader.readLinesFromString(input)
-    lines.forEach { println("$it\n----------------------") }
-}

@@ -2,6 +2,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 
 class InterpreterTest {
     @Test
@@ -621,5 +623,135 @@ class InterpreterTest {
         assertEquals(type, variableMap[name]?.type, "Type mismatch for $name")
         assertEquals(isMutable, variableMap[name]?.isMutable, "Mutability mismatch for $name")
         assertEquals(value, variableMap[name]?.value, "Value mismatch for $name")
+    }
+
+    @Test
+    fun givenANumberAndTrueCondition_interpretingSimpleConditionalStatementWithPrintln_ShouldOutputNumberToConsole() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("number", "1", true),
+                    "b" to VariableInfo("bool", "true", true),
+                ),
+            )
+        /*
+        let a:number = 1;
+        let b:bool = true;
+        if(b) {
+            println(a);
+        }
+         */
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "b", start = 0, end = 1),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "println", start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "a", start = 8, end = 9)),
+                                    start = 0,
+                                    end = 10,
+                                ),
+                            start = 0,
+                            end = 11,
+                        ),
+                    ),
+                alternate = emptyList(),
+                start = 0,
+                end = 11,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("1\n", consoleOutputCapture.toString())
+    }
+
+    @Test
+    fun givenFalseConditionAndNumbers_interpretingConditionalStatementWithPrintln_ShouldOutputAlternateToConsole() {
+        val consoleOutputCapture = ByteArrayOutputStream()
+        System.setOut(PrintStream(consoleOutputCapture))
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("number", "1", true),
+                    "b" to VariableInfo("bool", "false", true),
+                    "c" to VariableInfo("number", "2", true),
+                ),
+            )
+        /*
+        let a:number = 1;
+        let b:bool = false;
+        let c:number = 2;
+        if(b) {
+            println(a);
+        }else{
+            println(c);
+        }
+         */
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "b", start = 0, end = 1),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "println", start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "a", start = 8, end = 9)),
+                                    start = 0,
+                                    end = 10,
+                                ),
+                            start = 0,
+                            end = 11,
+                        ),
+                    ),
+                alternate =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "println", start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "c", start = 8, end = 9)),
+                                    start = 0,
+                                    end = 10,
+                                ),
+                            start = 0,
+                            end = 11,
+                        ),
+                    ),
+                start = 0,
+                end = 11,
+            )
+        interpreter.interpret(astNode)
+        assertEquals("2\n", consoleOutputCapture.toString())
+    }
+
+    @Test
+    fun givenBadCondition_interpretingSimpleConditionalStatement_ShouldThrowIllegalArgumentException() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("number", "1", true),
+                    "b" to VariableInfo("string", "true", true),
+                ),
+            )
+        /*
+        let b:string = "true";
+        if(b) {
+        }
+         */
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "b", start = 0, end = 1),
+                consequent = emptyList(),
+                alternate = emptyList(),
+                start = 0,
+                end = 11,
+            )
+        assertThrows(IllegalArgumentException::class.java) {
+            interpreter.interpret(astNode)
+        }
     }
 }

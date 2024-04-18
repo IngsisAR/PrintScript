@@ -1,11 +1,26 @@
+import astbuilder.ASTBuilderSuccess
+
 fun main() {
     println("\nReading from string\n")
     val input =
         """
-        if (a) {
-            if (b) {
+        let a:number = 1;
+        let b:bool = true;
+        let c:bool = true;
+        if(b) {
+            println(a);
+            if(c) {
+                println("c is true");
+                if(a) {
+                    println("a is 1");
+                } else {
+                    println("a is not 1");
+                }
             } else {
+                println("c is false");
+            }
         } else {
+            println("b is false");
         }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
@@ -28,12 +43,12 @@ private fun performFromLines(fileLines: List<String>) {
         val ast = parser.parse(tokens, index)
         println("\nParser Output")
         println("$ast\n")
-//        if (ast is ASTBuilderSuccess) {
-//            try {
-//                interpreter = interpreter.interpret(ast.astNode)
-//            } catch (e: Exception) {
-//                println(e.message)
-//            }
-//        }
+        if (ast is ASTBuilderSuccess) {
+            try {
+                interpreter = interpreter.interpret(ast.astNode)
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
     }
 }

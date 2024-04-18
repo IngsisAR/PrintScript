@@ -103,6 +103,23 @@ class ConditionalStatementBuilder(tokens: List<Token>, val lineIndex: Int) : Abs
                 "CBRACE" -> {
                     braceCount--
                     if (braceCount == 0) {
+                        // catch statements without semicolon
+                        if (newStatementIndex != currentIndex) {
+                            val builderResult =
+                                addStatementToBlocksOrBuilderFailure(
+                                    tokens,
+                                    newStatementIndex,
+                                    currentIndex - 1,
+                                    lineIndex,
+                                    isIfBlock,
+                                    consequent,
+                                    isElseBlock,
+                                    alternate,
+                                )
+                            if (builderResult is ASTBuilderFailure) {
+                                return builderResult
+                            }
+                        }
                         if (isIfBlock) {
                             isIfBlock = false
                             isElseBlock = true
@@ -115,7 +132,7 @@ class ConditionalStatementBuilder(tokens: List<Token>, val lineIndex: Int) : Abs
                             newStatementIndex = currentIndex + 1
                             continue
                         }
-                    } else if (braceCount == 1 && isConditionalStatement) {
+                    } else if (braceCount >= 1 && isConditionalStatement) {
                         if (currentIndex + 1 < tokens.size && tokens[currentIndex + 1].type == "ELSE" && elseCount == 0) {
                             currentIndex++
                             elseCount++
@@ -136,8 +153,9 @@ class ConditionalStatementBuilder(tokens: List<Token>, val lineIndex: Int) : Abs
                             return builderResult
                         }
                         newStatementIndex = currentIndex + 1
-
-                        isConditionalStatement = false
+                        if (braceCount == 1) {
+                            isConditionalStatement = false
+                        }
                         currentIndex++
                     } else {
                         return ASTBuilderFailure("Unmatched braces in expression at ($lineIndex, ${currentToken.position.end})")

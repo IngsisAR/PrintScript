@@ -1399,4 +1399,29 @@ class ParserTest {
         val result = parser.parse(tokens, 0)
         assertEquals("Unmatched braces in expression at (0, 36)", (result as ASTBuilderFailure).errorMessage)
     }
+
+    @Test
+    fun parsingConditionalStatementWithMissingSemicolonInExpressionShouldReturnASTBuilderFailure() {
+        val parser = Parser()
+        /*
+        if(a){
+           a = 3
+        }
+         */
+        val tokens =
+            listOf(
+                Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
+                Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
+                Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
+                Token(type = "CPAREN", position = Position(start = 4, end = 5), value = ")"),
+                Token(type = "OBRACE", position = Position(start = 5, end = 6), value = "{"),
+                Token(type = "ID", position = Position(start = 10, end = 11), value = "a"),
+                Token(type = "ASSIGN", position = Position(start = 12, end = 13), value = "="),
+                Token(type = "NUMBER", position = Position(start = 14, end = 15), value = "3"),
+                Token(type = "CBRACE", position = Position(start = 16, end = 17), value = "}"),
+            )
+        val result = parser.parse(tokens, 0)
+        assert(result is ASTBuilderFailure)
+        assertEquals("Missing semicolon at (0, 15)", (result as ASTBuilderFailure).errorMessage)
+    }
 }
