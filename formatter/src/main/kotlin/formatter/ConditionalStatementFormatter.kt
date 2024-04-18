@@ -16,7 +16,7 @@ class ConditionalStatementFormatter : Formatter {
             contentFormatter(astNode.consequent, configMap) +
             (
                 if (astNode.alternate.isNotEmpty()) {
-                    "\n} else {\n" +
+                    "} else {\n" +
                         contentFormatter(astNode.alternate, configMap) + "\n" +
                         "}\n"
                 } else {
@@ -35,24 +35,26 @@ class ConditionalStatementFormatter : Formatter {
         configMap: Map<String, Any?>,
     ): String {
         return if (astNode.isNotEmpty()) {
-            var aux = ""
+            val aux: MutableList<String> = mutableListOf()
             for (statement in astNode) {
                 when (statement) {
                     is ConditionalStatement -> {
-                        aux += repeatIndentation(configMap) + "if(${statement.test.name}) {\n" +
-                            contentFormatter(statement.consequent, configMap).split("\n")
-                                .joinToString("\n") { repeatIndentation(configMap) + it } + "\n" +
-                            (
-                                if (statement.alternate.isNotEmpty()) {
-                                    repeatIndentation(configMap) + "} else {\n" +
-                                        contentFormatter(statement.alternate, configMap).split("\n")
-                                            .joinToString("\n") { repeatIndentation(configMap) + it } + "\n" +
+                        aux.add(
+                            repeatIndentation(configMap) + "if(${statement.test.name}) {\n" +
+                                contentFormatter(statement.consequent, configMap).split("\n")
+                                    .joinToString("\n") { repeatIndentation(configMap) + it } + "\n" +
+                                (
+                                    if (statement.alternate.isNotEmpty()) {
+                                        repeatIndentation(configMap) + "} else {\n" +
+                                            contentFormatter(statement.alternate, configMap).split("\n")
+                                                .joinToString("\n") { repeatIndentation(configMap) + it } + "\n" +
+                                            repeatIndentation(configMap) + "}\n"
+                                    } else {
                                         repeatIndentation(configMap) + "}"
-                                } else {
-                                    repeatIndentation(configMap) + "}"
-                                }
-                                )
-                        break
+                                    }
+                                    ),
+                        )
+                        continue
                     }
 
                     is ExpressionStatement -> {
@@ -65,17 +67,17 @@ class ConditionalStatementFormatter : Formatter {
                             }
                             aux += aux2.joinToString("\n") + ";"
                         } else {
-                            aux += repeatIndentation(configMap) + StatementFormatter().format(statement, configMap)
+                            aux.add(repeatIndentation(configMap) + StatementFormatter().format(statement, configMap))
                         }
-                        break
+                        continue
                     }
 
                     else -> {
-                        aux += repeatIndentation(configMap) + StatementFormatter().format(statement, configMap)
+                        aux.add(repeatIndentation(configMap) + StatementFormatter().format(statement, configMap))
                     }
                 }
             }
-            aux
+            aux.joinToString("\n")
         } else {
             ""
         }

@@ -472,7 +472,6 @@ class FormatterTest {
         assertEquals(
             "if(a) {\n" +
                 "    1 + 1;\n" +
-                "\n" +
                 "} else {\n" +
                 "    \n" +
                 "    print(\"Hello\");\n" +
@@ -658,7 +657,6 @@ class FormatterTest {
         assertEquals(
             "if(a) {\n" +
                 "        1 + 1;\n" +
-                "\n" +
                 "} else {\n" +
                 "        \n" +
                 "        print(\"Hello\");\n" +

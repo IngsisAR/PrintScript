@@ -11,10 +11,10 @@ println(b);
 
 if (a) {
     println("a is 4");
-    if(a){
-        println("a is 4");
+    if(b){
+        println("b is 4");
     } else {
-        println("a is not 4");
+        println("b is not 4");
     }
     b;
 } else {

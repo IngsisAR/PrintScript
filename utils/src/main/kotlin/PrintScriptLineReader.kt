@@ -49,7 +49,7 @@ class PrintScriptLineReader {
         }
 
         // Agrega cualquier línea restante
-        if (currentLine.isNotEmpty()) {
+        if (currentLine.trim().isNotEmpty()) {
             lines.add(currentLine.trim())
         }
 
@@ -57,4 +57,10 @@ class PrintScriptLineReader {
     }
 
     fun readLinesFromFile(fileName: String): List<String> = readLinesFromString(File(fileName).readText())
+}
+
+fun main() {
+    println("\nReading from file\n")
+    val fileLines = PrintScriptLineReader().readLinesFromFile("cli/src/main/resources/script_example.txt")
+    fileLines.forEach { println("line: $it\n") }
 }
