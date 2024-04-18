@@ -1,26 +1,20 @@
 import astbuilder.ASTBuilderSuccess
+import formatter.FormatterImpl
 
 fun main() {
     println("\nReading from string\n")
     val input =
         """
-        let a:bool = true;
-        let b:bool = true;
-        let c:bool = true;
-        if(b) {
-            println(a);
-            if(c) {
-                println("c is true");
-                if(a) {
-                    println("a is 1");
-                } else {
-                    println("a is not 1");
+        if (a) {
+            if(b){
+                if(c){
+                    println("if c");
                 }
-            } else {
-                println("c is false");
+            }else{
+                println("else b");
             }
-        } else {
-            println("b is false");
+        }else{
+            println("else a");
         }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
@@ -45,7 +39,8 @@ private fun performFromLines(fileLines: List<String>) {
         println("$ast\n")
         if (ast is ASTBuilderSuccess) {
             try {
-                interpreter = interpreter.interpret(ast.astNode)
+//                interpreter = interpreter.interpret(ast.astNode)
+                println(FormatterImpl("formatter/src/main/resources/FormatterConfig.json").format(ast.astNode))
             } catch (e: Exception) {
                 println(e.message)
             }
