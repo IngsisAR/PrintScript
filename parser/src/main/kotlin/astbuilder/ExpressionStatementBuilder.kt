@@ -13,14 +13,17 @@ class ExpressionStatementBuilder(
             return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
+            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.end})")
         }
         if (tokens.size == 1) {
             return ASTBuilderFailure("No expression found at ($lineIndex, ${tokens.first().position.start})")
         }
         val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1), lineIndex).getVerifiedExpressionResult()
         return if (expressionResult is ASTBuilderFailure) {
-            ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
+            if (expressionResult.errorMessage.isNotEmpty()) {
+                return ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
+            }
+            ASTBuilderFailure("Invalid expression at ($lineIndex, ${tokens.first().position.start})")
         } else {
             expressionResult
         }

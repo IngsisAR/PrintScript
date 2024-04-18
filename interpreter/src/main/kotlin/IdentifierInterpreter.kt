@@ -8,6 +8,7 @@ class IdentifierInterpreter(
         return when (variableInfo.type) {
             "string" -> variableInfo.value.toString()
             "number" -> variableInfo.value.toBigDecimal()
+            "bool" -> variableInfo.value.toBoolean()
             else -> throw IllegalArgumentException("Unsupported variable type")
         }
     }

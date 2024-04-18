@@ -4,14 +4,40 @@ import Expression
 import Statement
 import Token
 
+val REDUNDANT_ERRORS =
+    listOf(
+        "No operator found in binary expression",
+        "Not enough tokens to build assignment expression",
+        "Invalid assignment expression",
+        "Not enough members for call expression",
+        "Binary expression must have at least 3 tokens",
+    )
+
+fun getASTBuilderResult(builders: List<ASTBuilder>): ASTBuilderResult {
+    for (builder in builders) {
+        val astBuilderResult = builder.verifyAndBuild()
+        if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
+            return astBuilderResult
+        }
+        if (astBuilderResult is ASTBuilderFailure &&
+            builder !is LiteralBuilder &&
+            builder !is IdentifierBuilder &&
+            !REDUNDANT_ERRORS.contains(astBuilderResult.errorMessage)
+        ) {
+            return ASTBuilderFailure(astBuilderResult.errorMessage)
+        }
+    }
+    return ASTBuilderFailure("")
+}
+
 class AssignableExpressionProvider(
     tokens: List<Token>,
     lineIndex: Int,
 ) {
     private val assignableExpressionBuilders: List<AbstractASTBuilder> =
         listOf(
-            CallExpressionBuilder(tokens, lineIndex),
             BinaryExpressionBuilder(tokens, lineIndex),
+            CallExpressionBuilder(tokens, lineIndex),
             NumberLiteralBuilder(tokens, lineIndex),
             StringLiteralBuilder(tokens, lineIndex),
             IdentifierBuilder(tokens, lineIndex),
@@ -19,28 +45,7 @@ class AssignableExpressionProvider(
         )
 
     fun getAssignableExpressionResult(): ASTBuilderResult {
-        var errorMessages = ""
-        for (expressionBuilder in assignableExpressionBuilders) {
-            val astBuilderResult = expressionBuilder.verifyAndBuild()
-            if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
-                return astBuilderResult
-            }
-            if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is LiteralBuilder &&
-                expressionBuilder !is IdentifierBuilder
-            ) {
-                errorMessages += astBuilderResult.errorMessage + "\n"
-            }
-        }
-        errorMessages =
-            errorMessages
-                .lines()
-                .filterNot {
-                    it == "No operator found in binary expression" ||
-                        it == "Not enough members for call expression" ||
-                        it == "Binary expression must have at least 3 tokens"
-                }.joinToString("\n")
-        return ASTBuilderFailure(errorMessages)
+        return getASTBuilderResult(assignableExpressionBuilders)
     }
 }
 
@@ -51,8 +56,8 @@ class ExpressionProvider(
     private val expressionBuilders: List<AbstractASTBuilder> =
         listOf(
             AssignmentExpressionBuilder(tokens, lineIndex),
-            CallExpressionBuilder(tokens, lineIndex),
             BinaryExpressionBuilder(tokens, lineIndex),
+            CallExpressionBuilder(tokens, lineIndex),
             NumberLiteralBuilder(tokens, lineIndex),
             StringLiteralBuilder(tokens, lineIndex),
             IdentifierBuilder(tokens, lineIndex),
@@ -60,30 +65,7 @@ class ExpressionProvider(
         )
 
     fun getVerifiedExpressionResult(): ASTBuilderResult {
-        var errorMessages = ""
-        for (expressionBuilder in expressionBuilders) {
-            val astBuilderResult = expressionBuilder.verifyAndBuild()
-            if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
-                return astBuilderResult
-            }
-            if (astBuilderResult is ASTBuilderFailure &&
-                expressionBuilder !is LiteralBuilder &&
-                expressionBuilder !is IdentifierBuilder
-            ) {
-                errorMessages += astBuilderResult.errorMessage + "\n"
-            }
-        }
-        errorMessages =
-            errorMessages
-                .lines()
-                .filterNot {
-                    it == "No operator found in binary expression" ||
-                        it == "Not enough tokens to build assignment expression" ||
-                        it == "Invalid assignment expression" ||
-                        it == "Not enough members for call expression" ||
-                        it == "Binary expression must have at least 3 tokens"
-                }.joinToString("\n")
-        return ASTBuilderFailure(errorMessages)
+        return getASTBuilderResult(expressionBuilders)
     }
 }
 
@@ -93,6 +75,7 @@ class StatementProvider(
 ) {
     private val statementBuilders: List<AbstractASTBuilder> =
         listOf(
+            ConditionalStatementBuilder(tokens, lineIndex),
             VariableDeclarationBuilder(tokens, lineIndex),
             ExpressionStatementBuilder(tokens, lineIndex),
         )
@@ -101,9 +84,6 @@ class StatementProvider(
         var errorMessages = ""
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Empty tokens")
-        }
-        if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at ($lineIndex, ${tokens.last().position.start}")
         }
         for (statementBuilder in statementBuilders) {
             val astBuilderResult = statementBuilder.verifyAndBuild()
@@ -115,6 +95,12 @@ class StatementProvider(
                     errorMessages = astBuilderResult.errorMessage
                     break
                 } else if (statementBuilder is VariableDeclarationBuilder) {
+                    continue
+                }
+                if (astBuilderResult.errorMessage != "Invalid conditional expression" && statementBuilder is ConditionalStatementBuilder) {
+                    errorMessages = astBuilderResult.errorMessage
+                    break
+                } else if (statementBuilder is ConditionalStatementBuilder) {
                     continue
                 }
                 errorMessages += astBuilderResult.errorMessage

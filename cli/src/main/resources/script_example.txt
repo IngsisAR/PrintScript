@@ -10,3 +10,16 @@ b = "world";
 println(b);
 b = 5;
 println(b);
+
+
+if (a) {
+    println("a is 4");
+    if(a){
+        println("a is 4");
+    } else {
+        println("a is not 4");
+    }
+    b;
+} else {
+    println("a is not 4");
+}

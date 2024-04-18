@@ -384,4 +384,328 @@ class FormatterTest {
             formatter.format(ast)
         }
     }
+
+    @Test
+    fun conditionalWithoutelseAndOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+                "identationInsideConditionals" to 1,
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate = emptyList(),
+                start = 7,
+                end = 19,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals("if(a) {\n" + "    1 + 1;\n" + "}", formatter.format(astNode))
+    }
+
+    @Test
+    fun conditionalWithElseAndOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+                "identationInsideConditionals" to 1,
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "print", start = 29, end = 36),
+                                    arguments = listOf(StringLiteral(value = "Hello", start = 37, end = 44)),
+                                    start = 29,
+                                    end = 45,
+                                ),
+                            start = 29,
+                            end = 46,
+                        ),
+                    ),
+                start = 7,
+                end = 48,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals(
+            "if(a) {\n" +
+                "    1 + 1;\n" +
+                "\n" +
+                "} else {\n" +
+                "    \n" +
+                "    print(\"Hello\");\n" +
+                "}\n",
+            formatter.format(astNode),
+        )
+    }
+
+    @Test
+    fun multipleConditionalsWithElseAndOneSpace() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+                "identationInsideConditionals" to 1,
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ConditionalStatement(
+                            test = Identifier(name = "b", start = 16, end = 17),
+                            consequent =
+                                listOf(
+                                    ExpressionStatement(
+                                        expression =
+                                            CallExpression(
+                                                callee = Identifier(name = "println", start = 28, end = 35),
+                                                arguments = listOf(StringLiteral(value = "If b", start = 36, end = 42)),
+                                                start = 28,
+                                                end = 43,
+                                            ),
+                                        start = 28,
+                                        end = 44,
+                                    ),
+                                ),
+                            alternate =
+                                listOf(
+                                    ExpressionStatement(
+                                        expression =
+                                            CallExpression(
+                                                callee = Identifier(name = "println", start = 64, end = 71),
+                                                arguments = listOf(StringLiteral(value = "else b", start = 72, end = 80)),
+                                                start = 64,
+                                                end = 81,
+                                            ),
+                                        start = 64,
+                                        end = 82,
+                                    ),
+                                ),
+                            start = 18,
+                            end = 88,
+                        ),
+                    ),
+                alternate =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "println", start = 100, end = 107),
+                                    arguments = listOf(StringLiteral(value = "else a", start = 108, end = 116)),
+                                    start = 100,
+                                    end = 117,
+                                ),
+                            start = 100,
+                            end = 118,
+                        ),
+                    ),
+                start = 7,
+                end = 120,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals(
+            "if(a) {\n" +
+                "    if(b) {\n" +
+                "        \n" +
+                "        println(\"If b\");\n" +
+                "    } else {\n" +
+                "        \n" +
+                "        println(\"else b\");\n" +
+                "    }\n" +
+                "} else {\n" +
+                "    \n" +
+                "    println(\"else a\");\n" +
+                "}\n",
+            formatter.format(astNode),
+        )
+    }
+
+    @Test
+    fun conditionalWithoutelseAndTwoSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+                "identationInsideConditionals" to 2,
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate = emptyList(),
+                start = 7,
+                end = 19,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals(
+            "if(a) {\n" +
+                "        1 + 1;\n" +
+                "}",
+            formatter.format(astNode),
+        )
+    }
+
+    @Test
+    fun conditionalWithElseAndTwoSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to 1,
+                "spaceAfterColon" to 1,
+                "spacesInAssignSymbol" to 1,
+                "lineJumpBeforePrintln" to 1,
+                "identationInsideConditionals" to 2,
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                CallExpression(
+                                    callee = Identifier(name = "print", start = 29, end = 36),
+                                    arguments = listOf(StringLiteral(value = "Hello", start = 37, end = 44)),
+                                    start = 29,
+                                    end = 45,
+                                ),
+                            start = 29,
+                            end = 46,
+                        ),
+                    ),
+                start = 7,
+                end = 48,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals(
+            "if(a) {\n" +
+                "        1 + 1;\n" +
+                "\n" +
+                "} else {\n" +
+                "        \n" +
+                "        print(\"Hello\");\n" +
+                "}\n",
+            formatter.format(astNode),
+        )
+    }
+
+    @Test
+    fun conditionalWithoutelseAndNoneSpaces() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+                "identationInsideConditionals" to "None",
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate = emptyList(),
+                start = 7,
+                end = 19,
+            )
+        val formatter = FormatterImpl(testConfigJsonPath)
+        assertEquals(
+            "if(a) {\n" +
+                "    1 + 1;\n" +
+                "}",
+            formatter.format(astNode),
+        )
+    }
 }
