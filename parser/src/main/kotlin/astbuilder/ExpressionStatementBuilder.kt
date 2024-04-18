@@ -20,7 +20,10 @@ class ExpressionStatementBuilder(
         }
         val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1), lineIndex).getVerifiedExpressionResult()
         return if (expressionResult is ASTBuilderFailure) {
-            ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
+            if (expressionResult.errorMessage.isNotEmpty()) {
+                return ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
+            }
+            ASTBuilderFailure("Invalid expression at ($lineIndex, ${tokens.first().position.start})")
         } else {
             expressionResult
         }

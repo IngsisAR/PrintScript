@@ -13,8 +13,7 @@ class VariableDeclaratorInterpreter(
                 when (it) {
                     is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(it)
                     is Identifier -> IdentifierInterpreter(variableMap).interpret(it)
-                    is NumberLiteral -> it.value
-                    is StringLiteral -> it.value
+                    is Literal -> it.value
                     else -> throw IllegalArgumentException("Unsupported init type: ${it::class.simpleName}")
                 }
             }

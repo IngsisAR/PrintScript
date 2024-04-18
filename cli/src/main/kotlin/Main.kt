@@ -1,11 +1,21 @@
 import astbuilder.ASTBuilderSuccess
-import utils.PrintScriptLineReader
+import formatter.FormatterImpl
 
 fun main() {
     println("\nReading from string\n")
     val input =
         """
-        let a:string = "hola";
+        if (a) {
+            if(b){
+                if(c){
+                    println("if c");
+                }
+            }else{
+                println("else b");
+            }
+        }else{
+            println("else a");
+        }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
     // val lines = printScriptLineReader.readLinesFromString(input)
@@ -18,15 +28,19 @@ fun main() {
 private fun performFromLines(fileLines: List<String>) {
     var interpreter = InterpreterImpl()
     for ((index, line) in fileLines.withIndex()) {
+        println(line + "\n")
+        println("Lexer output")
         val lexer = Lexer(line, 0, "utils/src/main/resources/tokenRegex.json")
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()
         val ast = parser.parse(tokens, index)
-        println(ast)
+        println("\nParser Output")
+        println("$ast\n")
         if (ast is ASTBuilderSuccess) {
             try {
-                interpreter = interpreter.interpret(ast.astNode)
+//                interpreter = interpreter.interpret(ast.astNode)
+                println(FormatterImpl("formatter/src/main/resources/FormatterConfig.json").format(ast.astNode))
             } catch (e: Exception) {
                 println(e.message)
             }

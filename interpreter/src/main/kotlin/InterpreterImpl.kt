@@ -10,6 +10,7 @@ class InterpreterImpl(
             is CallExpression -> CallExpressionInterpreter(variableMap).interpret(node)
             is Identifier -> IdentifierInterpreter(variableMap).interpret(node)
             is ExpressionStatement -> return interpret(node.expression)
+            is ConditionalStatement -> return ConditionalStatementInterpreter(variableMap).interpret(node)
             is VariableDeclaration -> internalVariableMap = VariableDeclarationInterpreter(variableMap).interpret(node)
             else -> throw IllegalArgumentException("Invalid node type: ${node::class.simpleName}")
         }

@@ -22,7 +22,7 @@ class AssignmentExpressionBuilder(
                 return if (identifierResult is ASTBuilderFailure) {
                     ASTBuilderFailure("missing identifier at ($lineIndex, ${tokens[0].position.start})")
                 } else {
-                    ASTBuilderFailure("missing expression after assignment at ($lineIndex, ${tokens[1].position.start})")
+                    ASTBuilderFailure("missing expression after assignment at ($lineIndex, ${tokens[1].position.end})")
                 }
             }
             if (identifierResult is ASTBuilderSuccess && tokens[1].type == "ASSIGN") {

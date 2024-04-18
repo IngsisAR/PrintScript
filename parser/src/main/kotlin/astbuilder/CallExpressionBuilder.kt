@@ -23,7 +23,7 @@ class CallExpressionBuilder(
             return ASTBuilderFailure("Not enough members for call expression")
         }
         if (identifierResult is ASTBuilderSuccess && tokens[1].type == "OPAREN" && tokens.last().type != "CPAREN") {
-            return ASTBuilderFailure("Call expression does not have close parenthesis at ($lineIndex, ${tokens.last().position.start})")
+            return ASTBuilderFailure("Call expression does not have close parenthesis at ($lineIndex, ${tokens.last().position.end})")
         }
 
         if (tokens.size > 3) {
