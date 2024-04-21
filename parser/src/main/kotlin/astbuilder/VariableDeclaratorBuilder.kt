@@ -7,14 +7,14 @@ import TypeReference
 import VariableDeclarator
 
 class VariableDeclaratorBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
+) : ASTBuilder {
     private lateinit var identifier: Identifier
     private lateinit var typeReference: TypeReference
     private var init: Expression? = null
 
-    override fun verify(): ASTBuilderResult {
+    override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Not enough tokens for a variable declarator")
         }
@@ -62,29 +62,28 @@ class VariableDeclaratorBuilder(
                     }
                 } else {
                     init = (assignableExpressionResult as ASTBuilderSuccess).astNode as Expression
-                    assignableExpressionResult
+                    ASTBuilderSuccess(
+                        VariableDeclarator(
+                            id = identifier,
+                            type = typeReference,
+                            init = init,
+                            start = tokens.first().position.start,
+                            end = tokens.last().position.end,
+                        ),
+                    )
                 }
             } else {
                 ASTBuilderFailure("Invalid declarator: Missing assignment operator at ($lineIndex, ${tokens[3].position.start})")
             }
         }
-        return idBuilderResult
-    }
-
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            ASTBuilderSuccess(
-                VariableDeclarator(
-                    id = identifier,
-                    type = typeReference,
-                    init = init,
-                    start = tokens.first().position.start,
-                    end = tokens.last().position.end,
-                ),
-            )
-        } else {
-            result
-        }
+        return ASTBuilderSuccess(
+            VariableDeclarator(
+                id = identifier,
+                type = typeReference,
+                init = init,
+                start = tokens.first().position.start,
+                end = tokens.last().position.end,
+            ),
+        )
     }
 }

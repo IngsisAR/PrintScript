@@ -11,10 +11,10 @@ import Token
 import java.util.Stack
 
 class BinaryExpressionBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
-    override fun verify(): ASTBuilderResult {
+) : ASTBuilder {
+    override fun verifyAndBuild(): ASTBuilderResult {
         when {
             tokens.size < 3 -> {
                 return ASTBuilderFailure("Binary expression must have at least 3 tokens")
@@ -179,6 +179,4 @@ class BinaryExpressionBuilder(
 
         return ASTBuilderSuccess(stack.pop())
     }
-
-    override fun verifyAndBuild(): ASTBuilderResult = verify()
 }

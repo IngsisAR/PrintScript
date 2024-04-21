@@ -5,7 +5,7 @@ import Identifier
 import Statement
 import Token
 
-class ConditionalStatementBuilder(tokens: List<Token>, val lineIndex: Int) : AbstractASTBuilder(tokens, lineIndex) {
+class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) : ASTBuilder {
     private lateinit var test: Identifier
 
     override fun verifyAndBuild(): ASTBuilderResult {

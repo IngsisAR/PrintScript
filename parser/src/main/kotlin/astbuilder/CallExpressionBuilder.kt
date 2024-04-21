@@ -6,13 +6,13 @@ import Identifier
 import Token
 
 class CallExpressionBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
+) : ASTBuilder {
     private var arguments: List<Expression> = emptyList()
     private var identifierResult: ASTBuilderResult = ASTBuilderFailure("")
 
-    override fun verify(): ASTBuilderResult {
+    override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.size < 2) {
             return ASTBuilderFailure("Not enough members for call expression")
         }
@@ -39,7 +39,14 @@ class CallExpressionBuilder(
                     return ASTBuilderFailure("Call expression does not have valid argument")
                 }
                 arguments = listOf((expressionResult as ASTBuilderSuccess).astNode as Expression)
-                return expressionResult
+                return ASTBuilderSuccess(
+                    CallExpression(
+                        callee = (identifierResult as ASTBuilderSuccess).astNode as Identifier,
+                        arguments = arguments,
+                        start = tokens.first().position.start,
+                        end = tokens.last().position.end,
+                    ),
+                )
             } else {
                 var tokensAux = tokens.subList(2, tokens.size - 1)
                 for (i in 0 until commaCount) {
@@ -61,16 +68,7 @@ class CallExpressionBuilder(
                 }
                 arguments += (expressionResult as ASTBuilderSuccess).astNode as Expression
             }
-            return identifierResult
-        } else {
-            return identifierResult
-        }
-    }
-
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            ASTBuilderSuccess(
+            return ASTBuilderSuccess(
                 CallExpression(
                     callee = (identifierResult as ASTBuilderSuccess).astNode as Identifier,
                     arguments = arguments,
@@ -79,7 +77,7 @@ class CallExpressionBuilder(
                 ),
             )
         } else {
-            result
+            return ASTBuilderFailure("Call expression does not have valid argument")
         }
     }
 }

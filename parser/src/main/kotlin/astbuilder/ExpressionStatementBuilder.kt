@@ -5,10 +5,10 @@ import ExpressionStatement
 import Token
 
 class ExpressionStatementBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
-    override fun verify(): ASTBuilderResult {
+) : ASTBuilder {
+    override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Empty tokens")
         }
@@ -25,22 +25,13 @@ class ExpressionStatementBuilder(
             }
             ASTBuilderFailure("Invalid expression at ($lineIndex, ${tokens.first().position.start})")
         } else {
-            expressionResult
-        }
-    }
-
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
             ASTBuilderSuccess(
                 ExpressionStatement(
-                    result.astNode as Expression,
+                    (expressionResult as ASTBuilderSuccess).astNode as Expression,
                     tokens.first().position.start,
                     tokens.last().position.end,
                 ),
             )
-        } else {
-            result
         }
     }
 }
