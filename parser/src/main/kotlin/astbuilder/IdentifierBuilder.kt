@@ -4,10 +4,10 @@ import Identifier
 import Token
 
 class IdentifierBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
-    override fun verify(): ASTBuilderResult =
+) : ASTBuilder {
+    override fun verifyAndBuild(): ASTBuilderResult =
         if (tokens.size == 1 && tokens.first().type == "ID") {
             ASTBuilderSuccess(
                 Identifier(
@@ -19,6 +19,4 @@ class IdentifierBuilder(
         } else {
             ASTBuilderFailure("Invalid identifier")
         }
-
-    override fun verifyAndBuild(): ASTBuilderResult = verify()
 }

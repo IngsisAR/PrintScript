@@ -5,12 +5,12 @@ import VariableDeclaration
 import VariableDeclarator
 
 class VariableDeclarationBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
+) : ASTBuilder {
     private var variableDeclarators: List<VariableDeclarator> = emptyList()
 
-    override fun verify(): ASTBuilderResult {
+    override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Empty tokens")
         }
@@ -43,9 +43,15 @@ class VariableDeclarationBuilder(
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
                 }
                 variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
-                return variableDeclaratorResult
+                return ASTBuilderSuccess(
+                    VariableDeclaration(
+                        kind = tokens.first().value,
+                        declarations = variableDeclarators,
+                        start = tokens.first().position.start,
+                        end = tokens.last().position.end,
+                    ),
+                )
             }
-            var declaratorResult: ASTBuilderResult = ASTBuilderFailure("Invalid variable declaration")
             for (i in 0 until commaCount + 1) {
                 if (tokensAux.size < 3) {
                     return ASTBuilderFailure(
@@ -60,7 +66,6 @@ class VariableDeclarationBuilder(
                     if (variableDeclaratorResult is ASTBuilderFailure) {
                         return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
                     }
-                    declaratorResult = variableDeclaratorResult
                     variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
                     break
                 }
@@ -71,20 +76,10 @@ class VariableDeclarationBuilder(
                 if (variableDeclaratorResult is ASTBuilderFailure) {
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
                 }
-                declaratorResult = variableDeclaratorResult
                 variableDeclarators += (variableDeclaratorResult as ASTBuilderSuccess).astNode as VariableDeclarator
                 tokensAux = tokensAux.subList(commaIndex + 1, tokensAux.size)
             }
-            return declaratorResult
-        } else {
-            return ASTBuilderFailure("Invalid variable declaration")
-        }
-    }
-
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            ASTBuilderSuccess(
+            return ASTBuilderSuccess(
                 VariableDeclaration(
                     kind = tokens.first().value,
                     declarations = variableDeclarators,
@@ -93,7 +88,7 @@ class VariableDeclarationBuilder(
                 ),
             )
         } else {
-            result
+            return ASTBuilderFailure("Invalid variable declaration")
         }
     }
 }

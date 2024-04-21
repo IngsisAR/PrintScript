@@ -6,13 +6,13 @@ import Identifier
 import Token
 
 class AssignmentExpressionBuilder(
-    tokens: List<Token>,
+    val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
+) : ASTBuilder {
     private var assignableExpressionResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
     private var identifierResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
 
-    override fun verify(): ASTBuilderResult {
+    override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Not enough tokens to build assignment expression")
         }
@@ -32,7 +32,14 @@ class AssignmentExpressionBuilder(
                 return if (assignableExpressionResult is ASTBuilderSuccess &&
                     (assignableExpressionResult as ASTBuilderSuccess).astNode is Expression
                 ) {
-                    assignableExpressionResult
+                    ASTBuilderSuccess(
+                        AssignmentExpression(
+                            (identifierResult as ASTBuilderSuccess).astNode as Identifier,
+                            (assignableExpressionResult as ASTBuilderSuccess).astNode as Expression,
+                            tokens.first().position.start,
+                            tokens.last().position.end,
+                        ),
+                    )
                 } else {
                     ASTBuilderFailure((assignableExpressionResult as ASTBuilderFailure).errorMessage)
                 }
@@ -41,22 +48,6 @@ class AssignmentExpressionBuilder(
             }
         } else {
             return ASTBuilderFailure("Invalid assignment expression")
-        }
-    }
-
-    override fun verifyAndBuild(): ASTBuilderResult {
-        val result = verify()
-        return if (result is ASTBuilderSuccess) {
-            ASTBuilderSuccess(
-                AssignmentExpression(
-                    (identifierResult as ASTBuilderSuccess).astNode as Identifier,
-                    (assignableExpressionResult as ASTBuilderSuccess).astNode as Expression,
-                    tokens.first().position.start,
-                    tokens.last().position.end,
-                ),
-            )
-        } else {
-            result
         }
     }
 }

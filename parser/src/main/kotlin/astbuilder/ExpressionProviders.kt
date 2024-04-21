@@ -34,7 +34,7 @@ class AssignableExpressionProvider(
     tokens: List<Token>,
     lineIndex: Int,
 ) {
-    private val assignableExpressionBuilders: List<AbstractASTBuilder> =
+    private val assignableExpressionBuilders: List<ASTBuilder> =
         listOf(
             BinaryExpressionBuilder(tokens, lineIndex),
             CallExpressionBuilder(tokens, lineIndex),
@@ -53,7 +53,7 @@ class ExpressionProvider(
     tokens: List<Token>,
     lineIndex: Int,
 ) {
-    private val expressionBuilders: List<AbstractASTBuilder> =
+    private val expressionBuilders: List<ASTBuilder> =
         listOf(
             AssignmentExpressionBuilder(tokens, lineIndex),
             BinaryExpressionBuilder(tokens, lineIndex),
@@ -73,7 +73,7 @@ class StatementProvider(
     val tokens: List<Token>,
     val lineIndex: Int,
 ) {
-    private val statementBuilders: List<AbstractASTBuilder> =
+    private val statementBuilders: List<ASTBuilder> =
         listOf(
             ConditionalStatementBuilder(tokens, lineIndex),
             VariableDeclarationBuilder(tokens, lineIndex),
