@@ -10,9 +10,9 @@ let b : bool = true;
 if (b) {
     println("a is 4");
     if(b){
-        println("a is 4");
+        println("b is 4");
     } else {
-        println("a is not 4");
+        println("b is not 4");
     }
     b;
 } else {

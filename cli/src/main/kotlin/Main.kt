@@ -5,24 +5,25 @@ fun main() {
     println("\nReading from string\n")
     val input =
         """
-        if (a) {
-            if(b){
-                if(c){
-                    println("if c");
-                }
-            }else{
+            if(a) {
+                if(b) {
+
+                    println("If b");
+                } else {
+
                 println("else b");
             }
-        }else{
+        } else {
+
             println("else a");
         }
         """.trimIndent()
     val printScriptLineReader = PrintScriptLineReader()
-    // val lines = printScriptLineReader.readLinesFromString(input)
-    // performFromLines(lines)
-    println("\nReading from file\n")
-    val fileLines = printScriptLineReader.readLinesFromFile("cli/src/main/resources/script_example.txt")
-    performFromLines(fileLines)
+    val lines = printScriptLineReader.readLinesFromString(input)
+    performFromLines(lines)
+//    println("\nReading from file\n")
+//    val fileLines = printScriptLineReader.readLinesFromFile("cli/src/main/resources/script_example.txt")
+//    performFromLines(fileLines)
 }
 
 private fun performFromLines(fileLines: List<String>) {
@@ -40,6 +41,7 @@ private fun performFromLines(fileLines: List<String>) {
         if (ast is ASTBuilderSuccess) {
             try {
 //                interpreter = interpreter.interpret(ast.astNode)
+                println("Formatter Output")
                 println(FormatterImpl("formatter/src/main/resources/FormatterConfig.json").format(ast.astNode))
             } catch (e: Exception) {
                 println(e.message)

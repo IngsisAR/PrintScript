@@ -58,3 +58,9 @@ class PrintScriptLineReader {
 
     fun readLinesFromFile(fileName: String): List<String> = readLinesFromString(File(fileName).readText())
 }
+
+fun main() {
+    println("\nReading from file\n")
+    val fileLines = PrintScriptLineReader().readLinesFromFile("cli/src/main/resources/script_example.txt")
+    fileLines.forEach { println("line: $it\n") }
+}
