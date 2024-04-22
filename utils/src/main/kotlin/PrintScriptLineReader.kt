@@ -50,7 +50,7 @@ class PrintScriptLineReader {
 
         // Agrega cualquier línea restante
         if (currentLine.trim().isNotEmpty()) {
-            lines.add(currentLine.trim())
+            lines.add(currentLine)
         }
 
         return lines

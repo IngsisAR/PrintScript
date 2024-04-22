@@ -1,3 +1,4 @@
+import inputter.ConsoleInputter
 import outputter.ConsoleOutputter
 
 class CallExpressionInterpreter(
@@ -8,6 +9,7 @@ class CallExpressionInterpreter(
         return when (node.callee.name) {
             "println" -> ConsoleOutputter(variableMap).output(node)
             "readEnv" -> return readEnvironmentVariables(node.arguments[0] as StringLiteral)
+            "readInput" -> return ConsoleInputter(variableMap).readInput(node.arguments[0] as ASTNode)
             else -> throw IllegalArgumentException("Function '${node.callee.name}' not found")
         }
     }

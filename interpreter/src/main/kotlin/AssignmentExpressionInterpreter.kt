@@ -28,10 +28,11 @@ class AssignmentExpressionInterpreter(
             when (newValue) {
                 is Number -> "number"
                 is String -> "string"
+                is Boolean -> "bool"
                 else -> throw IllegalArgumentException("Unsupported value type: ${newValue::class.simpleName}")
             }
         require(variable.type == expectedType) {
-            "Type mismatch: expected ${variable.type}, got ${newValue::class.simpleName}"
+            "Type mismatch: expected ${variable.type}, got $expectedType"
         }
     }
 }

@@ -409,4 +409,24 @@ class StaticCodeAnalyzerTest {
             "No expressions in println function rule violated at (${lineIndex + 1}:${ast.arguments[0].start})",
         )
     }
+
+    @Test
+    fun analysisOf_readInputCallExpression_with_NoConfigurationForExpressionsInArguments_expectsTrueByDefault() {
+        createTestConfigJson(
+            emptyMap(),
+        )
+        val sca = StaticCodeAnalyzer(testConfigJsonPath)
+        val ast =
+            CallExpression(
+                Identifier("readInput", 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                0,
+                12,
+            )
+        val lineIndex = 0
+        assertEquals(
+            sca.analyze(ast, lineIndex).trim(),
+            "No expressions in readInput function rule violated at (${lineIndex + 1}:${ast.arguments[0].start})",
+        )
+    }
 }
