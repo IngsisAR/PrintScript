@@ -9,6 +9,7 @@ import VariableDeclarator
 class VariableDeclaratorBuilder(
     val tokens: List<Token>,
     val lineIndex: Int,
+    val ASTProviderFactory: ASTProviderFactory,
 ) : ASTBuilder {
     private lateinit var identifier: Identifier
     private lateinit var typeReference: TypeReference
@@ -49,10 +50,8 @@ class VariableDeclaratorBuilder(
         if (tokens.size > 4) {
             return if (tokens[3].type == "ASSIGN") {
                 val assignableExpressionResult =
-                    AssignableExpressionProvider(
-                        tokens.subList(4, tokens.size),
-                        lineIndex,
-                    ).getAssignableExpressionResult()
+                    ASTProviderFactory.changeTokens(tokens.subList(4, tokens.size))
+                        .getProviderByType("assignableExpression").getASTBuilderResult()
                 if (assignableExpressionResult is ASTBuilderFailure) {
                     val errorMessage = assignableExpressionResult.errorMessage
                     return if (errorMessage.isNotBlank() || errorMessage.isNotEmpty()) {

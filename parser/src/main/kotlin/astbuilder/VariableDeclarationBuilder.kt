@@ -7,6 +7,7 @@ import VariableDeclarator
 class VariableDeclarationBuilder(
     val tokens: List<Token>,
     val lineIndex: Int,
+    private val ASTProviderFactory: ASTProviderFactory,
 ) : ASTBuilder {
     private var variableDeclarators: List<VariableDeclarator> = emptyList()
 
@@ -37,7 +38,7 @@ class VariableDeclarationBuilder(
                     )
                 }
                 val variableDeclaratorResult =
-                    VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1), lineIndex)
+                    VariableDeclaratorBuilder(tokens.subList(1, tokens.size - 1), lineIndex, ASTProviderFactory)
                         .verifyAndBuild()
                 if (variableDeclaratorResult is ASTBuilderFailure) {
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
@@ -61,7 +62,7 @@ class VariableDeclarationBuilder(
                 }
                 if (i == commaCount) {
                     val variableDeclaratorResult =
-                        VariableDeclaratorBuilder(tokensAux, lineIndex)
+                        VariableDeclaratorBuilder(tokensAux, lineIndex, ASTProviderFactory)
                             .verifyAndBuild()
                     if (variableDeclaratorResult is ASTBuilderFailure) {
                         return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")
@@ -71,7 +72,7 @@ class VariableDeclarationBuilder(
                 }
                 val commaIndex = tokensAux.indexOfFirst { it.type == "COMMA" }
                 val variableDeclaratorResult =
-                    VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex), lineIndex)
+                    VariableDeclaratorBuilder(tokensAux.subList(0, commaIndex), lineIndex, ASTProviderFactory)
                         .verifyAndBuild()
                 if (variableDeclaratorResult is ASTBuilderFailure) {
                     return ASTBuilderFailure("Invalid variable declaration: ${variableDeclaratorResult.errorMessage}")

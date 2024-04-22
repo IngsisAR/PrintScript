@@ -5,7 +5,11 @@ import Identifier
 import Statement
 import Token
 
-class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) : ASTBuilder {
+class ConditionalStatementBuilder(
+    val tokens: List<Token>,
+    val lineIndex: Int,
+    private val ASTProviderFactory: ASTProviderFactory,
+) : ASTBuilder {
     private lateinit var test: Identifier
 
     override fun verifyAndBuild(): ASTBuilderResult {
@@ -110,7 +114,6 @@ class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) :
                                     tokens,
                                     newStatementIndex,
                                     currentIndex - 1,
-                                    lineIndex,
                                     isIfBlock,
                                     consequent,
                                     isElseBlock,
@@ -143,7 +146,6 @@ class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) :
                                 tokens,
                                 newStatementIndex,
                                 currentIndex,
-                                lineIndex,
                                 isIfBlock,
                                 consequent,
                                 isElseBlock,
@@ -179,7 +181,6 @@ class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) :
                                 tokens,
                                 newStatementIndex,
                                 currentIndex,
-                                lineIndex,
                                 isIfBlock,
                                 consequent,
                                 isElseBlock,
@@ -216,14 +217,13 @@ class ConditionalStatementBuilder(val tokens: List<Token>, val lineIndex: Int) :
         tokens: List<Token>,
         newStatementIndex: Int,
         currentIndex: Int,
-        lineIndex: Int,
         isIfBlock: Boolean,
         consequent: MutableList<Statement>,
         isElseBlock: Boolean,
         alternate: MutableList<Statement>,
     ): ASTBuilderResult {
         val statementTokens = tokens.subList(newStatementIndex, currentIndex + 1)
-        val result = StatementProvider(statementTokens, lineIndex).getVerifiedStatementResult()
+        val result = ASTProviderFactory.changeTokens(statementTokens).getProviderByType("statement").getASTBuilderResult()
 
         if (result is ASTBuilderFailure) {
             return result

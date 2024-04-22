@@ -1,5 +1,6 @@
 import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderSuccess
+import astbuilder.ASTProviderFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -35,7 +36,7 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -68,7 +69,7 @@ class ParserTest {
                         end = 14,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -103,7 +104,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -141,7 +142,7 @@ class ParserTest {
                         end = 6,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -153,7 +154,7 @@ class ParserTest {
                 Token("NUMBER", position = Position(start = 2, end = 3), value = "5"),
                 Token("SEMICOLON", position = Position(start = 3, end = 4), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals("Invalid expression: missing identifier at (0, 0)", (result as ASTBuilderFailure).errorMessage)
     }
@@ -167,7 +168,7 @@ class ParserTest {
                 Token("ASSIGN", position = Position(start = 2, end = 3), value = "="),
                 Token("SEMICOLON", position = Position(start = 3, end = 4), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals("Invalid expression: missing expression after assignment at (0, 3)", (result as ASTBuilderFailure).errorMessage)
     }
@@ -211,7 +212,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -253,7 +254,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -296,7 +297,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -338,7 +339,7 @@ class ParserTest {
                         end = 10,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -412,7 +413,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -482,7 +483,7 @@ class ParserTest {
                         end = 30,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -511,7 +512,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -527,7 +528,7 @@ class ParserTest {
                 Token("CPAREN", position = Position(start = 7, end = 8), value = ")"),
                 Token("SEMICOLON", position = Position(start = 8, end = 9), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals("Invalid expression: Mismatched parenthesis at (0, 7)", (result as ASTBuilderFailure).errorMessage)
     }
@@ -564,7 +565,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -598,7 +599,7 @@ class ParserTest {
                         end = 21,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -640,7 +641,7 @@ class ParserTest {
                         end = 18,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -674,7 +675,7 @@ class ParserTest {
                         end = 9,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -727,7 +728,7 @@ class ParserTest {
                         end = 34,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -776,7 +777,7 @@ class ParserTest {
                         end = 22,
                     ),
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -793,8 +794,8 @@ class ParserTest {
             )
 
         assert(
-            parser.parse(tokens, 0) is ASTBuilderFailure &&
-                (parser.parse(tokens, 0) as ASTBuilderFailure).errorMessage.contains("Missing semicolon"),
+            parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")) is ASTBuilderFailure &&
+                (parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")) as ASTBuilderFailure).errorMessage.contains("Missing semicolon"),
         )
     }
 
@@ -811,7 +812,7 @@ class ParserTest {
                 Token(type = "SEMICOLON", position = Position(start = 14, end = 15), value = ";"),
             )
         try {
-            parser.parse(tokens, 0)
+            parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         } catch (e: IllegalStateException) {
             assertEquals("Only one line of code is allowed at a time.", e.message)
         }
@@ -829,7 +830,7 @@ class ParserTest {
                 Token(type = "NUMBER", position = Position(start = 16, end = 17), value = "a"),
                 Token(type = "SEMICOLON", position = Position(start = 17, end = 18), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid variable declaration: Invalid declarator: Missing colon at (0, ${tokens[1].position.end})",
@@ -849,7 +850,7 @@ class ParserTest {
                 Token(type = "TYPE", position = Position(start = 6, end = 12), value = "number"),
                 Token(type = "SEMICOLON", position = Position(start = 12, end = 13), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid variable declaration: Invalid declarator: Missing type at (0, ${tokens[2].position.end})",
@@ -867,7 +868,7 @@ class ParserTest {
                 Token(type = "TYPE", position = Position(start = 3, end = 9), value = "number"),
                 Token(type = "SEMICOLON", position = Position(start = 9, end = 10), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure && result.errorMessage.contains("Invalid start of variable declaration"))
     }
 
@@ -883,7 +884,7 @@ class ParserTest {
                 Token(type = "ASSIGN", position = Position(start = 14, end = 15), value = "="),
                 Token(type = "SEMICOLON", position = Position(start = 15, end = 16), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid variable declaration: Invalid declarator: Missing assigned expression at " +
@@ -901,7 +902,7 @@ class ParserTest {
                 errorMessage =
                     "Empty tokens",
             )
-        assertEquals(result, parser.parse(tokens, 0))
+        assertEquals(result, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -917,7 +918,7 @@ class ParserTest {
                 Token(type = "COMMA", position = Position(start = 14, end = 15), value = ","),
                 Token(type = "SEMICOLON", position = Position(start = 15, end = 16), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid variable declaration: not enough tokens for a variable declarator at " +
@@ -944,7 +945,7 @@ class ParserTest {
                 Token(type = "NUMBER", position = Position(start = 23, end = 32), value = "10"),
                 Token(type = "SEMICOLON", position = Position(start = 32, end = 33), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid variable declaration: Invalid declarator: Invalid assigned expression at " +
@@ -963,7 +964,7 @@ class ParserTest {
                 Token(type = "STRING", position = Position(start = 6, end = 19), value = "Hello world"),
                 Token(type = "SEMICOLON", position = Position(start = 19, end = 20), value = ";"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals(
             "Invalid expression: Call expression does not have close parenthesis at (0, 19)",
@@ -1032,7 +1033,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(expected, parser.parse(tokens, 0))
+        assertEquals(expected, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -1167,7 +1168,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(expected, parser.parse(tokens, 0))
+        assertEquals(expected, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -1278,7 +1279,7 @@ class ParserTest {
                     ),
             )
 
-        assertEquals(expected, parser.parse(tokens, 0))
+        assertEquals(expected, parser.parse(ASTProviderFactory(tokens, 0, "1.1.0")))
     }
 
     @Test
@@ -1289,7 +1290,7 @@ class ParserTest {
                 Token(type = "IF", position = Position(start = 0, end = 2), value = "if"),
                 Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Invalid conditional expression: expected '(' after 'if' at (0, 2)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1302,7 +1303,7 @@ class ParserTest {
                 Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
                 Token(type = "CPAREN", position = Position(start = 3, end = 4), value = ")"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Invalid conditional expression: expected identifier after '(' at (0, 3)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1315,7 +1316,7 @@ class ParserTest {
                 Token(type = "OPAREN", position = Position(start = 2, end = 3), value = "("),
                 Token(type = "ID", position = Position(start = 3, end = 4), value = "a"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Invalid conditional expression: expected ')' after identifier at (0, 4)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1329,7 +1330,7 @@ class ParserTest {
                 Token(type = "NUMBER", position = Position(start = 3, end = 4), value = "3"),
                 Token(type = "CPAREN", position = Position(start = 4, end = 5), value = ")"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Invalid conditional expression: expected identifier after '(' at (0, 3)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1364,7 +1365,7 @@ class ParserTest {
                 Token(type = "CBRACE", position = Position(start = 44, end = 45), value = "}"),
             )
 
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Unexpected 'else' at (0, 37)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1396,7 +1397,7 @@ class ParserTest {
                 Token(type = "CBRACE", position = Position(start = 35, end = 36), value = "}"),
             )
 
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assertEquals("Unmatched braces in expression at (0, 36)", (result as ASTBuilderFailure).errorMessage)
     }
 
@@ -1420,7 +1421,7 @@ class ParserTest {
                 Token(type = "NUMBER", position = Position(start = 14, end = 15), value = "3"),
                 Token(type = "CBRACE", position = Position(start = 16, end = 17), value = "}"),
             )
-        val result = parser.parse(tokens, 0)
+        val result = parser.parse(ASTProviderFactory(tokens, 0, "1.1.0"))
         assert(result is ASTBuilderFailure)
         assertEquals("Missing semicolon at (0, 15)", (result as ASTBuilderFailure).errorMessage)
     }

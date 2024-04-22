@@ -13,6 +13,7 @@ import java.util.Stack
 class BinaryExpressionBuilder(
     val tokens: List<Token>,
     val lineIndex: Int,
+    private val ASTProviderFactory: ASTProviderFactory,
 ) : ASTBuilder {
     override fun verifyAndBuild(): ASTBuilderResult {
         when {
@@ -61,7 +62,8 @@ class BinaryExpressionBuilder(
                         }
                         // Creamos la sublista de tokens para la CallExpression.
                         val callExpressionTokens = tokens.subList(i, endIndex + 1)
-                        val callExpressionResult = CallExpressionBuilder(callExpressionTokens, lineIndex).verifyAndBuild()
+                        val callExpressionResult =
+                            CallExpressionBuilder(callExpressionTokens, lineIndex, ASTProviderFactory).verifyAndBuild()
                         if (callExpressionResult is ASTBuilderSuccess) {
                             outputQueue.add(Token("CALL_EXPRESSION", Position(i, endIndex), callExpressionResult.astNode.toString()))
                             i = endIndex + 1 // Saltamos todos los tokens procesados por CallExpressionBuilder.
@@ -155,6 +157,7 @@ class BinaryExpressionBuilder(
                         CallExpressionBuilder(
                             tokens.subList(token.position.start, token.position.end + 1),
                             lineIndex,
+                            ASTProviderFactory,
                         ).verifyAndBuild()
                     if (callExpressionResult is ASTBuilderFailure) {
                         return callExpressionResult

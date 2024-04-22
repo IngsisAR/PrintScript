@@ -8,6 +8,7 @@ import Token
 class AssignmentExpressionBuilder(
     val tokens: List<Token>,
     val lineIndex: Int,
+    private val factoryProvider: ASTProviderFactory,
 ) : ASTBuilder {
     private var assignableExpressionResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
     private var identifierResult: ASTBuilderResult = ASTBuilderFailure("Not implemented")
@@ -27,8 +28,8 @@ class AssignmentExpressionBuilder(
             }
             if (identifierResult is ASTBuilderSuccess && tokens[1].type == "ASSIGN") {
                 assignableExpressionResult =
-                    AssignableExpressionProvider(tokens.subList(2, tokens.size), lineIndex)
-                        .getAssignableExpressionResult()
+                    factoryProvider.changeTokens(tokens.subList(2, tokens.size))
+                        .getProviderByType("assignableExpression").getASTBuilderResult()
                 return if (assignableExpressionResult is ASTBuilderSuccess &&
                     (assignableExpressionResult as ASTBuilderSuccess).astNode is Expression
                 ) {

@@ -1,4 +1,5 @@
 import astbuilder.ASTBuilderSuccess
+import astbuilder.ASTProviderFactory
 import formatter.FormatterImpl
 
 fun main() {
@@ -35,7 +36,7 @@ private fun performFromLines(fileLines: List<String>) {
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()
-        val ast = parser.parse(tokens, index)
+        val ast = parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))
         println("\nParser Output")
         println("$ast\n")
         if (ast is ASTBuilderSuccess) {

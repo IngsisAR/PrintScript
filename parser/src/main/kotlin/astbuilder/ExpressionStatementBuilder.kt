@@ -7,6 +7,7 @@ import Token
 class ExpressionStatementBuilder(
     val tokens: List<Token>,
     val lineIndex: Int,
+    private val ASTProviderFactory: ASTProviderFactory,
 ) : ASTBuilder {
     override fun verifyAndBuild(): ASTBuilderResult {
         if (tokens.isEmpty()) {
@@ -18,7 +19,9 @@ class ExpressionStatementBuilder(
         if (tokens.size == 1) {
             return ASTBuilderFailure("No expression found at ($lineIndex, ${tokens.first().position.start})")
         }
-        val expressionResult = ExpressionProvider(tokens.subList(0, tokens.size - 1), lineIndex).getVerifiedExpressionResult()
+        val expressionResult =
+            ASTProviderFactory.changeTokens(tokens.subList(0, tokens.size - 1))
+                .getProviderByType("expression").getASTBuilderResult()
         return if (expressionResult is ASTBuilderFailure) {
             if (expressionResult.errorMessage.isNotEmpty()) {
                 return ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")

@@ -1,6 +1,7 @@
 import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderResult
 import astbuilder.ASTBuilderSuccess
+import astbuilder.ASTProviderFactory
 import formatter.FormatterImpl
 import java.io.File
 import kotlin.math.roundToInt
@@ -49,7 +50,7 @@ private fun validate(fileLines: List<String>): List<ASTNode> {
         val lexer = Lexer(line, 0, TOKEN_REGEX)
         val tokens = lexer.tokenize()
         val parser = Parser()
-        when (val ast = parser.parse(tokens, index)) {
+        when (val ast = parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))) {
             is ASTBuilderSuccess -> {
                 successfulASTs.add(ast.astNode)
                 printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
@@ -141,7 +142,7 @@ private fun processLine(
     val lexer = Lexer(line, 0, TOKEN_REGEX)
     val tokens = lexer.tokenize()
     val parser = Parser()
-    return parser.parse(tokens, index)
+    return parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))
 }
 
 private fun createFormattedFile(
