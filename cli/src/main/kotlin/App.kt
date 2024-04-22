@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
-private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex.json"
+private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex1.1.json"
 fun main() {
     println("""   ____       _       _   ____            _       _     """)
     println("""  |  _ \ _ __(_)_ __ | |_/ ___|  ___ _ __(_)_ __ | |_   """)

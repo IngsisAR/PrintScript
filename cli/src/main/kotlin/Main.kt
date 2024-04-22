@@ -32,7 +32,7 @@ private fun performFromLines(fileLines: List<String>) {
     for ((index, line) in fileLines.withIndex()) {
         println(line + "\n")
         println("Lexer output")
-        val lexer = Lexer(line, 0, "utils/src/main/resources/tokenRegex.json")
+        val lexer = Lexer(line, 0, "utils/src/main/resources/tokenRegex1.1.json")
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()
