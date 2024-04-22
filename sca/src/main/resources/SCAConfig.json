@@ -1,4 +1,5 @@
 {
   "printlnNoExpressionArguments": true,
-  "identifierCasing": "camel case"
+  "identifierCasing": "camel case",
+  "readInputNoExpressionArguments": true
 }
