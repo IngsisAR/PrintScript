@@ -3,6 +3,7 @@ package astbuilder
 import Expression
 import Statement
 import Token
+import VersionChecker
 
 interface ASTProvider {
     fun getASTBuilderResult(): ASTBuilderResult
@@ -10,19 +11,10 @@ interface ASTProvider {
     fun changeTokens(tokens: List<Token>): ASTProvider
 }
 
-abstract class AbstractProvider : ASTProvider {
-    fun String.isSameOrOlderThanCurrentVersion(factory: ASTProviderFactory): Boolean {
-        val targetVersion = split(".").map { it.toInt() }
-        val currentVersion = factory.version.split(".").map { it.toInt() }
-        val currentVersionIsNewer = currentVersion.zip(targetVersion).all { (current, target) -> current >= target }
-        return currentVersionIsNewer
-    }
-}
-
 abstract class AbstractExpressionProvider(
     val tokens: List<Token>,
     val lineIndex: Int,
-) : AbstractProvider() {
+) : ASTProvider {
     private val redundantErrors =
         listOf(
             "No operator found in binary expression",
@@ -66,7 +58,7 @@ class AssignableExpressionProvider(
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
-        if (!"1.1.0".isSameOrOlderThanCurrentVersion(factory)) {
+        if (!VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", factory.version)) {
             val modifiedBuilderList = assignableExpressionBuilders.toMutableList()
             modifiedBuilderList.removeIf { it is BooleanLiteralBuilder }
             return getASTBuilderResult(modifiedBuilderList)
@@ -96,7 +88,7 @@ class ExpressionProvider(
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
-        if (!"1.1.0".isSameOrOlderThanCurrentVersion(factory)) {
+        if (!VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", factory.version)) {
             val modifiedBuilderList = expressionBuilders.toMutableList()
             modifiedBuilderList.removeIf { it is BooleanLiteralBuilder }
             return getASTBuilderResult(modifiedBuilderList)
@@ -113,7 +105,7 @@ class StatementProvider(
     val tokens: List<Token>,
     val lineIndex: Int,
     private val factory: ASTProviderFactory,
-) : AbstractProvider() {
+) : ASTProvider {
     private val statementBuilders: List<ASTBuilder> =
         listOf(
             ConditionalStatementBuilder(tokens, lineIndex, factory),
@@ -122,6 +114,15 @@ class StatementProvider(
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
+        if (VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", factory.version)) {
+            return getASTBuilderResult(statementBuilders)
+        }
+        val modifiedStatementBuilders = statementBuilders.toMutableList()
+        modifiedStatementBuilders.removeIf { it is ConditionalStatementBuilder }
+        return getASTBuilderResult(modifiedStatementBuilders)
+    }
+
+    private fun getASTBuilderResult(statementBuilders: List<ASTBuilder>): ASTBuilderResult {
         var errorMessages = ""
         if (tokens.isEmpty()) {
             return ASTBuilderFailure("Empty tokens")
@@ -132,7 +133,7 @@ class StatementProvider(
                 return astBuilderResult
             }
             if (astBuilderResult is ASTBuilderFailure) {
-                if ("1.1.0".isSameOrOlderThanCurrentVersion(factory) && astBuilderResult.errorMessage != "Invalid conditional expression" &&
+                if (astBuilderResult.errorMessage != "Invalid conditional expression" &&
                     statementBuilder is ConditionalStatementBuilder
                 ) {
                     errorMessages = astBuilderResult.errorMessage

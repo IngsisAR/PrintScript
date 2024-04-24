@@ -7,7 +7,7 @@ import java.io.File
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
-private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
+private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig1.1.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex1.1.json"
 fun main() {
@@ -114,12 +114,12 @@ private fun analyze(fileLines: List<String>) {
     print("Config file path: ")
     val scaConfig = readlnOrNull()
     val configFile = if (scaConfig.isNullOrEmpty()) SCA_CONFIG_PATH else scaConfig
-    val sca = StaticCodeAnalyzer(configFile)
+    val sca = StaticCodeAnalyzer()
 
     for ((index, line) in fileLines.withIndex()) {
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
-            val response: String = sca.analyze(ast.astNode, index)
+            val response: String = sca.analyze(ast.astNode, index, configFile, "1.1.0")
             if (response.isNotEmpty()) {
                 return printRed(response)
             }

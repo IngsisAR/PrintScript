@@ -4,8 +4,8 @@ import astbuilder.StatementProvider
 
 class Parser {
     @Throws(IllegalArgumentException::class)
-    fun parse(ASTProviderFactory: ASTProviderFactory): ASTBuilderResult {
-        val statementProviderImpl = ASTProviderFactory.getProviderByType("statement") as StatementProvider
+    fun parse(astProviderFactory: ASTProviderFactory): ASTBuilderResult {
+        val statementProviderImpl = astProviderFactory.getProviderByType("statement") as StatementProvider
         return statementProviderImpl.getASTBuilderResult()
     }
 }

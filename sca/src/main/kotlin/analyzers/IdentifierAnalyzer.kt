@@ -10,6 +10,7 @@ class IdentifierAnalyzer : Analyzer {
         astNode: ASTNode,
         configMap: Map<String, Any?>,
         lineIndex: Int,
+        version: String,
     ): String {
         if (astNode !is Identifier) {
             return ""

@@ -4,26 +4,22 @@ import ASTNode
 import CallExpression
 import Identifier
 import Literal
+import VersionChecker
 
 class CallExpressionAnalyzer : Analyzer {
     override fun analyze(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
         lineIndex: Int,
+        version: String,
     ): String {
         var result = ""
         if (astNode !is CallExpression) return result
         val callee = astNode.callee
-        result += IdentifierAnalyzer().analyze(callee, configMap, lineIndex)
+        result += IdentifierAnalyzer().analyze(callee, configMap, lineIndex, version)
 
         val configPrintln = configMap["printlnNoExpressionArguments"] ?: true
         var aux = checkIfAttributeIsInConfigMapAndIsCorrect(configPrintln, "printlnNoExpressionArguments")
-        if (aux.isNotEmpty()) {
-            return aux
-        }
-
-        val configReadInput = configMap["printlnNoExpressionArguments"] ?: true
-        aux = checkIfAttributeIsInConfigMapAndIsCorrect(configReadInput, "readInputNoExpressionArguments")
         if (aux.isNotEmpty()) {
             return aux
         }
@@ -42,22 +38,32 @@ class CallExpressionAnalyzer : Analyzer {
                     }
                 }
             }
+        }
 
-            "readInput" -> {
-                if (arguments.isNotEmpty()) {
-                    for (argument in arguments) {
-                        if (configReadInput as Boolean &&
-                            argument !is Literal &&
-                            argument !is Identifier
-                        ) {
-                            result += "No expressions in readInput function rule violated at (${lineIndex + 1}:${argument.start})\n"
+        if (VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version)) {
+            val configReadInput = configMap["readInputNoExpressionArguments"] ?: true
+            aux = checkIfAttributeIsInConfigMapAndIsCorrect(configReadInput, "readInputNoExpressionArguments")
+            if (aux.isNotEmpty()) {
+                return aux
+            }
+            when (callee.name) {
+                "readInput" -> {
+                    if (arguments.isNotEmpty()) {
+                        for (argument in arguments) {
+                            if (configReadInput as Boolean &&
+                                argument !is Literal &&
+                                argument !is Identifier
+                            ) {
+                                result += "No expressions in readInput function rule violated at (${lineIndex + 1}:${argument.start})\n"
+                            }
                         }
                     }
                 }
             }
         }
+
         for (argument in arguments) {
-            result += ExpressionAnalyzer().analyze(argument, configMap, lineIndex)
+            result += ExpressionAnalyzer().analyze(argument, configMap, lineIndex, version)
         }
         return result
     }

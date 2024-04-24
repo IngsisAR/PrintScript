@@ -7,5 +7,6 @@ interface Analyzer {
         astNode: ASTNode,
         configMap: Map<String, Any?>,
         lineIndex: Int,
+        version: String,
     ): String
 }
