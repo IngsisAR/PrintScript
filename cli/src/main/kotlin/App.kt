@@ -7,7 +7,7 @@ import java.io.File
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
-private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig1.1.json"
+private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex1.1.json"
 fun main() {

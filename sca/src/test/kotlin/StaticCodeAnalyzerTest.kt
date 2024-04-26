@@ -42,8 +42,8 @@ class StaticCodeAnalyzerTest {
         val ast = Identifier("identifier_example", 10, 27)
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "Identifier: ${ast.name} is not in camel case at (${lineIndex + 1}:${ast.start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -71,8 +71,8 @@ class StaticCodeAnalyzerTest {
         val ast = Identifier("identifierExample", 10, 27)
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "Identifier: ${ast.name} is not in snake case at (${lineIndex + 1}:${ast.start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -106,8 +106,8 @@ class StaticCodeAnalyzerTest {
             )
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "No expressions in println function rule violated at (${lineIndex + 1}:${ast.arguments[0].start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -155,8 +155,8 @@ class StaticCodeAnalyzerTest {
             )
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "Identifier: ${ast.callee.name} is not in camel case at (${lineIndex + 1}:${ast.callee.start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -394,8 +394,8 @@ class StaticCodeAnalyzerTest {
         val ast = Identifier("identifier_example", 10, 27)
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "Identifier: ${ast.name} is not in camel case at (${lineIndex + 1}:${ast.start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -414,8 +414,8 @@ class StaticCodeAnalyzerTest {
             )
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "No expressions in println function rule violated at (${lineIndex + 1}:${ast.arguments[0].start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
         )
     }
 
@@ -434,8 +434,28 @@ class StaticCodeAnalyzerTest {
             )
         val lineIndex = 0
         assertEquals(
-            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
             "No expressions in readInput function rule violated at (${lineIndex + 1}:${ast.arguments[0].start})",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0").trim(),
+        )
+    }
+
+    @Test
+    fun analysisOf_readInputCallExpression_with_NoConfigurationForExpressionsInArgumentsAndSetPreviousVersion_expectsNoMessage() {
+        createTestConfigJson(
+            emptyMap(),
+        )
+        val sca = StaticCodeAnalyzer()
+        val ast =
+            CallExpression(
+                Identifier("readInput", 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                0,
+                12,
+            )
+        val lineIndex = 0
+        assertEquals(
+            "",
+            sca.analyze(ast, lineIndex, testConfigJsonPath, "1.0.0").trim(),
         )
     }
 }
