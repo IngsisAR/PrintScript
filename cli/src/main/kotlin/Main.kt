@@ -37,16 +37,13 @@ private fun performFromLines(fileLines: List<String>) {
         tokens.forEach { println(it) }
         val parser = Parser()
         val ast = parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))
-        println("\nParser Output")
-        println("$ast\n")
-        if (ast is ASTBuilderSuccess) {
-            try {
-//                interpreter = interpreter.interpret(ast.astNode)
-                println("Formatter Output")
-                println(FormatterImpl("formatter/src/main/resources/FormatterConfig.json").format(ast.astNode))
-            } catch (e: Exception) {
-                println(e.message)
+        when (ast) {
+            is ASTBuilderSuccess -> {
+                val formatted = FormatterImpl().format(ast.astNode, "formatter/src/main/resources/FormatterConfig.json", "1.1.0")
+                println("\nFormatted output")
+                println(formatted)
             }
+            else -> println("Error")
         }
     }
 }

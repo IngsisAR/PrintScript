@@ -52,8 +52,8 @@ class FormatterTest {
                 start = 0,
                 end = 13,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("\nprint(5 + 4);\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("\nprint(5 + 4);\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -88,8 +88,8 @@ class FormatterTest {
                 start = 0,
                 end = 13,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("\n\nprint(5 + 4);\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("\n\nprint(5 + 4);\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -124,8 +124,8 @@ class FormatterTest {
                 start = 0,
                 end = 13,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("print(5 + 4);\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("print(5 + 4);\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -155,8 +155,8 @@ class FormatterTest {
                 start = 0,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a : number = 1;\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a : number = 1;\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -186,8 +186,8 @@ class FormatterTest {
                 start = 0,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a  :  number  =  1;\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a  :  number  =  1;\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -217,8 +217,8 @@ class FormatterTest {
                 start = 0,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a:number=1;\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a:number=1;\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -248,8 +248,8 @@ class FormatterTest {
                 start = 0,
                 end = 30,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a : string = \"Hello World\";\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a : string = \"Hello World\";\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -279,8 +279,8 @@ class FormatterTest {
                 start = 0,
                 end = 30,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a  :  string  =  \"Hello World\";\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a  :  string  =  \"Hello World\";\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -310,8 +310,8 @@ class FormatterTest {
                 start = 0,
                 end = 30,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("let a:string=\"Hello World\";\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("let a:string=\"Hello World\";\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -337,8 +337,8 @@ class FormatterTest {
                 start = 0,
                 end = 6,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("a = 2;\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("a = 2;\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -364,8 +364,8 @@ class FormatterTest {
                 start = 0,
                 end = 6,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("a=2;\n", formatter.format(ast))
+        val formatter = FormatterImpl()
+        assertEquals("a=2;\n", formatter.format(ast, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -379,9 +379,9 @@ class FormatterTest {
             ),
         )
         val ast = NumberLiteral(value = 2.toBigDecimal(), start = 0, end = 1)
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertThrows(IllegalArgumentException::class.java) {
-            formatter.format(ast)
+            formatter.format(ast, testConfigJsonPath, "1.1.0")
         }
     }
 
@@ -418,8 +418,8 @@ class FormatterTest {
                 start = 7,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
-        assertEquals("if(a) {\n" + "    1 + 1;\n" + "}", formatter.format(astNode))
+        val formatter = FormatterImpl()
+        assertEquals("if(a) {\n" + "    1 + 1;\n" + "}", formatter.format(astNode, testConfigJsonPath, "1.1.0"))
     }
 
     @Test
@@ -468,7 +468,7 @@ class FormatterTest {
                 start = 7,
                 end = 48,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertEquals(
             "if(a) {\n" +
                 "    1 + 1;\n" +
@@ -476,7 +476,7 @@ class FormatterTest {
                 "    \n" +
                 "    print(\"Hello\");\n" +
                 "}\n",
-            formatter.format(astNode),
+            formatter.format(astNode, testConfigJsonPath, "1.1.0"),
         )
     }
 
@@ -547,7 +547,7 @@ class FormatterTest {
                 start = 7,
                 end = 120,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertEquals(
             "if(a) {\n" +
                 "    if(b) {\n" +
@@ -561,7 +561,7 @@ class FormatterTest {
                 "    \n" +
                 "    println(\"else a\");\n" +
                 "}\n",
-            formatter.format(astNode),
+            formatter.format(astNode, testConfigJsonPath, "1.1.0"),
         )
     }
 
@@ -598,12 +598,12 @@ class FormatterTest {
                 start = 7,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertEquals(
             "if(a) {\n" +
                 "        1 + 1;\n" +
                 "}",
-            formatter.format(astNode),
+            formatter.format(astNode, testConfigJsonPath, "1.1.0"),
         )
     }
 
@@ -653,7 +653,7 @@ class FormatterTest {
                 start = 7,
                 end = 48,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertEquals(
             "if(a) {\n" +
                 "        1 + 1;\n" +
@@ -661,12 +661,12 @@ class FormatterTest {
                 "        \n" +
                 "        print(\"Hello\");\n" +
                 "}\n",
-            formatter.format(astNode),
+            formatter.format(astNode, testConfigJsonPath, "1.1.0"),
         )
     }
 
     @Test
-    fun conditionalWithoutelseAndNoneSpaces() {
+    fun conditionalWithoutElseAndNoneSpaces() {
         createTestConfigJson(
             mapOf(
                 "spaceBeforeColon" to "none",
@@ -698,12 +698,51 @@ class FormatterTest {
                 start = 7,
                 end = 19,
             )
-        val formatter = FormatterImpl(testConfigJsonPath)
+        val formatter = FormatterImpl()
         assertEquals(
             "if(a) {\n" +
                 "    1 + 1;\n" +
                 "}",
-            formatter.format(astNode),
+            formatter.format(astNode, testConfigJsonPath, "1.1.0"),
         )
+    }
+
+    @Test
+    fun conditionalStatementWithPreviousVersionSetShouldThrowUnknownTokenType() {
+        createTestConfigJson(
+            mapOf(
+                "spaceBeforeColon" to "none",
+                "spaceAfterColon" to "none",
+                "spacesInAssignSymbol" to "none",
+                "lineJumpBeforePrintln" to "none",
+                "identationInsideConditionals" to "None",
+            ),
+        )
+        val astNode =
+            ConditionalStatement(
+                test = Identifier(name = "a", start = 4, end = 5),
+                consequent =
+                    listOf(
+                        ExpressionStatement(
+                            expression =
+                                BinaryExpression(
+                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
+                                    operator = "+",
+                                    start = 13,
+                                    end = 16,
+                                ),
+                            start = 13,
+                            end = 17,
+                        ),
+                    ),
+                alternate = emptyList(),
+                start = 7,
+                end = 19,
+            )
+        val formatter = FormatterImpl()
+        assertThrows(IllegalArgumentException::class.java) {
+            formatter.format(astNode, testConfigJsonPath, "1.0.0")
+        }
     }
 }

@@ -93,14 +93,14 @@ private fun format(
     val formatConfig = readlnOrNull()
     val configFile = formatConfig?.takeIf { it.isNotEmpty() } ?: FORMAT_CONFIG_PATH
 
-    val formatter = FormatterImpl(configFile)
+    val formatter = FormatterImpl()
     val formattedContent: StringBuilder = StringBuilder()
 
     for ((index, line) in fileLines.withIndex()) {
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
             try {
-                formattedContent.append(formatter.format(ast.astNode))
+                formattedContent.append(formatter.format(ast.astNode, configFile, "1.1.0"))
             } catch (e: Exception) {
                 println(e.message)
             }
