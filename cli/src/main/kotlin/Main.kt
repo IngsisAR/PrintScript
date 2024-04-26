@@ -28,7 +28,7 @@ fun main() {
 }
 
 private fun performFromLines(fileLines: List<String>) {
-    var interpreter = InterpreterImpl()
+//    var interpreter = InterpreterImpl()
     for ((index, line) in fileLines.withIndex()) {
         println(line + "\n")
         println("Lexer output")
