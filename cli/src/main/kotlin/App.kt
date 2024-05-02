@@ -10,13 +10,17 @@ import kotlin.system.exitProcess
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex1.1.json"
+
+private var version: String = "1.1.0"
 fun main() {
+    print("""Version (latest as default): """)
+    version = readlnOrNull() ?: "1.1.0"
     println("""   ____       _       _   ____            _       _     """)
     println("""  |  _ \ _ __(_)_ __ | |_/ ___|  ___ _ __(_)_ __ | |_   """)
     println("""  | |_) | '__| | '_ \| __\___ \ / __| '__| | '_ \| __|  """)
     println("""  |  __/| |  | | | | | |_ ___) | (__| |  | | |_) | |_   """)
     println("""  |_|   |_|  |_|_| |_|\__|____/ \___|_|  |_| .__/ \__|  """)
-    println("""                                           |_|      1.0 """)
+    println("""                                           |_|      $version """)
     print("""File path: """)
     val path = readlnOrNull() ?: throw IllegalArgumentException("Script needed")
     val script = getFile(path)
@@ -50,7 +54,7 @@ private fun validate(fileLines: List<String>): List<ASTNode> {
         val lexer = Lexer(line, 0, TOKEN_REGEX)
         val tokens = lexer.tokenize()
         val parser = Parser()
-        when (val ast = parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))) {
+        when (val ast = parser.parse(ASTProviderFactory(tokens, index, version))) {
             is ASTBuilderSuccess -> {
                 successfulASTs.add(ast.astNode)
                 printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
@@ -66,7 +70,7 @@ private fun validate(fileLines: List<String>): List<ASTNode> {
 }
 
 private fun execute(fileLines: List<String>) {
-    var interpreter = InterpreterImpl()
+    var interpreter = InterpreterImpl(version = version)
     val astNodes = validate(fileLines)
     if (astNodes.isEmpty()) return
     for (ast in astNodes) {
@@ -100,7 +104,7 @@ private fun format(
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
             try {
-                formattedContent.append(formatter.format(ast.astNode, configFile, "1.1.0"))
+                formattedContent.append(formatter.format(ast.astNode, configFile, version))
             } catch (e: Exception) {
                 println(e.message)
             }
@@ -119,7 +123,7 @@ private fun analyze(fileLines: List<String>) {
     for ((index, line) in fileLines.withIndex()) {
         val ast = processLine(line, index)
         if (ast is ASTBuilderSuccess) {
-            val response: String = sca.analyze(ast.astNode, index, configFile, "1.1.0")
+            val response: String = sca.analyze(ast.astNode, index, configFile, version)
             if (response.isNotEmpty()) {
                 return printRed(response)
             }
@@ -142,7 +146,7 @@ private fun processLine(
     val lexer = Lexer(line, 0, TOKEN_REGEX)
     val tokens = lexer.tokenize()
     val parser = Parser()
-    return parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))
+    return parser.parse(ASTProviderFactory(tokens, index, version))
 }
 
 private fun createFormattedFile(

@@ -1,13 +1,14 @@
 class ConditionalStatementInterpreter(
     val variableMap: Map<String, VariableInfo>,
+    private val version: String,
 ) : Interpreter {
     override fun interpret(node: ASTNode): InterpreterImpl {
         require(node is ConditionalStatement) { "Node must be a ConditionalStatement" }
-        val conditionValue = IdentifierInterpreter(variableMap).interpret(node.test)
+        val conditionValue = IdentifierInterpreter(variableMap, version).interpret(node.test)
         if (conditionValue !is Boolean) {
             throw IllegalArgumentException("Condition must be a boolean")
         }
-        var interpreter = InterpreterImpl(variableMap)
+        var interpreter = InterpreterImpl(variableMap, version)
         if (conditionValue) {
             for (statement in node.consequent) {
                 interpreter = interpreter.interpret(statement)

@@ -2,6 +2,7 @@ import java.math.BigDecimal
 
 class BinaryExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
+    private val version: String,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Any {
         require(node is BinaryExpression) { "Node must be an BinaryExpression" }
@@ -10,7 +11,7 @@ class BinaryExpressionInterpreter(
                 is NumberLiteral -> left.value
                 is StringLiteral -> left.value
                 is BinaryExpression -> interpret(left)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(left)
+                is Identifier -> IdentifierInterpreter(variableMap, version).interpret(left)
                 else -> throw IllegalArgumentException("Invalid expression")
             }
         val rightValue =
@@ -18,7 +19,7 @@ class BinaryExpressionInterpreter(
                 is NumberLiteral -> right.value
                 is StringLiteral -> right.value
                 is BinaryExpression -> interpret(right)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(right)
+                is Identifier -> IdentifierInterpreter(variableMap, version).interpret(right)
                 else -> throw IllegalArgumentException("Invalid expression ")
             }
         return handleOperation(leftValue, rightValue, node.operator)

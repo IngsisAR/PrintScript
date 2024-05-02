@@ -8,13 +8,13 @@ import IdentifierInterpreter
 import StringLiteral
 import VariableInfo
 
-class ConsoleInputter(private val variableMap: Map<String, VariableInfo>) : Inputter {
+class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, private val version: String) : Inputter {
     override fun readInput(node: ASTNode): Any {
         val text =
             when (node) {
                 is StringLiteral -> node.value
-                is Identifier -> return IdentifierInterpreter(variableMap).interpret(node)
-                is CallExpression -> return CallExpressionInterpreter(variableMap).interpret(node)
+                is Identifier -> return IdentifierInterpreter(variableMap, version).interpret(node)
+                is CallExpression -> return CallExpressionInterpreter(variableMap, version).interpret(node)
                 else -> ""
             }
         print(text)

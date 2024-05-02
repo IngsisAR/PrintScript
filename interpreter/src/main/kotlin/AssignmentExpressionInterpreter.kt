@@ -1,5 +1,6 @@
 class AssignmentExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
+    private val version: String,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
         require(node is AssignmentExpression) { "Node must be an AssignmentExpression" }
@@ -9,9 +10,9 @@ class AssignmentExpressionInterpreter(
         val newValue =
             when (val right = node.right) {
                 is Literal -> right.value
-                is BinaryExpression -> BinaryExpressionInterpreter(variableMap).interpret(right)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(right)
-                is CallExpression -> CallExpressionInterpreter(variableMap).interpret(right)
+                is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version).interpret(right)
+                is Identifier -> IdentifierInterpreter(variableMap, version).interpret(right)
+                is CallExpression -> CallExpressionInterpreter(variableMap, version).interpret(right)
                 else -> throw IllegalArgumentException("Node not found")
             }
         checkTypeMatches(variable, newValue)
@@ -25,10 +26,10 @@ class AssignmentExpressionInterpreter(
         newValue: Any,
     ) {
         val expectedType =
-            when (newValue) {
-                is Number -> "number"
-                is String -> "string"
-                is Boolean -> "bool"
+            when {
+                newValue is Number -> "number"
+                newValue is String -> "string"
+                newValue is Boolean && VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version) -> "bool"
                 else -> throw IllegalArgumentException("Unsupported value type: ${newValue::class.simpleName}")
             }
         require(variable.type == expectedType) {
