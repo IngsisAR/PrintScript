@@ -4,9 +4,10 @@ import java.io.File
 
 class Lexer(
     private val input: String,
-    private val lineIndex: Int,
+    lineStartIndex: Int,
     tokenRegexJsonPath: String,
 ) {
+    private var currentLineIndex = lineStartIndex
     private var currentPosition = 0
     private val mapper = jacksonObjectMapper()
     private val tokensRegex: List<TokenRegex> = mapper.readValue(File(tokenRegexJsonPath))
@@ -39,6 +40,13 @@ class Lexer(
             }
         }
 
+        //if it's a new line, increment the currentLine
+        if (remainingInput.isNotEmpty() && remainingInput[0] == '\n') {
+            currentLineIndex++
+            currentPosition++
+            return null
+        }
+
         // Ignore white spaces
         if (remainingInput.isNotEmpty() && remainingInput[0].isWhitespace()) {
             currentPosition++
@@ -46,7 +54,7 @@ class Lexer(
         }
 
         // Handle unexpected characters
-        error("Unexpected character at ($lineIndex,$currentPosition): ${remainingInput[0]}")
+        error("Unexpected character at ($currentLineIndex,$currentPosition): ${remainingInput[0]}")
     }
 
     private fun createToken(
@@ -55,8 +63,19 @@ class Lexer(
     ): Token {
         val startPosition = currentPosition
         val endPosition = currentPosition + matchedValue.length
-        val position = Position(startPosition, endPosition)
+        val position = Position(currentLineIndex, startPosition, endPosition)
         val trimmedVal = if (tokenType.token == "STRING") matchedValue.substring(1, matchedValue.length - 1) else matchedValue
         return Token(tokenType.token, position, trimmedVal)
     }
+
+    fun getCurrentLineIndex(): Int {
+        return currentLineIndex
+    }
+}
+
+fun main() {
+    val input = "let a : number;"
+    val lexer = Lexer(input, 1, "utils/src/main/resources/tokenRegex1.1.json")
+    val tokens = lexer.tokenize()
+    tokens.forEach { println(it) }
 }

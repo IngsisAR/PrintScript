@@ -12,8 +12,7 @@ import java.util.Stack
 
 class BinaryExpressionBuilder(
     val tokens: List<Token>,
-    val lineIndex: Int,
-    private val ASTProviderFactory: ASTProviderFactory,
+    private val astProviderFactory: ASTProviderFactory,
 ) : ASTBuilder {
     override fun verifyAndBuild(): ASTBuilderResult {
         when {
@@ -57,15 +56,15 @@ class BinaryExpressionBuilder(
                         val endIndex = tokens.subList(i, tokens.size).indexOfFirst { it.type == "CPAREN" } + i
                         if (endIndex == -1) {
                             return ASTBuilderFailure(
-                                "Mismatched parenthesis in call expression at ($lineIndex, ${tokens[i + 1].position.end})",
+                                "Mismatched parenthesis in call expression at (${tokens[i + 1].position.line}, ${tokens[i + 1].position.end})",
                             )
                         }
                         // Creamos la sublista de tokens para la CallExpression.
                         val callExpressionTokens = tokens.subList(i, endIndex + 1)
                         val callExpressionResult =
-                            CallExpressionBuilder(callExpressionTokens, lineIndex, ASTProviderFactory).verifyAndBuild()
+                            CallExpressionBuilder(callExpressionTokens, astProviderFactory).verifyAndBuild()
                         if (callExpressionResult is ASTBuilderSuccess) {
-                            outputQueue.add(Token("CALL_EXPRESSION", Position(i, endIndex), callExpressionResult.astNode.toString()))
+                            outputQueue.add(Token("CALL_EXPRESSION", Position(tokens[i].position.line, i, endIndex), callExpressionResult.astNode.toString()))
                             i = endIndex + 1 // Saltamos todos los tokens procesados por CallExpressionBuilder.
                         } else {
                             return callExpressionResult
@@ -97,7 +96,7 @@ class BinaryExpressionBuilder(
                         outputQueue.add(operatorStack.pop())
                     }
                     if (operatorStack.isEmpty()) {
-                        return ASTBuilderFailure("Mismatched parenthesis at ($lineIndex, ${token.position.start})")
+                        return ASTBuilderFailure("Mismatched parenthesis at (${token.position.line}, ${token.position.start})")
                     }
                     operatorStack.pop() // Descarta el paréntesis abierto.
                     i++
@@ -129,7 +128,7 @@ class BinaryExpressionBuilder(
         for (token in postFixTokens) {
             when (token.type) {
                 "NUMBER" -> {
-                    val numberResult = NumberLiteralBuilder(listOf(token), lineIndex).verifyAndBuild()
+                    val numberResult = NumberLiteralBuilder(listOf(token)).verifyAndBuild()
                     if (numberResult is ASTBuilderFailure) {
                         return numberResult
                     }
@@ -137,7 +136,7 @@ class BinaryExpressionBuilder(
                 }
 
                 "ID" -> {
-                    val identifierResult = IdentifierBuilder(listOf(token), lineIndex).verifyAndBuild()
+                    val identifierResult = IdentifierBuilder(listOf(token)).verifyAndBuild()
                     if (identifierResult is ASTBuilderFailure) {
                         return identifierResult
                     }
@@ -145,7 +144,7 @@ class BinaryExpressionBuilder(
                 }
 
                 "STRING" -> {
-                    val stringResult = StringLiteralBuilder(listOf(token), lineIndex).verifyAndBuild()
+                    val stringResult = StringLiteralBuilder(listOf(token)).verifyAndBuild()
                     if (stringResult is ASTBuilderFailure) {
                         return stringResult
                     }
@@ -156,8 +155,7 @@ class BinaryExpressionBuilder(
                     val callExpressionResult =
                         CallExpressionBuilder(
                             tokens.subList(token.position.start, token.position.end + 1),
-                            lineIndex,
-                            ASTProviderFactory,
+                            astProviderFactory,
                         ).verifyAndBuild()
                     if (callExpressionResult is ASTBuilderFailure) {
                         return callExpressionResult
@@ -167,17 +165,17 @@ class BinaryExpressionBuilder(
 
                 in listOf("PLUS", "MINUS", "MUL", "DIV", "MODULE") -> {
                     if (stack.size < 2) {
-                        return ASTBuilderFailure("Invalid postfix expression")
+                        return ASTBuilderFailure("Invalid postfix expression at (${token.position.line}, ${token.position.start})")
                     }
                     val right = stack.pop()
                     val left = stack.pop()
-                    stack.push(BinaryExpression(left, right, token.value, left.start, right.end))
+                    stack.push(BinaryExpression(left, right, token.value, left.line, left.start, right.end))
                 }
             }
         }
 
         if (stack.size != 1) {
-            return ASTBuilderFailure("Invalid postfix expression")
+            return ASTBuilderFailure("Invalid postfix expression at (${tokens.first().position.line}, ${tokens.first().position.start})")
         }
 
         return ASTBuilderSuccess(stack.pop())

@@ -13,18 +13,9 @@ interface ASTProvider {
 
 abstract class AbstractExpressionProvider(
     val tokens: List<Token>,
-    val lineIndex: Int,
 ) : ASTProvider {
-    private val redundantErrors =
-        listOf(
-            "No operator found in binary expression",
-            "Not enough tokens to build assignment expression",
-            "Invalid assignment expression",
-            "Not enough members for call expression",
-            "Binary expression must have at least 3 tokens",
-        )
 
-    protected fun getASTBuilderResult(builders: List<ASTBuilder>): ASTBuilderResult {
+    protected fun getASTBuilderResult(builders: List<ASTBuilder>, redundantErrorsToFilter: List<String>): ASTBuilderResult {
         for (builder in builders) {
             val astBuilderResult = builder.verifyAndBuild()
             if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {
@@ -33,7 +24,7 @@ abstract class AbstractExpressionProvider(
             if (astBuilderResult is ASTBuilderFailure &&
                 builder !is LiteralBuilder &&
                 builder !is IdentifierBuilder &&
-                !redundantErrors.contains(astBuilderResult.errorMessage)
+                !redundantErrorsToFilter.contains(astBuilderResult.errorMessage)
             ) {
                 return ASTBuilderFailure(astBuilderResult.errorMessage)
             }
@@ -44,73 +35,86 @@ abstract class AbstractExpressionProvider(
 
 class AssignableExpressionProvider(
     tokens: List<Token>,
-    lineIndex: Int,
     private val factory: ASTProviderFactory,
-) : AbstractExpressionProvider(tokens, lineIndex) {
+) : AbstractExpressionProvider(tokens) {
     private val assignableExpressionBuilders: List<ASTBuilder> =
         listOf(
-            BinaryExpressionBuilder(tokens, lineIndex, factory),
-            CallExpressionBuilder(tokens, lineIndex, factory),
-            NumberLiteralBuilder(tokens, lineIndex),
-            StringLiteralBuilder(tokens, lineIndex),
-            IdentifierBuilder(tokens, lineIndex),
-            BooleanLiteralBuilder(tokens, lineIndex),
+            BinaryExpressionBuilder(tokens, factory),
+            CallExpressionBuilder(tokens, factory),
+            NumberLiteralBuilder(tokens),
+            StringLiteralBuilder(tokens),
+            IdentifierBuilder(tokens),
+            BooleanLiteralBuilder(tokens),
+        )
+    private val redundantErrorsToFilter =
+        listOf(
+            "No operator found in binary expression",
+            "Not enough tokens to build assignment expression",
+            "Invalid assignment expression",
+            "Not enough members for call expression",
+            "Binary expression must have at least 3 tokens",
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
         if (!VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", factory.version)) {
             val modifiedBuilderList = assignableExpressionBuilders.toMutableList()
             modifiedBuilderList.removeIf { it is BooleanLiteralBuilder }
-            return getASTBuilderResult(modifiedBuilderList)
+            return getASTBuilderResult(modifiedBuilderList, redundantErrorsToFilter)
         }
-        return getASTBuilderResult(assignableExpressionBuilders)
+        return getASTBuilderResult(assignableExpressionBuilders, redundantErrorsToFilter)
     }
 
     override fun changeTokens(tokens: List<Token>): ASTProvider {
-        return AssignableExpressionProvider(tokens, lineIndex, factory)
+        return AssignableExpressionProvider(tokens, factory)
     }
 }
 
 class ExpressionProvider(
     tokens: List<Token>,
-    lineIndex: Int,
     private val factory: ASTProviderFactory,
-) : AbstractExpressionProvider(tokens, lineIndex) {
+) : AbstractExpressionProvider(tokens) {
     private val expressionBuilders: List<ASTBuilder> =
         listOf(
-            AssignmentExpressionBuilder(tokens, lineIndex, factory),
-            BinaryExpressionBuilder(tokens, lineIndex, factory),
-            CallExpressionBuilder(tokens, lineIndex, factory),
-            NumberLiteralBuilder(tokens, lineIndex),
-            StringLiteralBuilder(tokens, lineIndex),
-            IdentifierBuilder(tokens, lineIndex),
-            BooleanLiteralBuilder(tokens, lineIndex),
+            AssignmentExpressionBuilder(tokens, factory),
+            BinaryExpressionBuilder(tokens, factory),
+            CallExpressionBuilder(tokens, factory),
+            NumberLiteralBuilder(tokens),
+            StringLiteralBuilder(tokens),
+            IdentifierBuilder(tokens),
+            BooleanLiteralBuilder(tokens),
+        )
+    private val redundantErrorsToFilter =
+        listOf(
+            "No operator found in binary expression",
+            "Not enough tokens to build assignment expression",
+            "Invalid assignment expression",
+            "Not enough members for call expression",
+            "Binary expression must have at least 3 tokens",
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
         if (!VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", factory.version)) {
             val modifiedBuilderList = expressionBuilders.toMutableList()
             modifiedBuilderList.removeIf { it is BooleanLiteralBuilder }
-            return getASTBuilderResult(modifiedBuilderList)
+            return getASTBuilderResult(modifiedBuilderList, redundantErrorsToFilter)
         }
-        return getASTBuilderResult(expressionBuilders)
+        return getASTBuilderResult(expressionBuilders, redundantErrorsToFilter)
     }
 
     override fun changeTokens(tokens: List<Token>): ASTProvider {
-        return ExpressionProvider(tokens, lineIndex, factory)
+        return ExpressionProvider(tokens, factory)
     }
 }
 
 class StatementProvider(
     val tokens: List<Token>,
-    val lineIndex: Int,
     private val factory: ASTProviderFactory,
 ) : ASTProvider {
     private val statementBuilders: List<ASTBuilder> =
         listOf(
-            ConditionalStatementBuilder(tokens, lineIndex, factory),
-            VariableDeclarationBuilder(tokens, lineIndex, factory),
-            ExpressionStatementBuilder(tokens, lineIndex, factory),
+            ConditionalStatementBuilder(tokens, factory),
+            VariableDeclarationBuilder(tokens, factory),
+            ExpressionStatementBuilder(tokens, factory),
         )
 
     override fun getASTBuilderResult(): ASTBuilderResult {
@@ -154,6 +158,6 @@ class StatementProvider(
     }
 
     override fun changeTokens(tokens: List<Token>): ASTProvider {
-        return StatementProvider(tokens, lineIndex, factory)
+        return StatementProvider(tokens, factory)
     }
 }

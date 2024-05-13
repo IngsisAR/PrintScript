@@ -26,7 +26,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifierExample1", 10, 27)
+        val ast = Identifier("identifierExample1",, 10, 27)
         val lineIndex = 0
         assert(sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0") == "")
     }
@@ -39,7 +39,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifier_example", 10, 27)
+        val ast = Identifier("identifier_example",, 10, 27)
         val lineIndex = 0
         assertEquals(
             "Identifier: ${ast.name} is not in camel case at (${lineIndex + 1}:${ast.start})",
@@ -55,7 +55,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifier_example", 10, 27)
+        val ast = Identifier("identifier_example",, 10, 27)
         val lineIndex = 0
         assert(sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0") == "")
     }
@@ -68,7 +68,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifierExample", 10, 27)
+        val ast = Identifier("identifierExample",, 10, 27)
         val lineIndex = 0
         assertEquals(
             "Identifier: ${ast.name} is not in snake case at (${lineIndex + 1}:${ast.start})",
@@ -84,7 +84,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = CallExpression(Identifier("println", 0, 7), emptyList(), 0, 12)
+        val ast = CallExpression(Identifier("println",, 0, 7), emptyList(),, 0, 12)
         val lineIndex = 0
         assert(sca.analyze(ast, lineIndex, testConfigJsonPath, "1.1.0") == "")
     }
@@ -99,8 +99,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("println", 0, 7),
-                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                Identifier("println",, 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                 0,
                 12,
             )
@@ -121,8 +121,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("println", 0, 7),
-                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                Identifier("println",, 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                 0,
                 12,
             )
@@ -140,16 +140,16 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("Println", 0, 7),
+                Identifier("Println",, 0, 7),
                 listOf(
                     BinaryExpression(
-                        NumberLiteral(1, 8, 9),
-                        NumberLiteral(2, 10, 11),
-                        "+",
+                        NumberLiteral(1,, 8, 9),
+                        NumberLiteral(2,, 10, 11),
+                        "+",,
                         9,
                         11,
                     ),
-                ),
+                ),,
                 0,
                 12,
             )
@@ -172,14 +172,14 @@ class StaticCodeAnalyzerTest {
             VariableDeclaration(
                 listOf(
                     VariableDeclarator(
-                        Identifier("variableExample2", 1, 17),
-                        TypeReference("Number", 18, 24),
-                        Identifier("variableExample", 26, 42),
+                        Identifier("variableExample2",, 1, 17),
+                        TypeReference("Number",, 18, 24),
+                        Identifier("variableExample",, 26, 42),,
                         26,
                         28,
                     ),
                 ),
-                "let",
+                "let",,
                 0,
                 28,
             )
@@ -199,14 +199,14 @@ class StaticCodeAnalyzerTest {
             VariableDeclaration(
                 listOf(
                     VariableDeclarator(
-                        Identifier("variable_example", 1, 17),
-                        TypeReference("Number", 18, 24),
-                        null,
+                        Identifier("variable_example",, 1, 17),
+                        TypeReference("Number",, 18, 24),
+                        null,,
                         26,
                         28,
                     ),
                 ),
-                "let",
+                "let",,
                 0,
                 28,
             )
@@ -228,12 +228,12 @@ class StaticCodeAnalyzerTest {
         val ast =
             ExpressionStatement(
                 BinaryExpression(
-                    Identifier("variableExample", 1, 17),
-                    NumberLiteral(1, 18, 19),
-                    "+",
+                    Identifier("variableExample",, 1, 17),
+                    NumberLiteral(1,, 18, 19),
+                    "+",,
                     17,
                     19,
-                ),
+                ),,
                 0,
                 19,
             )
@@ -251,7 +251,7 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             ExpressionStatement(
-                Identifier("variable_example", 0, 16),
+                Identifier("variable_example",, 0, 16),,
                 0,
                 17,
             )
@@ -274,11 +274,11 @@ class StaticCodeAnalyzerTest {
         val ast =
             ExpressionStatement(
                 CallExpression(
-                    Identifier("println", 0, 7),
-                    emptyList(),
+                    Identifier("println",, 0, 7),
+                    emptyList(),,
                     0,
                     12,
-                ),
+                ),,
                 0,
                 12,
             )
@@ -297,11 +297,11 @@ class StaticCodeAnalyzerTest {
         val ast =
             ExpressionStatement(
                 CallExpression(
-                    Identifier("println", 0, 7),
-                    listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                    Identifier("println",, 0, 7),
+                    listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                     0,
                     12,
-                ),
+                ),,
                 0,
                 12,
             )
@@ -319,8 +319,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("println", 0, 7),
-                emptyList(),
+                Identifier("println",, 0, 7),
+                emptyList(),,
                 0,
                 12,
             )
@@ -341,8 +341,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("println", 0, 7),
-                emptyList(),
+                Identifier("println",, 0, 7),
+                emptyList(),,
                 0,
                 12,
             )
@@ -361,7 +361,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifierExample1", 10, 27)
+        val ast = Identifier("identifierExample1",, 10, 27)
         val lineIndex = 0
         assertEquals(
             "Invalid identifier casing configuration: kebab case, expected one of: camel case, snake case",
@@ -377,7 +377,7 @@ class StaticCodeAnalyzerTest {
             ),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifierExample1", 10, 27)
+        val ast = Identifier("identifierExample1",, 10, 27)
         val lineIndex = 0
         assertEquals(
             "Invalid identifier casing configuration: 1, expected one of: camel case, snake case",
@@ -391,7 +391,7 @@ class StaticCodeAnalyzerTest {
             emptyMap(),
         )
         val sca = StaticCodeAnalyzer()
-        val ast = Identifier("identifier_example", 10, 27)
+        val ast = Identifier("identifier_example",, 10, 27)
         val lineIndex = 0
         assertEquals(
             "Identifier: ${ast.name} is not in camel case at (${lineIndex + 1}:${ast.start})",
@@ -407,8 +407,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("println", 0, 7),
-                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                Identifier("println",, 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                 0,
                 12,
             )
@@ -427,8 +427,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("readInput", 0, 7),
-                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                Identifier("readInput",, 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                 0,
                 12,
             )
@@ -447,8 +447,8 @@ class StaticCodeAnalyzerTest {
         val sca = StaticCodeAnalyzer()
         val ast =
             CallExpression(
-                Identifier("readInput", 0, 7),
-                listOf(BinaryExpression(NumberLiteral(1, 8, 9), NumberLiteral(2, 10, 11), "+", 9, 11)),
+                Identifier("readInput",, 0, 7),
+                listOf(BinaryExpression(NumberLiteral(1,, 8, 9), NumberLiteral(2,, 10, 11), "+",, 9, 11)),,
                 0,
                 12,
             )

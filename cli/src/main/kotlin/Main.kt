@@ -36,7 +36,7 @@ private fun performFromLines(fileLines: List<String>) {
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()
-        val ast = parser.parse(ASTProviderFactory(tokens, index, "1.1.0"))
+        val ast = parser.parse(ASTProviderFactory(tokens, "1.1.0"))
         when (ast) {
             is ASTBuilderSuccess -> {
                 val formatted = FormatterImpl().format(ast.astNode, "formatter/src/main/resources/FormatterConfig.json", "1.1.0")

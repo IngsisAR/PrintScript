@@ -54,7 +54,7 @@ private fun validate(fileLines: List<String>): List<ASTNode> {
         val lexer = Lexer(line, 0, TOKEN_REGEX)
         val tokens = lexer.tokenize()
         val parser = Parser()
-        when (val ast = parser.parse(ASTProviderFactory(tokens, index, version))) {
+        when (val ast = parser.parse(ASTProviderFactory(tokens, version))) {
             is ASTBuilderSuccess -> {
                 successfulASTs.add(ast.astNode)
                 printGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
@@ -146,7 +146,7 @@ private fun processLine(
     val lexer = Lexer(line, 0, TOKEN_REGEX)
     val tokens = lexer.tokenize()
     val parser = Parser()
-    return parser.parse(ASTProviderFactory(tokens, index, version))
+    return parser.parse(ASTProviderFactory(tokens, version))
 }
 
 private fun createFormattedFile(

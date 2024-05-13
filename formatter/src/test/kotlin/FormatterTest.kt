@@ -35,20 +35,20 @@ class FormatterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "print", start = 0, end = 5),
+                        callee = Identifier(name = "print",, start = 0, end = 5),
                         arguments =
                             listOf(
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
-                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 5.toBigDecimal(),, start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(),, start = 10, end = 11),
+                                    operator = "+",,
                                     start = 6,
                                     end = 11,
                                 ),
-                            ),
+                            ),,
                         start = 0,
                         end = 12,
-                    ),
+                    ),,
                 start = 0,
                 end = 13,
             )
@@ -71,20 +71,20 @@ class FormatterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "print", start = 0, end = 5),
+                        callee = Identifier(name = "print",, start = 0, end = 5),
                         arguments =
                             listOf(
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
-                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 5.toBigDecimal(),, start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(),, start = 10, end = 11),
+                                    operator = "+",,
                                     start = 6,
                                     end = 11,
                                 ),
-                            ),
+                            ),,
                         start = 0,
                         end = 12,
-                    ),
+                    ),,
                 start = 0,
                 end = 13,
             )
@@ -107,20 +107,20 @@ class FormatterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "print", start = 0, end = 5),
+                        callee = Identifier(name = "print",, start = 0, end = 5),
                         arguments =
                             listOf(
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 5.toBigDecimal(), start = 6, end = 7),
-                                    right = NumberLiteral(value = 4.toBigDecimal(), start = 10, end = 11),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 5.toBigDecimal(),, start = 6, end = 7),
+                                    right = NumberLiteral(value = 4.toBigDecimal(),, start = 10, end = 11),
+                                    operator = "+",,
                                     start = 6,
                                     end = 11,
                                 ),
-                            ),
+                            ),,
                         start = 0,
                         end = 12,
-                    ),
+                    ),,
                 start = 0,
                 end = 13,
             )
@@ -144,14 +144,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "number", start = 7, end = 13),
-                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "number",, start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(),, start = 16, end = 18),,
                             start = 4,
                             end = 18,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 19,
             )
@@ -175,14 +175,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "number", start = 7, end = 13),
-                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "number",, start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(),, start = 16, end = 18),,
                             start = 4,
                             end = 18,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 19,
             )
@@ -206,14 +206,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "number", start = 7, end = 13),
-                            init = NumberLiteral(value = 1.toBigDecimal(), start = 16, end = 18),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "number",, start = 7, end = 13),
+                            init = NumberLiteral(value = 1.toBigDecimal(),, start = 16, end = 18),,
                             start = 4,
                             end = 18,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 19,
             )
@@ -237,14 +237,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "string", start = 7, end = 13),
-                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World",, start = 16, end = 29),,
                             start = 4,
                             end = 29,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 30,
             )
@@ -268,14 +268,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "string", start = 7, end = 13),
-                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World",, start = 16, end = 29),,
                             start = 4,
                             end = 29,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 30,
             )
@@ -299,14 +299,14 @@ class FormatterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a", start = 4, end = 5),
-                            type = TypeReference(type = "string", start = 7, end = 13),
-                            init = StringLiteral(value = "Hello World", start = 16, end = 29),
+                            id = Identifier(name = "a",, start = 4, end = 5),
+                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            init = StringLiteral(value = "Hello World",, start = 16, end = 29),,
                             start = 4,
                             end = 29,
                         ),
                     ),
-                kind = "let",
+                kind = "let",,
                 start = 0,
                 end = 30,
             )
@@ -329,11 +329,11 @@ class FormatterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a", start = 0, end = 1),
-                        right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
+                        left = Identifier(name = "a",, start = 0, end = 1),
+                        right = NumberLiteral(value = 2.toBigDecimal(),, start = 4, end = 5),,
                         start = 0,
                         end = 5,
-                    ),
+                    ),,
                 start = 0,
                 end = 6,
             )
@@ -356,11 +356,11 @@ class FormatterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a", start = 0, end = 1),
-                        right = NumberLiteral(value = 2.toBigDecimal(), start = 4, end = 5),
+                        left = Identifier(name = "a",, start = 0, end = 1),
+                        right = NumberLiteral(value = 2.toBigDecimal(),, start = 4, end = 5),,
                         start = 0,
                         end = 5,
-                    ),
+                    ),,
                 start = 0,
                 end = 6,
             )
@@ -378,7 +378,7 @@ class FormatterTest {
                 "lineJumpBeforePrintln" to "none",
             ),
         )
-        val ast = NumberLiteral(value = 2.toBigDecimal(), start = 0, end = 1)
+        val ast = NumberLiteral(value = 2.toBigDecimal(),, start = 0, end = 1)
         val formatter = FormatterImpl()
         assertThrows(IllegalArgumentException::class.java) {
             formatter.format(ast, testConfigJsonPath, "1.1.0")
@@ -398,23 +398,23 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
                     ),
-                alternate = emptyList(),
+                alternate = emptyList(),,
                 start = 7,
                 end = 19,
             )
@@ -435,18 +435,18 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
@@ -456,15 +456,15 @@ class FormatterTest {
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "print", start = 29, end = 36),
-                                    arguments = listOf(StringLiteral(value = "Hello", start = 37, end = 44)),
+                                    callee = Identifier(name = "print",, start = 29, end = 36),
+                                    arguments = listOf(StringLiteral(value = "Hello",, start = 37, end = 44)),,
                                     start = 29,
                                     end = 45,
-                                ),
+                                ),,
                             start = 29,
                             end = 46,
                         ),
-                    ),
+                    ),,
                 start = 7,
                 end = 48,
             )
@@ -493,21 +493,21 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ConditionalStatement(
-                            test = Identifier(name = "b", start = 16, end = 17),
+                            test = Identifier(name = "b",, start = 16, end = 17),
                             consequent =
                                 listOf(
                                     ExpressionStatement(
                                         expression =
                                             CallExpression(
-                                                callee = Identifier(name = "println", start = 28, end = 35),
-                                                arguments = listOf(StringLiteral(value = "If b", start = 36, end = 42)),
+                                                callee = Identifier(name = "println",, start = 28, end = 35),
+                                                arguments = listOf(StringLiteral(value = "If b",, start = 36, end = 42)),,
                                                 start = 28,
                                                 end = 43,
-                                            ),
+                                            ),,
                                         start = 28,
                                         end = 44,
                                     ),
@@ -517,15 +517,16 @@ class FormatterTest {
                                     ExpressionStatement(
                                         expression =
                                             CallExpression(
-                                                callee = Identifier(name = "println", start = 64, end = 71),
-                                                arguments = listOf(StringLiteral(value = "else b", start = 72, end = 80)),
+                                                callee = Identifier(name = "println",, start = 64, end = 71),
+                                                arguments = listOf(StringLiteral(value = "else b",, start = 72, end = 80)),,
                                                 start = 64,
                                                 end = 81,
-                                            ),
+                                            ),,
                                         start = 64,
                                         end = 82,
                                     ),
                                 ),
+                            ,
                             start = 18,
                             end = 88,
                         ),
@@ -535,15 +536,15 @@ class FormatterTest {
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "println", start = 100, end = 107),
-                                    arguments = listOf(StringLiteral(value = "else a", start = 108, end = 116)),
+                                    callee = Identifier(name = "println",, start = 100, end = 107),
+                                    arguments = listOf(StringLiteral(value = "else a",, start = 108, end = 116)),,
                                     start = 100,
                                     end = 117,
-                                ),
+                                ),,
                             start = 100,
                             end = 118,
                         ),
-                    ),
+                    ),,
                 start = 7,
                 end = 120,
             )
@@ -578,23 +579,23 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
                     ),
-                alternate = emptyList(),
+                alternate = emptyList(),,
                 start = 7,
                 end = 19,
             )
@@ -620,18 +621,18 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
@@ -641,15 +642,15 @@ class FormatterTest {
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "print", start = 29, end = 36),
-                                    arguments = listOf(StringLiteral(value = "Hello", start = 37, end = 44)),
+                                    callee = Identifier(name = "print",, start = 29, end = 36),
+                                    arguments = listOf(StringLiteral(value = "Hello",, start = 37, end = 44)),,
                                     start = 29,
                                     end = 45,
-                                ),
+                                ),,
                             start = 29,
                             end = 46,
                         ),
-                    ),
+                    ),,
                 start = 7,
                 end = 48,
             )
@@ -678,23 +679,23 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
                     ),
-                alternate = emptyList(),
+                alternate = emptyList(),,
                 start = 7,
                 end = 19,
             )
@@ -720,23 +721,23 @@ class FormatterTest {
         )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "a", start = 4, end = 5),
+                test = Identifier(name = "a",, start = 4, end = 5),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 1.toBigDecimal(), start = 13, end = 14),
-                                    right = NumberLiteral(value = 1.toBigDecimal(), start = 15, end = 16),
-                                    operator = "+",
+                                    left = NumberLiteral(value = 1.toBigDecimal(),, start = 13, end = 14),
+                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 15, end = 16),
+                                    operator = "+",,
                                     start = 13,
                                     end = 16,
-                                ),
+                                ),,
                             start = 13,
                             end = 17,
                         ),
                     ),
-                alternate = emptyList(),
+                alternate = emptyList(),,
                 start = 7,
                 end = 19,
             )
