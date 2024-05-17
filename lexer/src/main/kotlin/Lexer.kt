@@ -4,10 +4,10 @@ import java.io.File
 
 class Lexer(
     private val input: String,
-    lineStartIndex: Int,
+    chunkStartLine: Int,
     tokenRegexJsonPath: String,
 ) {
-    private var currentLineIndex = lineStartIndex
+    private var currentLineIndex = chunkStartLine
     private var currentPosition = 0
     private val mapper = jacksonObjectMapper()
     private val tokensRegex: List<TokenRegex> = mapper.readValue(File(tokenRegexJsonPath))
@@ -40,7 +40,7 @@ class Lexer(
             }
         }
 
-        //if it's a new line, increment the currentLine
+        // if it's a new line, increment the currentLine
         if (remainingInput.isNotEmpty() && remainingInput[0] == '\n') {
             currentLineIndex++
             currentPosition++
@@ -54,7 +54,7 @@ class Lexer(
         }
 
         // Handle unexpected characters
-        error("Unexpected character at ($currentLineIndex,$currentPosition): ${remainingInput[0]}")
+        error("Unexpected character at ($currentLineIndex:$currentPosition): ${remainingInput[0]}")
     }
 
     private fun createToken(
@@ -71,11 +71,4 @@ class Lexer(
     fun getCurrentLineIndex(): Int {
         return currentLineIndex
     }
-}
-
-fun main() {
-    val input = "let a : number;"
-    val lexer = Lexer(input, 1, "utils/src/main/resources/tokenRegex1.1.json")
-    val tokens = lexer.tokenize()
-    tokens.forEach { println(it) }
 }

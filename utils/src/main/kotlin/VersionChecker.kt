@@ -8,4 +8,9 @@ class VersionChecker {
         val currentVersionIsNewer = currentVersionSplit.zip(targetVersionSplit).all { (current, target) -> current >= target }
         return currentVersionIsNewer
     }
+
+    fun versionIsValid(version: String): Boolean {
+        val versionSplit = version.split(".")
+        return versionSplit.size == 3
+    }
 }

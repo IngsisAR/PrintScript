@@ -19,20 +19,20 @@ fun main() {
             println("else a");
         }
         """.trimIndent()
-    val printScriptLineReader = PrintScriptLineReader()
-    val lines = printScriptLineReader.readLinesFromString(input)
-    performFromLines(lines)
+    val printScriptChunkReader = PrintScriptChunkReader()
+    val lines = printScriptChunkReader.readChunksFromString(input)
+    performFromChunks(lines)
 //    println("\nReading from file\n")
 //    val fileLines = printScriptLineReader.readLinesFromFile("cli/src/main/resources/script_example.txt")
 //    performFromLines(fileLines)
 }
 
-private fun performFromLines(fileLines: List<String>) {
+private fun performFromChunks(fileChunks: List<String>) {
 //    var interpreter = InterpreterImpl()
-    for ((index, line) in fileLines.withIndex()) {
-        println(line + "\n")
+    for (chunk in fileChunks) {
+        println(chunk + "\n")
         println("Lexer output")
-        val lexer = Lexer(line, 0, "utils/src/main/resources/tokenRegex1.1.json")
+        val lexer = Lexer(chunk, 0, "utils/src/main/resources/tokenRegex1.1.json")
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }
         val parser = Parser()

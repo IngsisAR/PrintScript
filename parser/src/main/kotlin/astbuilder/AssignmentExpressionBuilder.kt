@@ -20,9 +20,9 @@ class AssignmentExpressionBuilder(
             identifierResult = IdentifierBuilder(tokens.subList(0, 1)).verifyAndBuild()
             if (tokens.size < 3) {
                 return if (identifierResult is ASTBuilderFailure) {
-                    ASTBuilderFailure("missing identifier at (${tokens[0].position.line}, ${tokens[0].position.start})")
+                    ASTBuilderFailure("missing identifier at (${tokens[0].position.line}:${tokens[0].position.start})")
                 } else {
-                    ASTBuilderFailure("missing expression after assignment at (${tokens[1].position.line}, ${tokens[1].position.end})")
+                    ASTBuilderFailure("missing expression after assignment at (${tokens[1].position.line}:${tokens[1].position.end})")
                 }
             }
             if (identifierResult is ASTBuilderSuccess && tokens[1].type == "ASSIGN") {

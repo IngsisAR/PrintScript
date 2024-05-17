@@ -13,10 +13,10 @@ class ExpressionStatementBuilder(
             return ASTBuilderFailure("Empty tokens")
         }
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at (${tokens.last().position.line}, ${tokens.last().position.end})")
+            return ASTBuilderFailure("Missing semicolon at (${tokens.last().position.line}:${tokens.last().position.end})")
         }
         if (tokens.size == 1) {
-            return ASTBuilderFailure("No expression found at (${tokens.first().position.line}, ${tokens.first().position.start})")
+            return ASTBuilderFailure("No expression found at (${tokens.first().position.line}:${tokens.first().position.start})")
         }
         val expressionResult =
             astProviderFactory.changeTokens(tokens.subList(0, tokens.size - 1))
@@ -25,7 +25,7 @@ class ExpressionStatementBuilder(
             if (expressionResult.errorMessage.isNotEmpty()) {
                 return ASTBuilderFailure("Invalid expression: ${expressionResult.errorMessage}")
             }
-            ASTBuilderFailure("Invalid expression at (${tokens.first().position.line}, ${tokens.first().position.start})")
+            ASTBuilderFailure("Invalid expression at (${tokens.first().position.line}:${tokens.first().position.start})")
         } else {
             ASTBuilderSuccess(
                 ExpressionStatement(

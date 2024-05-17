@@ -10,13 +10,12 @@ class CallExpressionAnalyzer : Analyzer {
     override fun analyze(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
-        lineIndex: Int,
         version: String,
     ): String {
         var result = ""
         if (astNode !is CallExpression) return result
         val callee = astNode.callee
-        result += IdentifierAnalyzer().analyze(callee, configMap, lineIndex, version)
+        result += IdentifierAnalyzer().analyze(callee, configMap, version)
 
         val configPrintln = configMap["printlnNoExpressionArguments"] ?: true
         var aux = checkIfAttributeIsInConfigMapAndIsCorrect(configPrintln, "printlnNoExpressionArguments")
@@ -33,7 +32,7 @@ class CallExpressionAnalyzer : Analyzer {
                             argument !is Literal &&
                             argument !is Identifier
                         ) {
-                            result += "No expressions in println function rule violated at (${lineIndex + 1}:${argument.start})\n"
+                            result += "No expressions in println function rule violated at (${argument.line}:${argument.start})\n"
                         }
                     }
                 }
@@ -54,7 +53,7 @@ class CallExpressionAnalyzer : Analyzer {
                                 argument !is Literal &&
                                 argument !is Identifier
                             ) {
-                                result += "No expressions in readInput function rule violated at (${lineIndex + 1}:${argument.start})\n"
+                                result += "No expressions in readInput function rule violated at (${argument.line}:${argument.start})\n"
                             }
                         }
                     }
@@ -63,7 +62,7 @@ class CallExpressionAnalyzer : Analyzer {
         }
 
         for (argument in arguments) {
-            result += ExpressionAnalyzer().analyze(argument, configMap, lineIndex, version)
+            result += ExpressionAnalyzer().analyze(argument, configMap, version)
         }
         return result
     }

@@ -1,7 +1,7 @@
 import java.io.File
 
-class PrintScriptLineReader {
-    fun readLinesFromString(string: String): List<String> {
+class PrintScriptChunkReader {
+    fun readChunksFromString(string: String): List<String> {
         val lines = mutableListOf<String>()
         var currentLine = ""
         var braceCount = 0
@@ -56,11 +56,5 @@ class PrintScriptLineReader {
         return lines
     }
 
-    fun readLinesFromFile(fileName: String): List<String> = readLinesFromString(File(fileName).readText())
-}
-
-fun main() {
-    println("\nReading from file\n")
-    val fileLines = PrintScriptLineReader().readLinesFromFile("cli/src/main/resources/script_example.txt")
-    fileLines.forEach { println("line: $it\n") }
+    fun readChunksFromFile(fileName: String): List<String> = readChunksFromString(File(fileName).readText())
 }

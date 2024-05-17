@@ -20,7 +20,7 @@ class TypeReferenceBuilder(
                         ),
                     )
                 } else {
-                    ASTBuilderFailure("Invalid type at (${it.position.line}, ${it.position.start})")
+                    ASTBuilderFailure("Invalid type at (${it.position.line}:${it.position.start})")
                 }
             }
             ?: ASTBuilderFailure("Empty tokens")

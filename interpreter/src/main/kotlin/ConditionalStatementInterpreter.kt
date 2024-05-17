@@ -6,7 +6,7 @@ class ConditionalStatementInterpreter(
         require(node is ConditionalStatement) { "Node must be a ConditionalStatement" }
         val conditionValue = IdentifierInterpreter(variableMap, version).interpret(node.test)
         if (conditionValue !is Boolean) {
-            throw IllegalArgumentException("Condition must be a boolean")
+            throw IllegalArgumentException("Condition must be a boolean at (${node.test.line}:${node.test.start})")
         }
         var interpreter = InterpreterImpl(variableMap, version)
         if (conditionValue) {
