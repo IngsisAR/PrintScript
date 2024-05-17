@@ -23,7 +23,9 @@ class CallExpressionBuilder(
             return ASTBuilderFailure("Not enough members for call expression")
         }
         if (identifierResult is ASTBuilderSuccess && tokens[1].type == "OPAREN" && tokens.last().type != "CPAREN") {
-            return ASTBuilderFailure("Call expression does not have close parenthesis at (${tokens.last().position.line}, ${tokens.last().position.end})")
+            return ASTBuilderFailure(
+                "Call expression does not have close parenthesis at (${tokens.last().position.line}:${tokens.last().position.end})",
+            )
         }
 
         if (tokens.size > 3) {
@@ -36,7 +38,7 @@ class CallExpressionBuilder(
                     if (expressionResult.errorMessage.isNotBlank() || expressionResult.errorMessage.isNotEmpty()) {
                         return ASTBuilderFailure("Call expression does not have valid argument: ${expressionResult.errorMessage}")
                     }
-                    return ASTBuilderFailure("Call expression does not have valid argument")
+                    return ASTBuilderFailure("Call expression does not have valid argument at ")
                 }
                 arguments = listOf((expressionResult as ASTBuilderSuccess).astNode as Expression)
                 return ASTBuilderSuccess(

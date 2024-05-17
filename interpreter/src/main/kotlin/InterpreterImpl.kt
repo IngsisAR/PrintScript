@@ -15,7 +15,7 @@ class InterpreterImpl(
                 VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version) ->
                 return ConditionalStatementInterpreter(variableMap, version).interpret(node)
             node is VariableDeclaration -> internalVariableMap = VariableDeclarationInterpreter(variableMap, version).interpret(node)
-            else -> throw IllegalArgumentException("Invalid node type: ${node::class.simpleName}")
+            else -> throw IllegalArgumentException("Invalid node type: ${node::class.simpleName} at (${node.line}:${node.start})")
         }
         return InterpreterImpl(internalVariableMap, version)
     }

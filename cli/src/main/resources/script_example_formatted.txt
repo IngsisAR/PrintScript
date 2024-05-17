@@ -1,5 +1,8 @@
-let aNumber : number = 1;
-let b : string = 8 + "th";
-let d : number = 3;
+let a : string = 8 + "th";
+a = readEnv("PATH");
 
-println(aNumber);
+println(a);
+let d : number = 3.1;
+d = readInput("input: ");
+
+println(d);

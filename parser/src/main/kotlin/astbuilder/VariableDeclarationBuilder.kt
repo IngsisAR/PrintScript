@@ -16,14 +16,14 @@ class VariableDeclarationBuilder(
         }
 
         if (tokens.last().type != "SEMICOLON") {
-            return ASTBuilderFailure("Missing semicolon at (${tokens.last().position.line}, ${tokens.last().position.end})")
+            return ASTBuilderFailure("Missing semicolon at (${tokens.last().position.line}:${tokens.last().position.end})")
         }
 
         if (tokens.any { it.type == "COLON" } || tokens.any { it.type == "LET" || it.type == "CONST" }) {
             if (tokens.first().type != "LET" && tokens.first().type != "CONST") {
                 return ASTBuilderFailure(
                     "Invalid start of variable declaration at " +
-                        "(${tokens.first().position.line}, ${tokens.first().position.start})",
+                        "(${tokens.first().position.line}:${tokens.first().position.start})",
                 )
             }
 
@@ -33,7 +33,7 @@ class VariableDeclarationBuilder(
                 if (tokensAux.size < 3) {
                     return ASTBuilderFailure(
                         "Invalid variable declaration: not enough tokens for a variable declarator at " +
-                            "(${tokens.first().position.line}, ${tokens.first().position.end})",
+                            "(${tokens.first().position.line}:${tokens.first().position.end})",
                     )
                 }
                 val variableDeclaratorResult =
@@ -57,7 +57,7 @@ class VariableDeclarationBuilder(
                 if (tokensAux.size < 3) {
                     return ASTBuilderFailure(
                         "Invalid variable declaration: not enough tokens for a variable declarator at " +
-                            "(${tokensAux.first().position.line}, ${tokensAux.first().position.start})",
+                            "(${tokensAux.first().position.line}:${tokensAux.first().position.start})",
                     )
                 }
                 if (i == commaCount) {

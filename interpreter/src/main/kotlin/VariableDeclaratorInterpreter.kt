@@ -6,7 +6,7 @@ class VariableDeclaratorInterpreter(
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
         require(node is VariableDeclarator) { "Node must be a VariableDeclarator" }
         val id = node.id.name
-        require(variableMap[id] == null) { "Variable '$id' already exists" }
+        require(variableMap[id] == null) { "Variable '$id' already exists at (${node.id.line}:${node.id.start})" }
 
         val type = node.type.type
         val value =
@@ -15,7 +15,7 @@ class VariableDeclaratorInterpreter(
                     is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version).interpret(it)
                     is Identifier -> IdentifierInterpreter(variableMap, version).interpret(it)
                     is Literal -> it.value
-                    else -> throw IllegalArgumentException("Unsupported init type: ${it::class.simpleName}")
+                    else -> throw IllegalArgumentException("Unsupported init type: ${it::class.simpleName} at (${it.line}:${it.start})")
                 }
             }
 

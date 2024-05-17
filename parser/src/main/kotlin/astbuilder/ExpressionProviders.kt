@@ -14,8 +14,10 @@ interface ASTProvider {
 abstract class AbstractExpressionProvider(
     val tokens: List<Token>,
 ) : ASTProvider {
-
-    protected fun getASTBuilderResult(builders: List<ASTBuilder>, redundantErrorsToFilter: List<String>): ASTBuilderResult {
+    protected fun getASTBuilderResult(
+        builders: List<ASTBuilder>,
+        redundantErrorsToFilter: List<String>,
+    ): ASTBuilderResult {
         for (builder in builders) {
             val astBuilderResult = builder.verifyAndBuild()
             if (astBuilderResult is ASTBuilderSuccess && astBuilderResult.astNode is Expression) {

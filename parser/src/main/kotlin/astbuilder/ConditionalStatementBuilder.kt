@@ -21,20 +21,20 @@ class ConditionalStatementBuilder(
         if (tokens.size > 1) {
             if (tokens[1].type != "OPAREN") {
                 return ASTBuilderFailure(
-                    "Invalid conditional expression: expected '(' after 'if' at (${tokens[0].position.line}, ${tokens[0].position.end})",
+                    "Invalid conditional expression: expected '(' after 'if' at (${tokens[0].position.line}:${tokens[0].position.end})",
                 )
             }
             if (tokens.size == 2) {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected identifier after '(' " +
-                        "at (${tokens[1].position.line}, ${tokens[1].position.end})",
+                        "at (${tokens[1].position.line}:${tokens[1].position.end})",
                 )
             }
             val identifierResult = IdentifierBuilder(tokens.subList(2, 3)).verifyAndBuild()
             if (identifierResult is ASTBuilderFailure) {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected identifier after '(' " +
-                        "at (${tokens[1].position.line}, ${tokens[1].position.end})",
+                        "at (${tokens[1].position.line}:${tokens[1].position.end})",
                 )
             }
             test = (identifierResult as ASTBuilderSuccess).astNode as Identifier
@@ -42,41 +42,39 @@ class ConditionalStatementBuilder(
             if (tokens.size == 3) {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected ')' after identifier " +
-                        "at (${tokens[2].position.line}, ${tokens[2].position.end})",
+                        "at (${tokens[2].position.line}:${tokens[2].position.end})",
                 )
             }
             if (tokens[3].type != "CPAREN") {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected ')' after identifier " +
-                        "at (${tokens[2].position.line}, ${tokens[2].position.end})",
+                        "at (${tokens[2].position.line}:${tokens[2].position.end})",
                 )
             }
             if (tokens.size == 4) {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected '{' after ')' " +
-                        "at ( ${tokens[3].position.line}, ${tokens[3].position.end})",
+                        "at ( ${tokens[3].position.line}:${tokens[3].position.end})",
                 )
             }
             if (tokens[4].type != "OBRACE") {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: expected '{' after ')' " +
-                        "at (${tokens[3].position.line}, ${tokens[3].position.end})",
+                        "at (${tokens[3].position.line}:${tokens[3].position.end})",
                 )
             }
             if (tokens.size == 5) {
                 return ASTBuilderFailure(
                     "Invalid conditional expression: unclosed block " +
-                        "at (${tokens[4].position.line}, ${tokens[4].position.end})",
+                        "at (${tokens[4].position.line}:${tokens[4].position.end})",
                 )
             }
             return buildIfAndElseBlocks(tokens.subList(4, tokens.size))
         }
-        return ASTBuilderFailure("Incomplete conditional expression at (${tokens.last().position.line}, ${tokens.last().position.end})")
+        return ASTBuilderFailure("Incomplete conditional expression at (${tokens.last().position.line}:${tokens.last().position.end})")
     }
 
-    private fun buildIfAndElseBlocks(
-        tokens: List<Token>,
-    ): ASTBuilderResult {
+    private fun buildIfAndElseBlocks(tokens: List<Token>): ASTBuilderResult {
         val consequent = mutableListOf<Statement>()
         val alternate = mutableListOf<Statement>()
         var currentIndex = 0
@@ -159,7 +157,9 @@ class ConditionalStatementBuilder(
                     } else if (braceCount >= 1) {
                         currentIndex++
                     } else {
-                        return ASTBuilderFailure("Unmatched braces in expression at (${currentToken.position.line}, ${currentToken.position.end})")
+                        return ASTBuilderFailure(
+                            "Unmatched braces in expression at (${currentToken.position.line}:${currentToken.position.end})",
+                        )
                     }
                 }
                 "IF" -> {
@@ -168,7 +168,7 @@ class ConditionalStatementBuilder(
                 }
                 "ELSE" -> {
                     if (!isElseBlock && !isConditionalStatement) {
-                        return ASTBuilderFailure("Unexpected 'else' at (${currentToken.position.line}, ${currentToken.position.start})")
+                        return ASTBuilderFailure("Unexpected 'else' at (${currentToken.position.line}:${currentToken.position.start})")
                     }
                     currentIndex++
                 }
@@ -197,7 +197,7 @@ class ConditionalStatementBuilder(
 
         // Verificamos si hay corchetes sin cerrar
         if (braceCount != 0) {
-            return ASTBuilderFailure("Unmatched braces in expression at (${tokens.last().position.line}, ${tokens.last().position.end})")
+            return ASTBuilderFailure("Unmatched braces in expression at (${tokens.last().position.line}:${tokens.last().position.end})")
         }
 
         return ASTBuilderSuccess(

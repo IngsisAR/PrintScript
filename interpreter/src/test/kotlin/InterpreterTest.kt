@@ -15,14 +15,16 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
-                            init = null,,
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+                            init = null,
+                            line = 1,
                             start = 4,
                             end = 13,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 14,
             )
@@ -41,14 +43,16 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
-                            init = StringLiteral(value = "hello",, start = 16, end = 23),,
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+                            init = StringLiteral(value = "hello", line = 1, start = 16, end = 23),
+                            line = 1,
                             start = 4,
                             end = 23,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 24,
             )
@@ -73,14 +77,16 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "b",, start = 4, end = 5),
-                            type = TypeReference(type = "number",, start = 7, end = 13),
-                            init = Identifier(name = "a",, start = 4, end = 5),,
+                            id = Identifier(name = "b", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "number", line = 1, start = 7, end = 13),
+                            init = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            line = 1,
                             start = 4,
                             end = 21,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 22,
             )
@@ -99,28 +105,32 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "f",, start = 4, end = 5),
-                            type = TypeReference(type = "number",, start = 7, end = 13),
-                            init = NumberLiteral(value = 5,, start = 16, end = 17),,
+                            id = Identifier(name = "f", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "number", line = 1, start = 7, end = 13),
+                            init = NumberLiteral(value = 5, line = 1, start = 16, end = 17),
+                            line = 1,
                             start = 4,
                             end = 17,
                         ),
                         VariableDeclarator(
-                            id = Identifier(name = "g",, start = 19, end = 20),
-                            type = TypeReference(type = "number",, start = 22, end = 28),
-                            init = NumberLiteral(value = 10,, start = 31, end = 33),,
+                            id = Identifier(name = "g", line = 1, start = 19, end = 20),
+                            type = TypeReference(type = "number", line = 1, start = 22, end = 28),
+                            init = NumberLiteral(value = 10, line = 1, start = 31, end = 33),
+                            line = 1,
                             start = 19,
                             end = 33,
                         ),
                         VariableDeclarator(
-                            id = Identifier(name = "h",, start = 35, end = 36),
-                            type = TypeReference(type = "number",, start = 37, end = 43),
-                            init = NumberLiteral(value = 15,, start = 46, end = 48),,
+                            id = Identifier(name = "h", line = 1, start = 35, end = 36),
+                            type = TypeReference(type = "number", line = 1, start = 37, end = 43),
+                            init = NumberLiteral(value = 15, line = 1, start = 46, end = 48),
+                            line = 1,
                             start = 35,
                             end = 48,
                         ),
                     ),
-                kind = "const",,
+                kind = "const",
+                line = 1,
                 start = 0,
                 end = 49,
             )
@@ -140,20 +150,23 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 CallExpression(
-                                    callee = Identifier(name = "println",, start = 0, end = 7),
-                                    arguments = listOf(Identifier(name = "c",, start = 8, end = 9)),,
+                                    callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "c", line = 1, start = 8, end = 9)),
+                                    line = 1,
                                     start = 0,
                                     end = 10,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 23,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 24,
             )
@@ -170,21 +183,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "number",, start = 7, end = 13),
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "number", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 5.toBigDecimal(),, start = 16, end = 17),
-                                    right = NumberLiteral(value = 6.toBigDecimal(),, start = 20, end = 21),
-                                    operator = "+",,
+                                    left = NumberLiteral(value = 5.toBigDecimal(), line = 1, start = 16, end = 17),
+                                    right = NumberLiteral(value = 6.toBigDecimal(), line = 1, start = 20, end = 21),
+                                    operator = "+",
+                                    line = 1,
                                     start = 16,
                                     end = 21,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 21,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 22,
             )
@@ -203,21 +219,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "b",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "b", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = StringLiteral(value = "hello",, start = 16, end = 23),
-                                    right = StringLiteral(value = " world",, start = 26, end = 34),
-                                    operator = "+",,
+                                    left = StringLiteral(value = "hello", line = 1, start = 16, end = 23),
+                                    right = StringLiteral(value = " world", line = 1, start = 26, end = 34),
+                                    operator = "+",
+                                    line = 1,
                                     start = 16,
                                     end = 34,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 34,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 35,
             )
@@ -232,21 +251,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "b",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "b", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = StringLiteral(value = "hello",, start = 16, end = 23),
-                                    right = StringLiteral(value = " world",, start = 26, end = 34),
-                                    operator = "-",,
+                                    left = StringLiteral(value = "hello", line = 1, start = 16, end = 23),
+                                    right = StringLiteral(value = " world", line = 1, start = 26, end = 34),
+                                    operator = "-",
+                                    line = 1,
                                     start = 16,
                                     end = 34,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 34,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 35,
             )
@@ -263,21 +285,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 8,, start = 16, end = 17),
-                                    right = StringLiteral(value = "th",, start = 20, end = 24),
-                                    operator = "+",,
+                                    left = NumberLiteral(value = 8, line = 1, start = 16, end = 17),
+                                    right = StringLiteral(value = "th", line = 1, start = 20, end = 24),
+                                    operator = "+",
+                                    line = 1,
                                     start = 16,
                                     end = 24,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 24,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 25,
             )
@@ -296,21 +321,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "a",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = StringLiteral(value = "n°",, start = 16, end = 17),
-                                    right = NumberLiteral(value = 1.toBigDecimal(),, start = 20, end = 24),
-                                    operator = "+",,
+                                    left = StringLiteral(value = "n°", line = 1, start = 16, end = 17),
+                                    right = NumberLiteral(value = 1.toBigDecimal(), line = 1, start = 20, end = 24),
+                                    operator = "+",
+                                    line = 1,
                                     start = 16,
                                     end = 24,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 24,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 25,
             )
@@ -336,21 +364,24 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "c",, start = 4, end = 5),
-                            type = TypeReference(type = "string",, start = 7, end = 13),
+                            id = Identifier(name = "c", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
                             init =
                                 BinaryExpression(
-                                    left = Identifier(name = "a",, start = 16, end = 20),
-                                    right = Identifier(name = "b",, start = 23, end = 28),
-                                    operator = "+",,
+                                    left = Identifier(name = "a", line = 1, start = 16, end = 20),
+                                    right = Identifier(name = "b", line = 1, start = 23, end = 28),
+                                    operator = "+",
+                                    line = 1,
                                     start = 16,
                                     end = 28,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 28,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 29,
             )
@@ -375,37 +406,40 @@ class InterpreterTest {
                 declarations =
                     listOf(
                         VariableDeclarator(
-                            id = Identifier(name = "c",, start = 4, end = 5),
-                            type = TypeReference(type = "number",, start = 8, end = 14),
+                            id = Identifier(name = "c", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "number", line = 1, start = 8, end = 14),
                             init =
                                 BinaryExpression(
                                     left =
                                         BinaryExpression(
-                                            left = Identifier(name = "a",, start = 18, end = 19),
-                                            right = NumberLiteral(value = 2.toBigDecimal(),, start = 22, end = 23),
+                                            left = Identifier(name = "a", line = 1, start = 18, end = 19),
+                                            right = NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 22, end = 23),
                                             operator = "*",
-                                            ,
+                                            line = 1,
                                             start = 18,
                                             end = 23,
                                         ),
                                     right =
                                         BinaryExpression(
-                                            left = NumberLiteral(value = 4.toBigDecimal(),, start = 29, end = 30),
-                                            right = Identifier(name = "b",, start = 33, end = 34),
+                                            left = NumberLiteral(value = 4.toBigDecimal(), line = 1, start = 29, end = 30),
+                                            right = Identifier(name = "b", line = 1, start = 33, end = 34),
                                             operator = "/",
-                                            ,
+                                            line = 1,
                                             start = 29,
                                             end = 34,
                                         ),
-                                    operator = "-",,
+                                    operator = "-",
+                                    line = 1,
                                     start = 18,
                                     end = 34,
-                                ),,
+                                ),
+                            line = 1,
                             start = 4,
                             end = 35,
                         ),
                     ),
-                kind = "let",,
+                kind = "let",
+                line = 1,
                 start = 0,
                 end = 36,
             )
@@ -421,9 +455,10 @@ class InterpreterTest {
         val interpreter = InterpreterImpl(version = "1.1.0")
         val astNode =
             BinaryExpression(
-                left = NumberLiteral(value = 5.toBigDecimal(),, start = 16, end = 17),
-                right = NumberLiteral(value = 6.toBigDecimal(),, start = 20, end = 21),
-                operator = ".",,
+                left = NumberLiteral(value = 5.toBigDecimal(), line = 1, start = 16, end = 17),
+                right = NumberLiteral(value = 6.toBigDecimal(), line = 1, start = 20, end = 21),
+                operator = ".",
+                line = 1,
                 start = 16,
                 end = 21,
             )
@@ -439,11 +474,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = NumberLiteral(value = 9,, start = 4, end = 5),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = NumberLiteral(value = 9, line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -458,11 +495,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = StringLiteral(value = "world",, start = 4, end = 5),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = StringLiteral(value = "world", line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -483,18 +522,21 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
                         right =
                             BinaryExpression(
-                                left = NumberLiteral(value = 4.toBigDecimal(),, start = 29, end = 30),
-                                right = NumberLiteral(value = 4.toBigDecimal(),, start = 29, end = 30),
-                                operator = "/",,
+                                left = NumberLiteral(value = 4.toBigDecimal(), line = 1, start = 29, end = 30),
+                                right = NumberLiteral(value = 4.toBigDecimal(), line = 1, start = 29, end = 30),
+                                operator = "/",
+                                line = 1,
                                 start = 29,
                                 end = 34,
-                            ),,
+                            ),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -516,11 +558,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = Identifier(name = "d",, start = 18, end = 19),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = Identifier(name = "d", line = 1, start = 18, end = 19),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -539,17 +583,20 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
                         right =
                             CallExpression(
-                                callee = Identifier(name = "readInput",, start = 0, end = 7),
-                                arguments = listOf(StringLiteral(value = "Enter a value:",, start = 16, end = 30)),,
+                                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                                arguments = listOf(StringLiteral(value = "Enter a value:", line = 1, start = 16, end = 30)),
+                                line = 1,
                                 start = 0,
                                 end = 10,
-                            ),,
+                            ),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -565,28 +612,18 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = NumberLiteral(value = 9,, start = 4, end = 5),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = NumberLiteral(value = 9, line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNodeB)
-        }
-    }
-
-    @Test
-    fun interpretNullAssignmentExpression() {
-        val variableMap = mapOf("nullVar" to VariableInfo("string", null, true))
-        val interpreter = IdentifierInterpreter(variableMap, "1.1.0")
-
-        val astNode = Identifier(name = "nullVar",, start = 0, end = 7)
-
-        assertThrows(IllegalArgumentException::class.java) {
-            interpreter.interpret(astNode)
         }
     }
 
@@ -597,11 +634,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = StringLiteral(value = "world",, start = 4, end = 5),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = StringLiteral(value = "world", line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -624,18 +663,20 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "b",, start = 0, end = 1),
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
                         right =
                             AssignmentExpression(
-                                left = Identifier(name = "a",, start = 0, end = 1),
-                                right = StringLiteral(value = "world",, start = 4, end = 5),
-                                ,
+                                left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                                right = StringLiteral(value = "world", line = 1, start = 4, end = 5),
+                                line = 1,
                                 start = 0,
                                 end = 5,
-                            ),,
+                            ),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -651,11 +692,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "1",, start = 0, end = 1),
-                        right = StringLiteral(value = "world",, start = 4, end = 5),,
+                        left = Identifier(name = "1", line = 1, start = 0, end = 1),
+                        right = StringLiteral(value = "world", line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -678,11 +721,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
-                        arguments = listOf(Identifier(name = "c",, start = 8, end = 9)),,
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                        arguments = listOf(Identifier(name = "c", line = 1, start = 8, end = 9)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -706,11 +751,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
-                        arguments = listOf(Identifier(name = "c",, start = 8, end = 9)),,
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                        arguments = listOf(Identifier(name = "c", line = 1, start = 8, end = 9)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -722,7 +769,7 @@ class InterpreterTest {
     @Test
     fun interpretIdentifierExpression() {
         val interpreter = InterpreterImpl(mapOf("a" to VariableInfo("string", "hello", true)), "1.1.0")
-        val astNode = NumberLiteral(value = 2.toBigDecimal(),, start = 22, end = 23)
+        val astNode = NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 22, end = 23)
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
@@ -738,11 +785,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
-                        arguments = listOf(NumberLiteral(value = 2.toBigDecimal(),, start = 8, end = 9)),,
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                        arguments = listOf(NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 8, end = 9)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -760,11 +809,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
-                        arguments = listOf(StringLiteral(value = "hello",, start = 8, end = 13)),,
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                        arguments = listOf(StringLiteral(value = "hello", line = 1, start = 8, end = 13)),
+                        line = 1,
                         start = 0,
                         end = 14,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 15,
             )
@@ -782,11 +833,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
-                        arguments = listOf(Identifier(name = "a",, start = 8, end = 9)),,
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                        arguments = listOf(Identifier(name = "a", line = 1, start = 8, end = 9)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -804,20 +857,23 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "println",, start = 0, end = 7),
+                        callee = Identifier(name = "println", line = 1, start = 0, end = 7),
                         arguments =
                             listOf(
                                 BinaryExpression(
-                                    left = NumberLiteral(value = 2.toBigDecimal(),, start = 8, end = 9),
-                                    right = NumberLiteral(value = 3.toBigDecimal(),, start = 12, end = 13),
-                                    operator = "+",,
+                                    left = NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 8, end = 9),
+                                    right = NumberLiteral(value = 3.toBigDecimal(), line = 1, start = 12, end = 13),
+                                    operator = "+",
+                                    line = 1,
                                     start = 8,
                                     end = 13,
                                 ),
-                            ),,
+                            ),
+                        line = 1,
                         start = 0,
                         end = 14,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 15,
             )
@@ -833,11 +889,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "sum",, start = 0, end = 7),
-                        arguments = listOf(Identifier(name = "a",, start = 8, end = 9)),,
+                        callee = Identifier(name = "sum", line = 1, start = 0, end = 7),
+                        arguments = listOf(Identifier(name = "a", line = 1, start = 8, end = 9)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -880,22 +938,25 @@ class InterpreterTest {
          */
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "b",, start = 0, end = 1),
+                test = Identifier(name = "b", line = 1, start = 0, end = 1),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "println",, start = 0, end = 7),
-                                    arguments = listOf(Identifier(name = "a",, start = 8, end = 9)),,
+                                    callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "a", line = 1, start = 8, end = 9)),
+                                    line = 1,
                                     start = 0,
                                     end = 10,
-                                ),,
+                                ),
+                            line = 1,
                             start = 0,
                             end = 11,
                         ),
                     ),
-                alternate = emptyList(),,
+                alternate = emptyList(),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -928,17 +989,19 @@ class InterpreterTest {
          */
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "b",, start = 0, end = 1),
+                test = Identifier(name = "b", line = 1, start = 0, end = 1),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "println",, start = 0, end = 7),
-                                    arguments = listOf(Identifier(name = "a",, start = 8, end = 9)),,
+                                    callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "a", line = 1, start = 8, end = 9)),
+                                    line = 1,
                                     start = 0,
                                     end = 10,
-                                ),,
+                                ),
+                            line = 1,
                             start = 0,
                             end = 11,
                         ),
@@ -948,15 +1011,18 @@ class InterpreterTest {
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "println",, start = 0, end = 7),
-                                    arguments = listOf(Identifier(name = "c",, start = 8, end = 9)),,
+                                    callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "c", line = 1, start = 8, end = 9)),
+                                    line = 1,
                                     start = 0,
                                     end = 10,
-                                ),,
+                                ),
+                            line = 1,
                             start = 0,
                             end = 11,
                         ),
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -981,9 +1047,10 @@ class InterpreterTest {
          */
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "b",, start = 0, end = 1),
+                test = Identifier(name = "b", line = 1, start = 0, end = 1),
                 consequent = emptyList(),
-                alternate = emptyList(),,
+                alternate = emptyList(),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -994,53 +1061,39 @@ class InterpreterTest {
 
     @Test
     fun getEnvironmentVariable() {
-        System.setProperty("TEST_PATH", "/mocked/path")
         val interpreter =
             InterpreterImpl(
                 mapOf(
-                    "b" to VariableInfo("string", "true", true),
+                    "b" to VariableInfo("string", "", true),
                 ),
                 "1.1.0",
             )
+        /*
+        b = readEnv("PATH")
+         */
         val astNode =
             ExpressionStatement(
                 expression =
-                    CallExpression(
-                        callee = Identifier(name = "readEnv",, start = 0, end = 7),
-                        arguments = listOf(StringLiteral(value = "PATH",, start = 16, end = 23)),,
+                    AssignmentExpression(
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                arguments = listOf(StringLiteral(value = "PATH", line = 1, start = 16, end = 23)),
+                                line = 1,
+                                start = 0,
+                                end = 10,
+                            ),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
         val response = interpreter.interpret(astNode)
-        println(response)
-    }
-
-    @Test
-    fun getUserInput() {
-        val interpreter =
-            InterpreterImpl(
-                mapOf(
-                    "b" to VariableInfo("string", "true", true),
-                ),
-                "1.1.0",
-            )
-        val astNode =
-            ExpressionStatement(
-                expression =
-                    CallExpression(
-                        callee = Identifier(name = "readInput",, start = 0, end = 7),
-                        arguments = listOf(StringLiteral(value = "",, start = 16, end = 23)),,
-                        start = 0,
-                        end = 10,
-                    ),,
-                start = 0,
-                end = 11,
-            )
-        val response = interpreter.interpret(astNode)
-        println(response)
+        assertEquals(System.getenv("PATH"), response.variableMap["b"]?.value)
     }
 
     @Test
@@ -1053,8 +1106,9 @@ class InterpreterTest {
 
         val astNode =
             CallExpression(
-                callee = Identifier(name = "println",, start = 0, end = 7),
-                arguments = listOf(StringLiteral(value = "Hello, World!",, start = 16, end = 30)),,
+                callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Hello, World!", line = 1, start = 16, end = 30)),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -1065,17 +1119,38 @@ class InterpreterTest {
     }
 
     @Test
-    fun callExpressionReadUserInput() {
-        val variableMap = mapOf("b" to VariableInfo("string", "true", true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0")
+    fun interpretCallExpression_ReadUserInput_with_numericInput() {
+        val interpreter = CallExpressionInterpreter(emptyMap(), "1.1.0")
+
+        val input = "123"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Enter a value:", line = 1, start = 16, end = 30)),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+
+        val result = interpreter.interpret(astNode)
+
+        assertEquals(123, result)
+    }
+
+    @Test
+    fun interpretCallExpression_ReadUserInput_with_booleanInput() {
+        val interpreter = CallExpressionInterpreter(emptyMap(), "1.1.0")
 
         val input = "true"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
 
         val astNode =
             CallExpression(
-                callee = Identifier(name = "readInput",, start = 0, end = 7),
-                arguments = listOf(StringLiteral(value = "Enter a value:",, start = 16, end = 30)),,
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Enter a value:", line = 1, start = 16, end = 30)),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -1083,6 +1158,84 @@ class InterpreterTest {
         val result = interpreter.interpret(astNode)
 
         assertEquals(true, result)
+    }
+
+    @Test
+    fun interpretCallExpression_ReadUserInput_with_IdentifierStringAsArgument() {
+        val variableMap = mapOf("b" to VariableInfo("string", "true", true))
+        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0")
+
+        val input = "123"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(Identifier(name = "b", line = 1, start = 16, end = 17)),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+
+        val result = interpreter.interpret(astNode)
+
+        assertEquals(123, result)
+    }
+
+    @Test
+    fun interpretCallExpression_ReadUserInput_with_IdentifierBooleanAsArgument_ShouldThrowException() {
+        val variableMap = mapOf("b" to VariableInfo("bool", "true", true))
+        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0")
+
+        val input = "true"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(Identifier(name = "b", line = 1, start = 16, end = 17)),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+
+        val message =
+            assertThrows(IllegalArgumentException::class.java) {
+                interpreter.interpret(astNode)
+            }.message
+        assertEquals(
+            "Expected String argument but was Boolean " +
+                "at (1:16)",
+            message,
+        )
+    }
+
+    @Test
+    fun interpretCallExpression_ReadUserInput_with_IdentifierNullAsArgument_ShouldThrowException() {
+        val variableMap = mapOf("b" to VariableInfo("string", null, true))
+        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0")
+
+        val input = "123"
+        System.setIn(ByteArrayInputStream(input.toByteArray()))
+
+        val astNode =
+            CallExpression(
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(Identifier(name = "b", line = 1, start = 16, end = 17)),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+
+        val message =
+            assertThrows(IllegalArgumentException::class.java) {
+                interpreter.interpret(astNode)
+            }.message
+        assertEquals(
+            "Variable b is not initialized " +
+                "at (1:16)",
+            message,
+        )
     }
 
     @Test
@@ -1097,22 +1250,25 @@ class InterpreterTest {
             )
         val astNode =
             ConditionalStatement(
-                test = Identifier(name = "b",, start = 0, end = 1),
+                test = Identifier(name = "b", line = 1, start = 0, end = 1),
                 consequent =
                     listOf(
                         ExpressionStatement(
                             expression =
                                 CallExpression(
-                                    callee = Identifier(name = "println",, start = 0, end = 7),
-                                    arguments = listOf(Identifier(name = "a",, start = 8, end = 9)),,
+                                    callee = Identifier(name = "println", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "a", line = 1, start = 8, end = 9)),
+                                    line = 1,
                                     start = 0,
                                     end = 10,
-                                ),,
+                                ),
+                            line = 1,
                             start = 0,
                             end = 11,
                         ),
                     ),
-                alternate = emptyList(),,
+                alternate = emptyList(),
+                line = 1,
                 start = 0,
                 end = 11,
             )
@@ -1135,11 +1291,13 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     AssignmentExpression(
-                        left = Identifier(name = "a",, start = 0, end = 1),
-                        right = BooleanLiteral(value = true,, start = 4, end = 5),,
+                        left = Identifier(name = "a", line = 1, start = 0, end = 1),
+                        right = BooleanLiteral(value = true, line = 1, start = 4, end = 5),
+                        line = 1,
                         start = 0,
                         end = 5,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 6,
             )
@@ -1158,13 +1316,14 @@ class InterpreterTest {
 
         val astNode =
             CallExpression(
-                callee = Identifier(name = "readInput",, start = 0, end = 7),
-                arguments = listOf(StringLiteral(value = "Enter a value:",, start = 16, end = 30)),,
+                callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                arguments = listOf(StringLiteral(value = "Enter a value:", line = 1, start = 16, end = 30)),
+                line = 1,
                 start = 0,
                 end = 11,
             )
 
-        assertThrows(UnsupportedOperationException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
     }
@@ -1183,15 +1342,17 @@ class InterpreterTest {
             ExpressionStatement(
                 expression =
                     CallExpression(
-                        callee = Identifier(name = "readEnv",, start = 0, end = 7),
-                        arguments = listOf(StringLiteral(value = "PATH",, start = 16, end = 23)),,
+                        callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                        arguments = listOf(StringLiteral(value = "PATH", line = 1, start = 16, end = 23)),
+                        line = 1,
                         start = 0,
                         end = 10,
-                    ),,
+                    ),
+                line = 1,
                 start = 0,
                 end = 11,
             )
-        assertThrows(UnsupportedOperationException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
     }
