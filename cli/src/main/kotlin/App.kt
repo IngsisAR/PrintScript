@@ -56,22 +56,24 @@ private fun handleCommand(
         "5" -> exitProcess(0)
         else -> println("Invalid function specified - use 'analyze', 'format', 'execute' or 'validate'")
     }
+    handleCommand(script, path)
 }
 
 private fun validate(fileChunks: List<String>): List<ASTNode> {
     val successfulASTs = mutableListOf<ASTNode>()
-    var chunkStartLine = 0
+    var chunkStartLine = 1
     for ((index, chunk) in fileChunks.withIndex()) {
         val lexer = Lexer(chunk, chunkStartLine, TOKEN_REGEX)
         val tokens = lexer.tokenize()
+        chunkStartLine = lexer.getCurrentLineIndex() + 1
         val parser = Parser()
         when (val ast = parser.parse(ASTProviderFactory(tokens, version))) {
             is ASTBuilderSuccess -> {
                 successfulASTs.add(ast.astNode)
                 printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
-                chunkStartLine = lexer.getCurrentLineIndex()
             }
             is ASTBuilderFailure -> {
+                if (ast.errorMessage == "Empty tokens") continue
                 printlnRed(ast.errorMessage)
                 return emptyList()
             }
@@ -96,6 +98,7 @@ private fun execute(fileLines: List<String>) {
     printlnGreen("✓ File executed successfully")
 }
 
+// Debe usar validate o bien corregir processChunk() y utilizarlo en validate
 private fun format(
     fileLines: List<String>,
     path: String,
@@ -113,7 +116,7 @@ private fun format(
     val formattedContent: StringBuilder = StringBuilder()
 
     for ((index, line) in fileLines.withIndex()) {
-        val ast = processLine(line)
+        val ast = processChunk(line)
         if (ast is ASTBuilderSuccess) {
             try {
                 formattedContent.append(formatter.format(ast.astNode, configFile, version))
@@ -126,20 +129,20 @@ private fun format(
     createFormattedFile(newFilePath, formattedContent.toString())
 }
 
-private fun analyze(fileLines: List<String>) {
+private fun analyze(fileChunks: List<String>) {
     print("Config file path: ")
     val scaConfig = readlnOrNull()
     val configFile = if (scaConfig.isNullOrEmpty()) SCA_CONFIG_PATH else scaConfig
     val sca = StaticCodeAnalyzer()
 
-    for ((index, line) in fileLines.withIndex()) {
-        val ast = processLine(line)
+    for ((index, line) in fileChunks.withIndex()) {
+        val ast = processChunk(line)
         if (ast is ASTBuilderSuccess) {
             val response: String = sca.analyze(ast.astNode, configFile, version)
             if (response.isNotEmpty()) {
                 return printlnRed(response)
             }
-            printlnGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
+            printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
         }
     }
     printlnGreen("✓ File analyzed successfully")
@@ -151,7 +154,7 @@ private fun functionProgress(
 ): Int {
     return ((index + 1).toDouble() / totalLines * 100).roundToInt()
 }
-private fun processLine(line: String): ASTBuilderResult {
+private fun processChunk(line: String): ASTBuilderResult {
     val lexer = Lexer(line, 0, TOKEN_REGEX)
     val tokens = lexer.tokenize()
     val parser = Parser()
