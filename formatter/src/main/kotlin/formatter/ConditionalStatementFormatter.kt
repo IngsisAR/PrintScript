@@ -61,10 +61,8 @@ class ConditionalStatementFormatter : Formatter {
                         if (statement.expression is CallExpression) {
                             val aux2 =
                                 CallExpressionFormatter().format(statement.expression as CallExpression, configMap)
-                                    .split("\n") as MutableList<String>
-                            for ((index, value) in aux2.withIndex()) {
-                                aux2[index] = repeatIndentation(configMap) + value
-                            }
+                                    .split("\n").toMutableList()
+                            aux2.replaceAll { repeatIndentation(configMap) + it }
                             aux += aux2.joinToString("\n") + ";"
                         } else {
                             aux.add(repeatIndentation(configMap) + StatementFormatter().format(statement, configMap))

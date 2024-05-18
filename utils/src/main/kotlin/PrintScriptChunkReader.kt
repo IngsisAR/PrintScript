@@ -1,13 +1,15 @@
 import java.io.File
 
-class PrintScriptLineReader {
-    fun readLinesFromString(string: String): List<String> {
+class PrintScriptChunkReader {
+    fun readChunksFromString(string: String): List<String> {
         val lines = mutableListOf<String>()
         var currentLine = ""
         var braceCount = 0
         var elseCount = 0
+        // Normaliza los saltos de línea al leer el archivo
+        val normalizedString = string.replace("\r\n", "\n").replace('\r', '\n')
 
-        for ((index, char) in string.withIndex()) {
+        for ((index, char) in normalizedString.withIndex()) {
             when (char) {
                 '{' -> {
                     braceCount++
@@ -18,7 +20,9 @@ class PrintScriptLineReader {
                     braceCount--
                     currentLine += char
                     if (braceCount == 0) {
-                        val elseIsNext = string.substring(index + 1).replace('}', ' ').trim().startsWith("else")
+                        val elseIsNext =
+                            normalizedString.substring(index + 1).replace('}', ' ')
+                                .trim().startsWith("else")
                         if (elseIsNext && elseCount == 0) {
                             elseCount++
                         } else if (!elseIsNext || elseCount > 0) {
@@ -35,6 +39,16 @@ class PrintScriptLineReader {
                         lines.add(currentLine.trim())
                         currentLine = ""
                     } else {
+                        currentLine += char
+                    }
+                }
+
+                '\n' -> {
+                    if (braceCount == 0 && normalizedString[index - 1] != ';' &&
+                        normalizedString[index - 1] != '{' && normalizedString[index - 1] != '}'
+                    ) {
+                        lines.add(currentLine.trim())
+                    } else if (braceCount != 0) {
                         currentLine += char
                     }
                 }
@@ -56,11 +70,5 @@ class PrintScriptLineReader {
         return lines
     }
 
-    fun readLinesFromFile(fileName: String): List<String> = readLinesFromString(File(fileName).readText())
-}
-
-fun main() {
-    println("\nReading from file\n")
-    val fileLines = PrintScriptLineReader().readLinesFromFile("cli/src/main/resources/script_example.txt")
-    fileLines.forEach { println("line: $it\n") }
+    fun readChunksFromFile(fileName: String): List<String> = readChunksFromString(File(fileName).readText())
 }

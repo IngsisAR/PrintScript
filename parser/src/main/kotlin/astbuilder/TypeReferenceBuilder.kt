@@ -5,7 +5,6 @@ import TypeReference
 
 class TypeReferenceBuilder(
     val tokens: List<Token>,
-    val lineIndex: Int,
 ) : ASTBuilder {
     override fun verifyAndBuild(): ASTBuilderResult =
         tokens
@@ -15,12 +14,13 @@ class TypeReferenceBuilder(
                     ASTBuilderSuccess(
                         TypeReference(
                             type = tokens.first().value,
+                            line = tokens.first().position.line,
                             start = tokens.first().position.start,
                             end = tokens.first().position.end,
                         ),
                     )
                 } else {
-                    ASTBuilderFailure("Invalid type at ($lineIndex, ${it.position.start})")
+                    ASTBuilderFailure("Invalid type at (${it.position.line}:${it.position.start})")
                 }
             }
             ?: ASTBuilderFailure("Empty tokens")

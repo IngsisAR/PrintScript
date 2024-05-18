@@ -9,7 +9,6 @@ import java.io.File
 class StaticCodeAnalyzer {
     fun analyze(
         astNode: ASTNode,
-        lineIndex: Int,
         scaConfigJsonPath: String,
         version: String,
     ): String {
@@ -17,10 +16,10 @@ class StaticCodeAnalyzer {
         val configMap: Map<String, Any?> = mapper.readValue(File(scaConfigJsonPath).readText())
 
         return when (astNode) {
-            is VariableDeclaration -> VariableDeclarationAnalyzer().analyze(astNode, configMap, lineIndex, version)
-            is ExpressionStatement -> ExpressionStatementAnalyzer().analyze(astNode, configMap, lineIndex, version)
-            is CallExpression -> CallExpressionAnalyzer().analyze(astNode, configMap, lineIndex, version)
-            is Identifier -> IdentifierAnalyzer().analyze(astNode, configMap, lineIndex, version)
+            is VariableDeclaration -> VariableDeclarationAnalyzer().analyze(astNode, configMap, version)
+            is ExpressionStatement -> ExpressionStatementAnalyzer().analyze(astNode, configMap, version)
+            is CallExpression -> CallExpressionAnalyzer().analyze(astNode, configMap, version)
+            is Identifier -> IdentifierAnalyzer().analyze(astNode, configMap, version)
             else -> ""
         }
     }

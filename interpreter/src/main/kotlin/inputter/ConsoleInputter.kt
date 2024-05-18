@@ -13,8 +13,30 @@ class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, privat
         val text =
             when (node) {
                 is StringLiteral -> node.value
-                is Identifier -> return IdentifierInterpreter(variableMap, version).interpret(node)
-                is CallExpression -> return CallExpressionInterpreter(variableMap, version).interpret(node)
+                is Identifier -> {
+                    val result =
+                        IdentifierInterpreter(variableMap, version).interpret(node)
+                            ?: throw IllegalArgumentException("Variable ${node.name} is not initialized at (${node.line}:${node.start})")
+                    if (result is String) {
+                        result
+                    } else {
+                        throw IllegalArgumentException(
+                            "Expected String argument but was ${result::class.java.simpleName} " +
+                                "at (${node.line}:${node.start})",
+                        )
+                    }
+                }
+                is CallExpression -> {
+                    val result = CallExpressionInterpreter(variableMap, version).interpret(node)
+                    if (result is String) {
+                        result
+                    } else {
+                        throw IllegalArgumentException(
+                            "Expected String argument but was ${result::class.java.simpleName} " +
+                                "at (${node.line}:${node.start})",
+                        )
+                    }
+                }
                 else -> ""
             }
         print(text)

@@ -2,12 +2,12 @@ package astbuilder
 
 import Token
 
-class ASTProviderFactory(val tokens: List<Token>, val lineIndex: Int, val version: String) {
+class ASTProviderFactory(val tokens: List<Token>, val version: String) {
     private var providerByType: Map<String, ASTProvider> =
         mapOf(
-            "statement" to StatementProvider(tokens, lineIndex, this),
-            "expression" to ExpressionProvider(tokens, lineIndex, this),
-            "assignableExpression" to AssignableExpressionProvider(tokens, lineIndex, this),
+            "statement" to StatementProvider(tokens, this),
+            "expression" to ExpressionProvider(tokens, this),
+            "assignableExpression" to AssignableExpressionProvider(tokens, this),
         )
 
     fun getProviderByType(type: String): ASTProvider {
@@ -20,13 +20,13 @@ class ASTProviderFactory(val tokens: List<Token>, val lineIndex: Int, val versio
     ): ASTProviderFactory {
         val newProviderByType = providerByType.toMutableMap()
         newProviderByType[type] = provider
-        val newASTProviderFactory = ASTProviderFactory(tokens, lineIndex, version)
+        val newASTProviderFactory = ASTProviderFactory(tokens, version)
         newASTProviderFactory.providerByType = newProviderByType
         return newASTProviderFactory
     }
 
     fun changeTokens(tokens: List<Token>): ASTProviderFactory {
-        val newASTProviderFactory = ASTProviderFactory(tokens, lineIndex, version)
+        val newASTProviderFactory = ASTProviderFactory(tokens, version)
         // Maintain the same providers but with new tokens
         newASTProviderFactory.providerByType = providerByType.mapValues { (_, provider) -> provider.changeTokens(tokens) }
         return newASTProviderFactory
