@@ -11,6 +11,7 @@ private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private const val TOKEN_REGEX = "utils/src/main/resources/tokenRegex1.1.json"
 private var version = "1.1.0"
+
 fun main() {
     print("""Version (latest as default): """)
     version = readln()
@@ -31,7 +32,7 @@ private fun validateVersion(version: String): String {
     var versionCheck = if (version == "") "1.1.0" else version
     val versionChecker = VersionChecker()
     while (!versionChecker.versionIsValid(versionCheck)) {
-        print("Invalid version. Please enter a valid version: ")
+        printlnRed("Invalid version. Please enter a valid version: ")
         versionCheck = readln()
     }
     return versionCheck
