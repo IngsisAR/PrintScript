@@ -6,23 +6,22 @@ import BinaryExpressionInterpreter
 import CallExpression
 import Identifier
 import IdentifierInterpreter
-import NumberLiteral
-import StringLiteral
+import Literal
 import VariableInfo
 
 class ConsoleOutputter(
     private val variableMap: Map<String, VariableInfo>,
+    private val version: String,
 ) : Outputter {
     override fun output(node: ASTNode) {
-        require(node is CallExpression) { "Node must be a CallExpression" }
+        require(node is CallExpression) { "Node must be a CallExpression at (${node.line}:${node.start})" }
         val output: StringBuilder = StringBuilder()
         node.arguments.forEach { arg ->
             when (arg) {
-                is NumberLiteral -> output.append(arg.value)
-                is StringLiteral -> output.append(arg.value)
-                is BinaryExpression -> output.append(BinaryExpressionInterpreter(variableMap).interpret(arg))
-                is Identifier -> output.append(IdentifierInterpreter(variableMap).interpret(arg))
-                else -> throw IllegalArgumentException("Function not found")
+                is Literal -> output.append(arg.value)
+                is BinaryExpression -> output.append(BinaryExpressionInterpreter(variableMap, version).interpret(arg))
+                is Identifier -> output.append(IdentifierInterpreter(variableMap, version).interpret(arg))
+                else -> throw IllegalArgumentException("Function not found at (${arg.line}:${arg.start})")
             }
         }
         print(output.toString() + "\n")

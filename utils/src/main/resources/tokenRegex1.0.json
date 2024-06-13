@@ -2,9 +2,6 @@
   "token" : "LET",
   "regex" : "let"
 }, {
-  "token" : "CONST",
-  "regex" : "const"
-}, {
   "token" : "COLON",
   "regex" : ":"
 }, {
@@ -64,4 +61,4 @@
 }, {
   "token" : "STRING",
   "regex" : "\"[^\"]*\"|'[^']*'"
-} ]
+}]

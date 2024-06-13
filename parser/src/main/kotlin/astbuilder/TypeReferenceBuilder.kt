@@ -4,10 +4,9 @@ import Token
 import TypeReference
 
 class TypeReferenceBuilder(
-    tokens: List<Token>,
-    lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex) {
-    override fun verify(): ASTBuilderResult =
+    val tokens: List<Token>,
+) : ASTBuilder {
+    override fun verifyAndBuild(): ASTBuilderResult =
         tokens
             .firstOrNull()
             ?.let {
@@ -15,15 +14,14 @@ class TypeReferenceBuilder(
                     ASTBuilderSuccess(
                         TypeReference(
                             type = tokens.first().value,
+                            line = tokens.first().position.line,
                             start = tokens.first().position.start,
                             end = tokens.first().position.end,
                         ),
                     )
                 } else {
-                    ASTBuilderFailure("Invalid type")
+                    ASTBuilderFailure("Invalid type at (${it.position.line}:${it.position.start})")
                 }
             }
             ?: ASTBuilderFailure("Empty tokens")
-
-    override fun verifyAndBuild(): ASTBuilderResult = verify()
 }

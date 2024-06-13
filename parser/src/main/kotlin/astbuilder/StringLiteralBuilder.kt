@@ -4,14 +4,14 @@ import StringLiteral
 import Token
 
 class StringLiteralBuilder(
-    tokens: List<Token>,
-    val lineIndex: Int,
-) : AbstractASTBuilder(tokens, lineIndex), LiteralBuilder {
-    override fun verify(): ASTBuilderResult =
+    val tokens: List<Token>,
+) : LiteralBuilder {
+    override fun verifyAndBuild(): ASTBuilderResult =
         if (tokens.size == 1 && tokens[0].type == "STRING") {
             ASTBuilderSuccess(
                 StringLiteral(
                     tokens[0].value,
+                    tokens[0].position.line,
                     tokens[0].position.start,
                     tokens[0].position.end,
                 ),
@@ -19,6 +19,4 @@ class StringLiteralBuilder(
         } else {
             ASTBuilderFailure("Invalid string")
         }
-
-    override fun verifyAndBuild(): ASTBuilderResult = verify()
 }

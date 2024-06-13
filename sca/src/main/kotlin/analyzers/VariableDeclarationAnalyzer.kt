@@ -7,12 +7,12 @@ class VariableDeclarationAnalyzer : Analyzer {
     override fun analyze(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
-        lineIndex: Int,
+        version: String,
     ): String {
         var result = ""
         if (astNode is VariableDeclaration) {
             for (declaration in astNode.declarations) {
-                result += VariableDeclaratorAnalyzer().analyze(declaration, configMap, lineIndex)
+                result += VariableDeclaratorAnalyzer().analyze(declaration, configMap, version)
             }
         }
         return result

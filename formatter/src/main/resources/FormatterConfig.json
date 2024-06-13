@@ -2,5 +2,6 @@
   "spaceBeforeColon": 1,
   "spaceAfterColon": 1,
   "spacesInAssignSymbol": 1,
-  "lineJumpBeforePrintln": 1
+  "lineJumpBeforePrintln": 1,
+  "identationInsideConditionals": 1
 }

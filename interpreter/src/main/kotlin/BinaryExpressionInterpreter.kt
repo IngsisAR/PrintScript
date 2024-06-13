@@ -2,33 +2,33 @@ import java.math.BigDecimal
 
 class BinaryExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
+    private val version: String,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Any {
         require(node is BinaryExpression) { "Node must be an BinaryExpression" }
-        val leftValue =
-            when (val left = node.left) {
-                is NumberLiteral -> left.value
-                is StringLiteral -> left.value
-                is BinaryExpression -> interpret(left)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(left)
-                else -> throw IllegalArgumentException("Invalid expression")
-            }
-        val rightValue =
-            when (val right = node.right) {
-                is NumberLiteral -> right.value
-                is StringLiteral -> right.value
-                is BinaryExpression -> interpret(right)
-                is Identifier -> IdentifierInterpreter(variableMap).interpret(right)
-                else -> throw IllegalArgumentException("Invalid expression ")
-            }
-        return handleOperation(leftValue, rightValue, node.operator)
+        val leftValue = getOperandValue(node.left)
+        val rightValue = getOperandValue(node.right)
+        return handleOperation(leftValue, rightValue, node.operator, node.line, node.start)
     }
+
+    private fun getOperandValue(operand: Expression): Any =
+        when (operand) {
+            is NumberLiteral -> operand.value
+            is StringLiteral -> operand.value
+            is BinaryExpression -> interpret(operand)
+            is Identifier ->
+                IdentifierInterpreter(variableMap, version).interpret(operand)
+                    ?: throw IllegalArgumentException("Null value operand at (${operand.line}:${operand.start})")
+            else -> throw IllegalArgumentException("Invalid operand at (${operand.line}:${operand.end})")
+        }
 
     @Throws(IllegalArgumentException::class)
     private fun handleOperation(
         leftValue: Any,
         rightValue: Any,
         operator: String,
+        line: Int,
+        start: Int,
     ): Any {
         val result =
             when (operator) {
@@ -42,7 +42,7 @@ class BinaryExpressionInterpreter(
                             leftValue.toString() +
                                 rightValue.toString()
 
-                        else -> throw IllegalArgumentException("Invalid operands for '+': $leftValue, $rightValue")
+                        else -> throw IllegalArgumentException("Invalid operands for '+': $leftValue, $rightValue at ($line:$start)")
                     }
 
                 "-", "*", "/" ->
@@ -55,10 +55,12 @@ class BinaryExpressionInterpreter(
                                 else -> throw IllegalArgumentException("Invalid operator: $operator")
                             }
 
-                        else -> throw IllegalArgumentException("Invalid operands for '$operator': $leftValue, $rightValue")
+                        else -> throw IllegalArgumentException(
+                            "Invalid operands for '$operator': $leftValue, $rightValue at ($line:$start)",
+                        )
                     }
 
-                else -> throw IllegalArgumentException("Invalid operator: $operator")
+                else -> throw IllegalArgumentException("Invalid operator: $operator at ($line:$start)")
             }
         return result
     }
