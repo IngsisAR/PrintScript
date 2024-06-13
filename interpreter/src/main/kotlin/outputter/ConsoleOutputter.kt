@@ -1,13 +1,13 @@
 package outputter
 
-import ASTNode
-import BinaryExpression
-import BinaryExpressionInterpreter
-import CallExpression
-import Identifier
-import IdentifierInterpreter
-import Literal
-import VariableInfo
+import interpreter.BinaryExpressionInterpreter
+import interpreter.IdentifierInterpreter
+import interpreter.VariableInfo
+import utils.ASTNode
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.Identifier
+import utils.Literal
 
 class ConsoleOutputter(
     private val variableMap: Map<String, VariableInfo>,

@@ -1,6 +1,6 @@
 package astbuilder
 
-import Token
+import utils.Token
 
 class ASTProviderFactory(val tokens: List<Token>, val version: String) {
     private var providerByType: Map<String, ASTProvider> =

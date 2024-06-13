@@ -1,7 +1,7 @@
 package analyzers
 
-import ASTNode
-import ExpressionStatement
+import utils.ASTNode
+import utils.ExpressionStatement
 
 class ExpressionStatementAnalyzer : Analyzer {
     override fun analyze(

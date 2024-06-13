@@ -1,10 +1,10 @@
 package astbuilder
 
-import Expression
-import Identifier
-import Token
-import TypeReference
-import VariableDeclarator
+import utils.Expression
+import utils.Identifier
+import utils.Token
+import utils.TypeReference
+import utils.VariableDeclarator
 
 class VariableDeclaratorBuilder(
     val tokens: List<Token>,

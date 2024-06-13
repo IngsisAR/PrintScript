@@ -1,7 +1,7 @@
 package formatter
 
-import ASTNode
-import BinaryExpression
+import utils.ASTNode
+import utils.BinaryExpression
 
 class BinaryExpressionFormatter : Formatter {
     override fun format(

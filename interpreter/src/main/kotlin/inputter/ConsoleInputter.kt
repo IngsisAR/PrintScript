@@ -1,12 +1,12 @@
 package inputter
 
-import ASTNode
-import CallExpression
-import CallExpressionInterpreter
-import Identifier
-import IdentifierInterpreter
-import StringLiteral
-import VariableInfo
+import interpreter.CallExpressionInterpreter
+import interpreter.IdentifierInterpreter
+import interpreter.VariableInfo
+import utils.ASTNode
+import utils.CallExpression
+import utils.Identifier
+import utils.StringLiteral
 
 class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, private val version: String) : Inputter {
     override fun readInput(node: ASTNode): Any {

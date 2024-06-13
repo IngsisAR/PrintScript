@@ -1,3 +1,15 @@
+package interpreter
+
+import utils.ASTNode
+import utils.AssignmentExpression
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.ConditionalStatement
+import utils.ExpressionStatement
+import utils.Identifier
+import utils.VariableDeclaration
+import utils.VersionChecker
+
 class InterpreterImpl(
     val variableMap: Map<String, VariableInfo> = emptyMap(),
     val version: String,

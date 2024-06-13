@@ -1,8 +1,8 @@
 package astbuilder
 
-import Token
-import VariableDeclaration
-import VariableDeclarator
+import utils.Token
+import utils.VariableDeclaration
+import utils.VariableDeclarator
 
 class VariableDeclarationBuilder(
     val tokens: List<Token>,

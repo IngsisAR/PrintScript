@@ -1,6 +1,6 @@
 package inputter
 
-import ASTNode
+import utils.ASTNode
 
 interface Inputter {
     fun readInput(node: ASTNode): Any

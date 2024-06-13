@@ -1,8 +1,17 @@
+package cli
+
 import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderResult
 import astbuilder.ASTBuilderSuccess
 import astbuilder.ASTProviderFactory
 import formatter.FormatterImpl
+import interpreter.InterpreterImpl
+import lexer.Lexer
+import parser.Parser
+import sca.StaticCodeAnalyzer
+import utils.ASTNode
+import utils.PrintScriptChunkReader
+import utils.VersionChecker
 import java.io.File
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess

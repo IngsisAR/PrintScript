@@ -1,7 +1,7 @@
 package formatter
 
-import ASTNode
-import VariableDeclarator
+import utils.ASTNode
+import utils.VariableDeclarator
 
 class VariableDeclaratorFormatter : Formatter {
     override fun format(

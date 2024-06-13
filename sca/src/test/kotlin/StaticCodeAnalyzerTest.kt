@@ -1,5 +1,14 @@
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import sca.StaticCodeAnalyzer
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.ExpressionStatement
+import utils.Identifier
+import utils.NumberLiteral
+import utils.TypeReference
+import utils.VariableDeclaration
+import utils.VariableDeclarator
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import kotlin.io.path.Path

@@ -1,7 +1,7 @@
 package analyzers
 
-import ASTNode
-import VariableDeclaration
+import utils.ASTNode
+import utils.VariableDeclaration
 
 class VariableDeclarationAnalyzer : Analyzer {
     override fun analyze(

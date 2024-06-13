@@ -1,7 +1,7 @@
 package analyzers
 
-import ASTNode
-import Identifier
+import utils.ASTNode
+import utils.Identifier
 
 class IdentifierAnalyzer : Analyzer {
     private val allowedCasing = listOf("camel case", "snake case")

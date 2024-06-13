@@ -1,7 +1,7 @@
 package astbuilder
 
-import NumberLiteral
-import Token
+import utils.NumberLiteral
+import utils.Token
 
 class NumberLiteralBuilder(
     val tokens: List<Token>,

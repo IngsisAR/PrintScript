@@ -1,7 +1,7 @@
 package astbuilder
 
-import Identifier
-import Token
+import utils.Identifier
+import utils.Token
 
 class IdentifierBuilder(
     val tokens: List<Token>,

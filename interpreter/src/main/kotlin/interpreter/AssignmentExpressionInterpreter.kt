@@ -1,3 +1,13 @@
+package interpreter
+
+import utils.ASTNode
+import utils.AssignmentExpression
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.Identifier
+import utils.Literal
+import utils.VersionChecker
+
 class AssignmentExpressionInterpreter(
     private val variableMap: Map<String, VariableInfo>,
     private val version: String,

@@ -1,3 +1,11 @@
+package interpreter
+
+import utils.ASTNode
+import utils.BinaryExpression
+import utils.Identifier
+import utils.Literal
+import utils.VariableDeclarator
+
 class VariableDeclaratorInterpreter(
     private val variableMap: Map<String, VariableInfo>,
     private val kind: String,

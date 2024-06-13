@@ -1,9 +1,9 @@
 package astbuilder
 
-import Expression
-import Statement
-import Token
-import VersionChecker
+import utils.Expression
+import utils.Statement
+import utils.Token
+import utils.VersionChecker
 
 interface ASTProvider {
     fun getASTBuilderResult(): ASTBuilderResult

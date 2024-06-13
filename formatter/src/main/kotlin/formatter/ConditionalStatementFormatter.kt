@@ -1,10 +1,10 @@
 package formatter
 
-import ASTNode
-import CallExpression
-import ConditionalStatement
-import ExpressionStatement
-import Statement
+import utils.ASTNode
+import utils.CallExpression
+import utils.ConditionalStatement
+import utils.ExpressionStatement
+import utils.Statement
 
 class ConditionalStatementFormatter : Formatter {
     override fun format(

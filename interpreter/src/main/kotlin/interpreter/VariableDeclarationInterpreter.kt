@@ -1,3 +1,8 @@
+package interpreter
+
+import utils.ASTNode
+import utils.VariableDeclaration
+
 class VariableDeclarationInterpreter(
     private val variableMap: Map<String, VariableInfo>,
     private val version: String,
