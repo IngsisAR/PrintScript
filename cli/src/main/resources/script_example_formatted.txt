@@ -1,5 +1,2 @@
-const booleanValue: boolean = false;
-if(booleanValue) {
-    println("if statement is not working correctly");
-}
-println("outside of conditional");
+const name: string = readInput("Name:");
+println("Hello " + name + "!");
