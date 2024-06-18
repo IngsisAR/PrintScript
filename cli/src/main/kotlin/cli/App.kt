@@ -10,7 +10,9 @@ import lexer.Lexer
 import parser.Parser
 import sca.StaticCodeAnalyzer
 import utils.ASTNode
+import utils.PrintOutputProvider
 import utils.PrintScriptChunkReader
+import utils.SystemInputProvider
 import utils.VersionChecker
 import java.io.File
 import kotlin.math.roundToInt
@@ -94,7 +96,7 @@ private fun validate(fileChunks: List<String>): List<ASTNode> {
 }
 
 private fun execute(fileLines: List<String>) {
-    var interpreter = InterpreterImpl(version = version)
+    var interpreter = InterpreterImpl(version = version, outputProvider = PrintOutputProvider(), inputProvider = SystemInputProvider())
     val astNodes = validate(fileLines)
     if (astNodes.isEmpty()) return
     for (ast in astNodes) {

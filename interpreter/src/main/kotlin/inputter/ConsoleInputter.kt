@@ -6,9 +6,16 @@ import interpreter.VariableInfo
 import utils.ASTNode
 import utils.CallExpression
 import utils.Identifier
+import utils.InputProvider
+import utils.OutputProvider
 import utils.StringLiteral
 
-class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, private val version: String) : Inputter {
+class ConsoleInputter(
+    private val variableMap: Map<String, VariableInfo>,
+    private val version: String,
+    private val outputProvider: OutputProvider,
+    private val inputProvider: InputProvider,
+) : Inputter {
     override fun readInput(node: ASTNode): Any {
         val text =
             when (node) {
@@ -27,7 +34,7 @@ class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, privat
                     }
                 }
                 is CallExpression -> {
-                    val result = CallExpressionInterpreter(variableMap, version).interpret(node)
+                    val result = CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(node)
                     if (result is String) {
                         result
                     } else {
@@ -40,14 +47,14 @@ class ConsoleInputter(private val variableMap: Map<String, VariableInfo>, privat
                 else -> ""
             }
         print(text)
-        val input = readlnOrNull()
+        val input = inputProvider.readInput(text)
         return when {
             input?.matches("true|false".toRegex()) == true -> input.toBoolean()
             input?.matches("\\d+(\\.\\d+)?".toRegex()) == true -> {
                 input.toIntOrNull() ?: (input.toDoubleOrNull() ?: "")
             }
             input?.matches("\"[^\"]*\"|'[^']*'".toRegex()) == true -> input.removeSurrounding("\"").removeSurrounding("'")
-            else -> input ?: ""
+            else -> input
         }
     }
 }
