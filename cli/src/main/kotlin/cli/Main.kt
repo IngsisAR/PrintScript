@@ -19,7 +19,7 @@ fun main() {
 //        let d : number = 3.1;
 //        d = readInput("input: ");
 //        println(d);
-//        let b : bool = true;
+//        let b : boolean = true;
 //
 //
 //        if (b) {

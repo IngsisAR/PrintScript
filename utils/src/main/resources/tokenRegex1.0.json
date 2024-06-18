@@ -51,10 +51,10 @@
   "regex" : "program"
 }, {
   "token" : "ID",
-  "regex" : "(?!\\b(?:number|string|float|bool)\\b)[a-zA-Z_][a-zA-Z0-9_]*"
+  "regex" : "(?!\\b(?:number|string|float|boolean)\\b)[a-zA-Z_][a-zA-Z0-9_]*"
 }, {
   "token" : "TYPE",
-  "regex" : "number|string|float|bool"
+  "regex" : "number|string|float|boolean"
 }, {
   "token" : "NUMBER",
   "regex" : "\\d+(\\.\\d+)?"

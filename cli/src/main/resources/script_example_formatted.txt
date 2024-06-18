@@ -1,25 +1,5 @@
-let a : string = 8 + "th";
-a = readEnv("PATH");
-
-println(a);
-let d : number = 3.1;
-d = readInput("input: ");
-
-println(d);
-let b : bool = true;
-if(b) {
-    
-    println("a is 4");
-    if(b) {
-        
-        println("b is 4");
-    } else {
-        
-        println("b is not 4");
-    }
-
-    b;
-} else {
-    
-    println("a is not 4");
+const booleanValue: boolean = false;
+if(booleanValue) {
+    println("if statement is not working correctly");
 }
+println("outside of conditional");

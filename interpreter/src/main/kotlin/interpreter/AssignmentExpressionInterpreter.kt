@@ -50,7 +50,7 @@ class AssignmentExpressionInterpreter(
             when {
                 newValue is Number -> "number"
                 newValue is String -> "string"
-                newValue is Boolean && VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version) -> "bool"
+                newValue is Boolean && VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version) -> "boolean"
                 newValue == null -> variable.type
                 else -> throw IllegalArgumentException(
                     "Unsupported value type: ${newValue::class.simpleName} " +

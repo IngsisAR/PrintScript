@@ -1011,7 +1011,7 @@ class InterpreterTest {
             InterpreterImpl(
                 mapOf(
                     "a" to VariableInfo("number", "1", true),
-                    "b" to VariableInfo("bool", "true", true),
+                    "b" to VariableInfo("boolean", "true", true),
                 ),
                 "1.1.0",
                 outputProvider = outputProvider,
@@ -1019,7 +1019,7 @@ class InterpreterTest {
             )
         /*
         let a:number = 1;
-        let b:bool = true;
+        let b:boolean = true;
         if(b) {
             println(a);
         }
@@ -1060,7 +1060,7 @@ class InterpreterTest {
             InterpreterImpl(
                 mapOf(
                     "a" to VariableInfo("number", "1", true),
-                    "b" to VariableInfo("bool", "false", true),
+                    "b" to VariableInfo("boolean", "false", true),
                     "c" to VariableInfo("number", "2", true),
                 ),
                 "1.1.0",
@@ -1069,7 +1069,7 @@ class InterpreterTest {
             )
         /*
         let a:number = 1;
-        let b:bool = false;
+        let b:boolean = false;
         let c:number = 2;
         if(b) {
             println(a);
@@ -1278,7 +1278,7 @@ class InterpreterTest {
 
     @Test
     fun interpretCallExpression_ReadUserInput_with_IdentifierBooleanAsArgument_ShouldThrowException() {
-        val variableMap = mapOf("b" to VariableInfo("bool", "true", true))
+        val variableMap = mapOf("b" to VariableInfo("boolean", "true", true))
         val interpreter = CallExpressionInterpreter(variableMap, "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
 
         val input = "true"
@@ -1338,7 +1338,7 @@ class InterpreterTest {
             InterpreterImpl(
                 mapOf(
                     "a" to VariableInfo("number", "1", true),
-                    "b" to VariableInfo("bool", "true", true),
+                    "b" to VariableInfo("boolean", "true", true),
                 ),
                 "1.0.0",
                 outputProvider = outputProvider,
@@ -1378,7 +1378,7 @@ class InterpreterTest {
         val interpreter =
             InterpreterImpl(
                 mapOf(
-                    "a" to VariableInfo("bool", null, true),
+                    "a" to VariableInfo("boolean", null, true),
                 ),
                 "1.0.0",
                 outputProvider = outputProvider,
