@@ -26,7 +26,7 @@ class VersionChecker {
 
     private fun structureIsValid(version: String): Boolean {
         val versionSplit = version.split(".")
-        return versionSplit.size == 3
+        return versionSplit.size == 2
     }
 
     private fun versionIsAvailable(version: String): Boolean {

@@ -46,7 +46,7 @@ class ConsoleInputter(
                 }
                 else -> ""
             }
-        print(text)
+        outputProvider.print(text)
         val input = inputProvider.readInput(text)
         return when {
             input?.matches("true|false".toRegex()) == true -> input.toBoolean()

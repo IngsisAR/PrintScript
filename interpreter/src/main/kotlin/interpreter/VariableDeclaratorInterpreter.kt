@@ -8,6 +8,7 @@ import utils.InputProvider
 import utils.Literal
 import utils.OutputProvider
 import utils.VariableDeclarator
+import utils.VersionChecker
 
 class VariableDeclaratorInterpreter(
     private val variableMap: Map<String, VariableInfo>,
@@ -33,6 +34,28 @@ class VariableDeclaratorInterpreter(
                 }
             }
 
+        checkTypeMatches(type, value, node.init ?: node.id)
         return mapOf(id to VariableInfo(type, value?.toString(), kind == "let"))
+    }
+
+    private fun checkTypeMatches(
+        expectedType: String,
+        newValue: Any?,
+        assignedNode: ASTNode,
+    ) {
+        val gottenType =
+            when {
+                newValue is Number -> "number"
+                newValue is String -> "string"
+                newValue is Boolean && VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version) -> "boolean"
+                newValue == null -> expectedType
+                else -> throw IllegalArgumentException(
+                    "Unsupported value type: ${newValue::class.simpleName} " +
+                        "at (${assignedNode.line}:${assignedNode.start})",
+                )
+            }
+        require(expectedType == gottenType) {
+            "Type mismatch: expected $expectedType, got $gottenType at (${assignedNode.line}:${assignedNode.start})"
+        }
     }
 }
