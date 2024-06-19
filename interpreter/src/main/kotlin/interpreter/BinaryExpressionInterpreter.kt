@@ -1,3 +1,11 @@
+package interpreter
+
+import utils.ASTNode
+import utils.BinaryExpression
+import utils.Expression
+import utils.Identifier
+import utils.NumberLiteral
+import utils.StringLiteral
 import java.math.BigDecimal
 
 class BinaryExpressionInterpreter(

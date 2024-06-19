@@ -1,10 +1,10 @@
 package formatter
 
-import ASTNode
-import ConditionalStatement
-import ExpressionStatement
-import Statement
-import VariableDeclaration
+import utils.ASTNode
+import utils.ConditionalStatement
+import utils.ExpressionStatement
+import utils.Statement
+import utils.VariableDeclaration
 
 /**
  * @author Agustin Augurusa

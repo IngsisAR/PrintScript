@@ -1,9 +1,9 @@
 package astbuilder
 
-import AssignmentExpression
-import Expression
-import Identifier
-import Token
+import utils.AssignmentExpression
+import utils.Expression
+import utils.Identifier
+import utils.Token
 
 class AssignmentExpressionBuilder(
     val tokens: List<Token>,

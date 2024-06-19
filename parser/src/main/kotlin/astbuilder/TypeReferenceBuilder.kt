@@ -1,7 +1,7 @@
 package astbuilder
 
-import Token
-import TypeReference
+import utils.Token
+import utils.TypeReference
 
 class TypeReferenceBuilder(
     val tokens: List<Token>,

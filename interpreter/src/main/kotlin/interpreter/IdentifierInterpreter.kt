@@ -1,3 +1,9 @@
+package interpreter
+
+import utils.ASTNode
+import utils.Identifier
+import utils.VersionChecker
+
 class IdentifierInterpreter(
     private val variableMap: Map<String, VariableInfo>,
     private val version: String,
@@ -8,7 +14,7 @@ class IdentifierInterpreter(
         return when {
             variableInfo.type == "string" -> variableInfo.value
             variableInfo.type == "number" -> variableInfo.value?.toBigDecimal()
-            variableInfo.type == "bool" &&
+            variableInfo.type == "boolean" &&
                 VersionChecker().versionIsSameOrOlderThanCurrentVersion("1.1.0", version)
             -> variableInfo.value.toBoolean()
             else -> throw IllegalArgumentException("Unsupported variable type")

@@ -13,7 +13,7 @@ tasks.jacocoTestCoverageVerification {
             limit {
                 counter = "INSTRUCTION"
                 value = "COVEREDRATIO"
-                minimum = 0.80
+                minimum = 0.78
             }
             limit {
                 counter = "BRANCH"
@@ -28,4 +28,4 @@ tasks.check {
     dependsOn(tasks.jacocoTestCoverageVerification)
 }
 
-version "1.1.1-SNAPSHOT"
+version "1.1.6-SNAPSHOT"

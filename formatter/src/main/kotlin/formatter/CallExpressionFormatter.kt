@@ -1,7 +1,7 @@
 package formatter
 
-import ASTNode
-import CallExpression
+import utils.ASTNode
+import utils.CallExpression
 
 class CallExpressionFormatter : Formatter {
     override fun format(

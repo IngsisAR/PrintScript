@@ -1,6 +1,6 @@
 package formatter
 
-import ASTNode
+import utils.ASTNode
 
 interface Formatter {
     fun format(

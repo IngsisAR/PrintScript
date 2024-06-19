@@ -1,13 +1,13 @@
 package astbuilder
 
-import BinaryExpression
-import CallExpression
-import Expression
-import Identifier
-import NumberLiteral
-import Position
-import StringLiteral
-import Token
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.Expression
+import utils.Identifier
+import utils.NumberLiteral
+import utils.Position
+import utils.StringLiteral
+import utils.Token
 import java.util.Stack
 
 class BinaryExpressionBuilder(

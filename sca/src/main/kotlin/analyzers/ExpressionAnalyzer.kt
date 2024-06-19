@@ -1,8 +1,8 @@
 package analyzers
 
-import ASTNode
-import CallExpression
-import Identifier
+import utils.ASTNode
+import utils.CallExpression
+import utils.Identifier
 
 class ExpressionAnalyzer : Analyzer {
     override fun analyze(

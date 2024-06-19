@@ -1,8 +1,8 @@
 package astbuilder
 
-import Expression
-import ExpressionStatement
-import Token
+import utils.Expression
+import utils.ExpressionStatement
+import utils.Token
 
 class ExpressionStatementBuilder(
     val tokens: List<Token>,

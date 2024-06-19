@@ -1,9 +1,16 @@
+package sca
+
 import analyzers.CallExpressionAnalyzer
 import analyzers.ExpressionStatementAnalyzer
 import analyzers.IdentifierAnalyzer
 import analyzers.VariableDeclarationAnalyzer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import utils.ASTNode
+import utils.CallExpression
+import utils.ExpressionStatement
+import utils.Identifier
+import utils.VariableDeclaration
 import java.io.File
 
 class StaticCodeAnalyzer {

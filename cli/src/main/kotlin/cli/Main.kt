@@ -1,7 +1,12 @@
+package cli
+
 import astbuilder.ASTBuilderFailure
 import astbuilder.ASTBuilderSuccess
 import astbuilder.ASTProviderFactory
 import formatter.FormatterImpl
+import lexer.Lexer
+import parser.Parser
+import utils.PrintScriptChunkReader
 
 fun main() {
     val printScriptChunkReader = PrintScriptChunkReader()
@@ -14,7 +19,7 @@ fun main() {
 //        let d : number = 3.1;
 //        d = readInput("input: ");
 //        println(d);
-//        let b : bool = true;
+//        let b : boolean = true;
 //
 //
 //        if (b) {
@@ -37,11 +42,11 @@ fun main() {
 }
 
 private fun performFromChunks(fileChunks: List<String>) {
-//    var interpreter = InterpreterImpl()
+//    var interpreter = interpreter.InterpreterImpl()
     var chunkStartLine = 1
     for (chunk in fileChunks) {
         println(chunk + "\n")
-        println("Lexer output")
+        println("lexer.Lexer output")
         val lexer = Lexer(chunk, chunkStartLine, "utils/src/main/resources/tokenRegex1.1.json")
         val tokens = lexer.tokenize()
         tokens.forEach { println(it) }

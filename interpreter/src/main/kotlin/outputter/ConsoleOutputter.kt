@@ -1,17 +1,19 @@
 package outputter
 
-import ASTNode
-import BinaryExpression
-import BinaryExpressionInterpreter
-import CallExpression
-import Identifier
-import IdentifierInterpreter
-import Literal
-import VariableInfo
+import interpreter.BinaryExpressionInterpreter
+import interpreter.IdentifierInterpreter
+import interpreter.VariableInfo
+import utils.ASTNode
+import utils.BinaryExpression
+import utils.CallExpression
+import utils.Identifier
+import utils.Literal
+import utils.OutputProvider
 
 class ConsoleOutputter(
     private val variableMap: Map<String, VariableInfo>,
     private val version: String,
+    private val outputProvider: OutputProvider,
 ) : Outputter {
     override fun output(node: ASTNode) {
         require(node is CallExpression) { "Node must be a CallExpression at (${node.line}:${node.start})" }
@@ -24,6 +26,6 @@ class ConsoleOutputter(
                 else -> throw IllegalArgumentException("Function not found at (${arg.line}:${arg.start})")
             }
         }
-        print(output.toString() + "\n")
+        outputProvider.print(output.toString())
     }
 }

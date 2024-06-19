@@ -1,6 +1,6 @@
 package astbuilder
 
-import ASTNode
+import utils.ASTNode
 
 sealed interface ASTBuilderResult
 

@@ -1,5 +1,10 @@
+package lexer
+
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import utils.Position
+import utils.Token
+import utils.TokenRegex
 import java.io.File
 
 class Lexer(

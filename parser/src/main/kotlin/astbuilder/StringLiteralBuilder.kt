@@ -1,7 +1,7 @@
 package astbuilder
 
-import StringLiteral
-import Token
+import utils.StringLiteral
+import utils.Token
 
 class StringLiteralBuilder(
     val tokens: List<Token>,

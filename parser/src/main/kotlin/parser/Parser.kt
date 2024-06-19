@@ -1,3 +1,5 @@
+package parser
+
 import astbuilder.ASTBuilderResult
 import astbuilder.ASTProviderFactory
 import astbuilder.StatementProvider

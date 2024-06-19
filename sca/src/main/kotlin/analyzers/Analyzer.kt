@@ -1,6 +1,6 @@
 package analyzers
 
-import ASTNode
+import utils.ASTNode
 
 interface Analyzer {
     fun analyze(

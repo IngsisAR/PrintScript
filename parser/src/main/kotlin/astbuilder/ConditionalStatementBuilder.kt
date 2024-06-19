@@ -1,9 +1,9 @@
 package astbuilder
 
-import ConditionalStatement
-import Identifier
-import Statement
-import Token
+import utils.ConditionalStatement
+import utils.Identifier
+import utils.Statement
+import utils.Token
 
 class ConditionalStatementBuilder(
     val tokens: List<Token>,

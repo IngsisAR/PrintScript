@@ -1,10 +1,10 @@
 package analyzers
 
-import ASTNode
-import CallExpression
-import Identifier
-import Literal
-import VersionChecker
+import utils.ASTNode
+import utils.CallExpression
+import utils.Identifier
+import utils.Literal
+import utils.VersionChecker
 
 class CallExpressionAnalyzer : Analyzer {
     override fun analyze(

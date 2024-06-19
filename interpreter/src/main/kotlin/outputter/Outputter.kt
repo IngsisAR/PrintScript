@@ -1,6 +1,6 @@
 package outputter
 
-import ASTNode
+import utils.ASTNode
 
 interface Outputter {
     fun output(node: ASTNode)

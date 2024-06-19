@@ -1,3 +1,5 @@
+package utils
+
 sealed interface ASTNode {
     val line: Int
     val start: Int

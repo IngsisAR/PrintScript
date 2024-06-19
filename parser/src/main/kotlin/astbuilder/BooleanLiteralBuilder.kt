@@ -1,7 +1,7 @@
 package astbuilder
 
-import BooleanLiteral
-import Token
+import utils.BooleanLiteral
+import utils.Token
 
 class BooleanLiteralBuilder(
     val tokens: List<Token>,

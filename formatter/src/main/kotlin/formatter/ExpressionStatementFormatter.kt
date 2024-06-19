@@ -1,7 +1,7 @@
 package formatter
 
-import ASTNode
-import ExpressionStatement
+import utils.ASTNode
+import utils.ExpressionStatement
 
 class ExpressionStatementFormatter : Formatter {
     override fun format(
