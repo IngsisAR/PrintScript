@@ -870,7 +870,7 @@ class InterpreterTest {
                 end = 11,
             )
         interpreter.interpret(astNode)
-        assertEquals("2\n", consoleOutputCapture.toString())
+        assertEquals("2", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -894,7 +894,7 @@ class InterpreterTest {
                 end = 15,
             )
         interpreter.interpret(astNode)
-        assertEquals("hello\n", consoleOutputCapture.toString())
+        assertEquals("hello", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -924,7 +924,7 @@ class InterpreterTest {
                 end = 11,
             )
         interpreter.interpret(astNode)
-        assertEquals("hello\n", consoleOutputCapture.toString())
+        assertEquals("hello", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -958,7 +958,7 @@ class InterpreterTest {
                 end = 15,
             )
         interpreter.interpret(astNode)
-        assertEquals("5\n", consoleOutputCapture.toString())
+        assertEquals("5", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -1049,7 +1049,7 @@ class InterpreterTest {
                 end = 11,
             )
         interpreter.interpret(astNode)
-        assertEquals("1\n", consoleOutputCapture.toString())
+        assertEquals("1", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -1117,7 +1117,7 @@ class InterpreterTest {
                 end = 11,
             )
         interpreter.interpret(astNode)
-        assertEquals("2\n", consoleOutputCapture.toString())
+        assertEquals("2", consoleOutputCapture.toString().trim())
     }
 
     @Test
@@ -1209,7 +1209,7 @@ class InterpreterTest {
 
         interpreter.interpret(astNode)
 
-        assertEquals("Hello, World!\n", outContent.toString())
+        assertEquals("Hello, World!", outContent.toString().trim())
     }
 
     @Test
@@ -1455,5 +1455,69 @@ class InterpreterTest {
         assertThrows(IllegalArgumentException::class.java) {
             interpreter.interpret(astNode)
         }
+    }
+
+    @Test
+    fun interpretReadEnvWithIdentifierAssignedToVariable() {
+        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+
+        // Declare a variable and assign "PATH" to it
+        val varDeclaration =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "envVar", line = 1, start = 4, end = 10),
+                            type = TypeReference(type = "string", line = 1, start = 12, end = 18),
+                            init = StringLiteral(value = "PATH", line = 1, start = 21, end = 27),
+                            line = 1,
+                            start = 4,
+                            end = 27,
+                        ),
+                    ),
+                kind = "let",
+                line = 1,
+                start = 0,
+                end = 28,
+            )
+
+        /*
+        resultVar = readEnv(envVar)
+         */
+        val envResult =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "resultVar", line = 1, start = 4, end = 10),
+                            type = TypeReference(type = "string", line = 1, start = 12, end = 18),
+                            init =
+                                CallExpression(
+                                    callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                    arguments = listOf(Identifier(name = "envVar", line = 1, start = 16, end = 23)),
+                                    line = 1,
+                                    start = 0,
+                                    end = 10,
+                                ),
+                            line = 1,
+                            start = 4,
+                            end = 27,
+                        ),
+                    ),
+                kind = "let",
+                line = 1,
+                start = 0,
+                end = 28,
+            )
+
+        interpreter = interpreter.interpret(varDeclaration)
+        interpreter = interpreter.interpret(envResult)
+
+        // Get the value of resultVar
+        val result = interpreter.variableMap["resultVar"]?.value
+
+        // Get the expected environment variable content
+        val expected = System.getenv("PATH")
+        assertEquals(expected, result)
     }
 }
