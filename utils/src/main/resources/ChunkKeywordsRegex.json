@@ -1,0 +1,9 @@
+{
+  "declarators": [
+    "let",
+    "const"
+  ],
+  "followUpConditional": "else",
+  "startConditional": "if",
+  "identifier" : "(?!\\b(?:number|string|float|boolean|true|false)\\b)[a-zA-Z_][a-zA-Z0-9_]*"
+}

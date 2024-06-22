@@ -1,11 +1,24 @@
 package utils
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
 
+data class ChunkKeywordRegex(
+    @JsonProperty("declarators") val declarators: List<String>,
+    @JsonProperty("followUpConditional") val followUpConditional: String,
+    @JsonProperty("startConditional") val startConditional: String,
+    @JsonProperty("identifier") val identifier: String,
+)
+
 class PrintScriptChunkReader {
+    private val chunkKeywordsJsonPath = "utils/src/main/resources/ChunkKeywordsRegex.json"
+    private val chunkKeywordsRegex: ChunkKeywordRegex = jacksonObjectMapper().readValue(File(chunkKeywordsJsonPath))
+
     fun readChunksFromString(string: String): List<String> {
-        val lines = mutableListOf<String>()
-        var currentLine = ""
+        val chunks = mutableListOf<String>()
+        var currentChunk = ""
         var braceCount = 0
         var elseCount = 0
         // Normaliza los saltos de línea al leer el archivo
@@ -15,21 +28,22 @@ class PrintScriptChunkReader {
             when (char) {
                 '{' -> {
                     braceCount++
-                    currentLine += char
+                    currentChunk += char
                 }
 
                 '}' -> {
                     braceCount--
-                    currentLine += char
+                    currentChunk += char
                     if (braceCount == 0) {
                         val elseIsNext =
                             normalizedString.substring(index + 1).replace('}', ' ')
-                                .trim().startsWith("else")
+                                .trim().startsWith(chunkKeywordsRegex.followUpConditional)
                         if (elseIsNext && elseCount == 0) {
                             elseCount++
                         } else if (!elseIsNext || elseCount > 0) {
-                            lines.add(currentLine.trim())
-                            currentLine = ""
+                            chunks.add(currentChunk.trim())
+                            currentChunk = ""
+                            elseCount = 0
                         }
                     }
                 }
@@ -37,27 +51,27 @@ class PrintScriptChunkReader {
                 ';' -> {
                     if (braceCount == 0) {
                         // Solo consideramos ; como el final de una línea si no estamos dentro de un bloque
-                        currentLine += char
-                        lines.add(currentLine.trim())
-                        currentLine = ""
+                        currentChunk += char
+                        chunks.add(currentChunk.trim())
+                        currentChunk = ""
                     } else {
-                        currentLine += char
+                        currentChunk += char
                     }
                 }
 
                 '\n' -> {
-                    if (braceCount == 0 && normalizedString[index - 1] != ';' &&
-                        normalizedString[index - 1] != '{' && normalizedString[index - 1] != '}'
-                    ) {
-                        lines.add(currentLine.trim())
-                    } else if (braceCount != 0) {
-                        currentLine += char
+                    val nextIsKeyword = checkNextIsKeyword(normalizedString.substring(index + 1))
+                    if (braceCount == 0 && normalizedString[index - 1] != ';' && nextIsKeyword) {
+                        chunks.add(currentChunk.trim())
+                        currentChunk = ""
+                    } else {
+                        currentChunk += char
                     }
                 }
 
                 else -> {
-                    currentLine += char
-                    if (currentLine.toByteArray().size > 8192) {
+                    currentChunk += char
+                    if (currentChunk.toByteArray().size > 8192) {
                         break
                     }
                 }
@@ -65,12 +79,25 @@ class PrintScriptChunkReader {
         }
 
         // Agrega cualquier línea restante
-        if (currentLine.trim().isNotEmpty()) {
-            lines.add(currentLine)
+        if (currentChunk.trim().isNotEmpty()) {
+            chunks.add(currentChunk)
         }
 
-        return lines
+        return chunks
     }
 
     fun readChunksFromFile(fileName: String): List<String> = readChunksFromString(File(fileName).readText())
+
+    private fun checkNextIsKeyword(input: String): Boolean {
+        val allKeywords =
+            chunkKeywordsRegex.declarators +
+                listOf(chunkKeywordsRegex.followUpConditional, chunkKeywordsRegex.startConditional, chunkKeywordsRegex.identifier)
+
+        // Combine all regexes into one pattern
+        val combinedRegex = allKeywords.joinToString(separator = "|").toRegex()
+        val matchResult = combinedRegex.find(input.trimStart())
+
+        // Check if there is a match at the beginning of the input
+        return matchResult?.range?.first == 0
+    }
 }
