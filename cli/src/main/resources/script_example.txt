@@ -4,17 +4,21 @@ println(a);
 let d : number = 3.1;
 d = readInput("input: ");
 println(d);
-let b : boolean = true;
 
 
-if (b) {
-    println("a is 4");
-    if(b){
-        println("b is 4");
-    } else {
-        println("b is not 4");
-    }
-    b;
-} else {
-    println("a is not 4");
+
+let b
+ :
+ boolean=
+ true
+ ;
+
+ let a:
+ number=
+ 2;
+
+if
+(a
+)
+{
 }
