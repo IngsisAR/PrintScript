@@ -7,16 +7,20 @@ class CallExpressionFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
-        astNode as CallExpression
+        require(astNode is CallExpression) {
+            "CallExpressionFormatter can only format CallExpression nodes."
+        }
         return when (astNode.callee.name) {
-            "println" -> formatPrintln(astNode, configMap)
+            "println" -> formatPrintln(astNode, configMap, version)
             else ->
                 astNode.callee.name + "(" +
                     astNode.arguments.joinToString(", ") {
                         ExpressionFormatter().format(
                             it,
                             configMap,
+                            version,
                         )
                     } + ")"
         }
@@ -25,6 +29,7 @@ class CallExpressionFormatter : Formatter {
     private fun formatPrintln(
         function: CallExpression,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
         val lineJumpBeforePrintln = (configMap["lineJumpBeforePrintln"] as? Int)?.takeIf { it > 0 } ?: 0
         val lineJump =
@@ -37,6 +42,7 @@ class CallExpressionFormatter : Formatter {
                 ExpressionFormatter().format(
                     it,
                     configMap,
+                    version,
                 )
             } + ")"
     }

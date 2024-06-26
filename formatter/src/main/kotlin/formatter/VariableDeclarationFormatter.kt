@@ -7,8 +7,14 @@ class VariableDeclarationFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
-        astNode as VariableDeclaration
-        return astNode.kind + " " + astNode.declarations.joinToString(", ") { VariableDeclaratorFormatter().format(it, configMap) } + ";\n"
+        require(astNode is VariableDeclaration) {
+            "VariableDeclarationFormatter can only format VariableDeclaration nodes."
+        }
+        return astNode.kind + " " +
+            astNode.declarations.joinToString(", ") {
+                VariableDeclaratorFormatter().format(it, configMap, version)
+            } + ";\n"
     }
 }
