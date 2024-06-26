@@ -26,7 +26,7 @@ class VariableDeclaratorInterpreter(
         val value =
             node.init?.let {
                 when (it) {
-                    is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version).interpret(it)
+                    is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(it)
                     is Identifier -> IdentifierInterpreter(variableMap, version).interpret(it)
                     is CallExpression -> CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(it)
                     is Literal -> it.value

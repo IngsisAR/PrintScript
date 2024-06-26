@@ -27,7 +27,7 @@ class AssignmentExpressionInterpreter(
         val newValue =
             when (val right = node.right) {
                 is Literal -> right.value
-                is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version).interpret(right)
+                is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(right)
                 is Identifier -> IdentifierInterpreter(variableMap, version).interpret(right)
                 is CallExpression -> CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(right)
                 else -> throw IllegalArgumentException(

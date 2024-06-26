@@ -38,7 +38,9 @@ class CallExpressionBuilder(
                     if (expressionResult.errorMessage.isNotBlank() || expressionResult.errorMessage.isNotEmpty()) {
                         return ASTBuilderFailure("Call expression does not have valid argument: ${expressionResult.errorMessage}")
                     }
-                    return ASTBuilderFailure("Call expression does not have valid argument at ")
+                    return ASTBuilderFailure(
+                        "Call expression does not have valid argument at (${tokens[2].position.line}:${tokens[2].position.start})",
+                    )
                 }
                 arguments = listOf((expressionResult as ASTBuilderSuccess).astNode as Expression)
                 return ASTBuilderSuccess(
@@ -81,7 +83,15 @@ class CallExpressionBuilder(
                 ),
             )
         } else {
-            return ASTBuilderFailure("Call expression does not have valid argument")
+            return ASTBuilderSuccess(
+                CallExpression(
+                    callee = (identifierResult as ASTBuilderSuccess).astNode as Identifier,
+                    arguments = arguments,
+                    line = tokens.first().position.line,
+                    start = tokens.first().position.start,
+                    end = tokens.last().position.end,
+                ),
+            )
         }
     }
 }

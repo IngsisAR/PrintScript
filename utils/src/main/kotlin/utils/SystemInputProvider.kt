@@ -1,7 +1,7 @@
 package utils
 
 class SystemInputProvider : InputProvider {
-    override fun readInput(string: String): String {
+    override fun readInput(): String {
         val input = readlnOrNull()
         return input.toString()
     }

@@ -22,7 +22,7 @@ class InterpreterImpl(
         var internalVariableMap: Map<String, VariableInfo> = variableMap
 
         when {
-            node is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version).interpret(node)
+            node is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(node)
             node is AssignmentExpression ->
                 internalVariableMap =
                     AssignmentExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(
