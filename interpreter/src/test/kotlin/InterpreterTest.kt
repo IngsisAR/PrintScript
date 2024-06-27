@@ -419,7 +419,7 @@ class InterpreterTest {
 
     @Test
     fun interpretingPlusOperation_withNullOperand_ShouldThrowException() {
-        var interpreter =
+        val interpreter =
             InterpreterImpl(
                 mapOf(
                     "a" to VariableInfo("string", null, true),

@@ -61,9 +61,11 @@ class PrintScriptChunkReader {
 
                 '\n' -> {
                     val nextIsKeyword = checkNextIsKeyword(normalizedString.substring(index + 1))
-                    if (braceCount == 0 && normalizedString[index - 1] != ';' && nextIsKeyword) {
+                    if (braceCount == 0 && currentChunk.isNotEmpty() && nextIsKeyword) {
                         chunks.add(currentChunk.trim())
                         currentChunk = ""
+                    } else if (currentChunk.isEmpty()) {
+                        continue
                     } else {
                         currentChunk += char
                     }
