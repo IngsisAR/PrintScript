@@ -1,20 +1,3 @@
 #!/bin/sh
 
-#echo "Checking format"
-#
-#./gradlew ktlintFormat
-#
-#if [ $? -ne 0 ]; then
-#  echo "ktlintFormat task failed, aborting commit."
-#  exit 1
-#fi
-#
-#echo "Checking build"
-#
-#./gradlew build
-#if [ $? -ne 0 ]; then
-#  echo "Build task failed, aborting commit."
-#  exit 1
-#fi
-
 echo "Ready for commit"
