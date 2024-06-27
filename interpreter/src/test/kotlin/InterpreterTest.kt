@@ -374,7 +374,7 @@ class InterpreterTest {
     }
 
     @Test
-    fun interpretingStringIdentifiersInPlusOperationShouldResultInConcatenation() {
+    fun interpretingStringIdentifiers_InPlusOperation_ShouldResultInConcatenation() {
         var interpreter =
             InterpreterImpl(
                 mapOf(
@@ -415,6 +415,106 @@ class InterpreterTest {
         val resultVariableMap = interpreter.variableMap
 
         assertVariableInfo(resultVariableMap, "c", "string", true, "hello world")
+    }
+
+    @Test
+    fun interpretingPlusOperation_withNullOperand_ShouldThrowException() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("string", null, true),
+                    "b" to VariableInfo("string", "world", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        val astNode =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "c", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+                            init =
+                                BinaryExpression(
+                                    left = Identifier(name = "a", line = 1, start = 16, end = 20),
+                                    right = Identifier(name = "b", line = 1, start = 23, end = 28),
+                                    operator = "+",
+                                    line = 1,
+                                    start = 16,
+                                    end = 28,
+                                ),
+                            line = 1,
+                            start = 4,
+                            end = 28,
+                        ),
+                    ),
+                kind = "let",
+                line = 1,
+                start = 0,
+                end = 29,
+            )
+        val message =
+            assertThrows(IllegalArgumentException::class.java) {
+                interpreter.interpret(astNode)
+            }.message
+        assertEquals(
+            "Null value operand at (1:16)",
+            message,
+        )
+    }
+
+    @Test
+    fun interpretingValidCallExpressionAndAString_InPlusOperation_ShouldResultInConcatenation() {
+        var interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "a" to VariableInfo("string", "world", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        System.setIn(ByteArrayInputStream("hello ".toByteArray()))
+        // let result = readInput("Enter a value: ") + a
+        val astNode =
+            VariableDeclaration(
+                declarations =
+                    listOf(
+                        VariableDeclarator(
+                            id = Identifier(name = "result", line = 1, start = 4, end = 5),
+                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+                            init =
+                                BinaryExpression(
+                                    left =
+                                        CallExpression(
+                                            callee = Identifier(name = "readInput", line = 1, start = 0, end = 7),
+                                            arguments = listOf(StringLiteral(value = "Enter a value: ", line = 1, start = 16, end = 30)),
+                                            line = 1,
+                                            start = 0,
+                                            end = 10,
+                                        ),
+                                    right = Identifier(name = "a", line = 1, start = 23, end = 28),
+                                    operator = "+",
+                                    line = 1,
+                                    start = 16,
+                                    end = 28,
+                                ),
+                            line = 1,
+                            start = 4,
+                            end = 28,
+                        ),
+                    ),
+                kind = "let",
+                line = 1,
+                start = 0,
+                end = 29,
+            )
+        interpreter = interpreter.interpret(astNode)
+        val resultVariableMap = interpreter.variableMap
+
+        assertVariableInfo(resultVariableMap, "result", "string", true, "hello world")
     }
 
     @Test
@@ -1174,6 +1274,208 @@ class InterpreterTest {
                             CallExpression(
                                 callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
                                 arguments = listOf(StringLiteral(value = "PATH", line = 1, start = 16, end = 23)),
+                                line = 1,
+                                start = 0,
+                                end = 10,
+                            ),
+                        line = 1,
+                        start = 0,
+                        end = 10,
+                    ),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+        val response = interpreter.interpret(astNode)
+        assertEquals(System.getenv("PATH"), response.variableMap["b"]?.value)
+    }
+
+    @Test
+    fun getEnvironmentVariable_withValidBinaryExpression() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        /*
+        b = readEnv("PAT"+"H")
+         */
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                arguments =
+                                    listOf(
+                                        BinaryExpression(
+                                            left = StringLiteral(value = "PAT", line = 1, start = 16, end = 23),
+                                            right = StringLiteral(value = "H", line = 1, start = 16, end = 23),
+                                            operator = "+",
+                                            line = 1,
+                                            start = 16,
+                                            end = 23,
+                                        ),
+                                    ),
+                                line = 1,
+                                start = 0,
+                                end = 10,
+                            ),
+                        line = 1,
+                        start = 0,
+                        end = 10,
+                    ),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+        val response = interpreter.interpret(astNode)
+        assertEquals(System.getenv("PATH"), response.variableMap["b"]?.value)
+    }
+
+    @Test
+    fun getEnvironmentVariable_withInvalidBinaryExpression() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        /*
+        b = readEnv(2+3)
+         */
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                arguments =
+                                    listOf(
+                                        BinaryExpression(
+                                            left = NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 16, end = 23),
+                                            right = NumberLiteral(value = 3.toBigDecimal(), line = 1, start = 16, end = 23),
+                                            operator = "+",
+                                            line = 1,
+                                            start = 16,
+                                            end = 23,
+                                        ),
+                                    ),
+                                line = 1,
+                                start = 0,
+                                end = 10,
+                            ),
+                        line = 1,
+                        start = 0,
+                        end = 10,
+                    ),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+        val message =
+            assertThrows(IllegalArgumentException::class.java) {
+                interpreter.interpret(astNode)
+            }.message
+        assertEquals(
+            "Function 'readEnv' expects a string argument at (1:16)",
+            message,
+        )
+    }
+
+    @Test
+    fun interpretingReadEnv_withMultipleArguments_shouldThrowException() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        /*
+        b = readEnv("PATH", "HOME")
+         */
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                arguments =
+                                    listOf(
+                                        StringLiteral(value = "PATH", line = 1, start = 16, end = 23),
+                                        StringLiteral(value = "HOME", line = 1, start = 16, end = 23),
+                                    ),
+                                line = 1,
+                                start = 0,
+                                end = 10,
+                            ),
+                        line = 1,
+                        start = 0,
+                        end = 10,
+                    ),
+                line = 1,
+                start = 0,
+                end = 11,
+            )
+        val message =
+            assertThrows(IllegalArgumentException::class.java) {
+                interpreter.interpret(astNode)
+            }.message
+        assertEquals(
+            "Function 'readEnv' expects 1 argument at (1:16)",
+            message,
+        )
+    }
+
+    @Test
+    fun getEnvironmentVariable_withValidCallExpressionArgument() {
+        val interpreter =
+            InterpreterImpl(
+                mapOf(
+                    "b" to VariableInfo("string", "", true),
+                ),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+            )
+        System.setIn(ByteArrayInputStream("PATH".toByteArray()))
+        /*
+        b = readEnv(readInput("Input:"))
+         */
+        val astNode =
+            ExpressionStatement(
+                expression =
+                    AssignmentExpression(
+                        left = Identifier(name = "b", line = 1, start = 0, end = 1),
+                        right =
+                            CallExpression(
+                                callee = Identifier(name = "readEnv", line = 1, start = 0, end = 7),
+                                arguments =
+                                    listOf(
+                                        CallExpression(
+                                            callee = Identifier(name = "readInput", line = 1, start = 16, end = 23),
+                                            arguments = listOf(StringLiteral(value = "Input:", line = 1, start = 16, end = 23)),
+                                            line = 1,
+                                            start = 16,
+                                            end = 23,
+                                        ),
+                                    ),
                                 line = 1,
                                 start = 0,
                                 end = 10,

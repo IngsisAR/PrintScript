@@ -7,8 +7,11 @@ class ExpressionStatementFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
-        astNode as ExpressionStatement
-        return ExpressionFormatter().format(astNode.expression, configMap) + ";\n"
+        require(astNode is ExpressionStatement) {
+            "astNode must be a ExpressionStatement"
+        }
+        return ExpressionFormatter().format(astNode.expression, configMap, version) + ";\n"
     }
 }

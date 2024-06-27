@@ -7,8 +7,11 @@ class VariableDeclaratorFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
-        astNode as VariableDeclarator
+        require(astNode is VariableDeclarator) {
+            "VariableDeclaratorFormatter can only format VariableDeclarator nodes."
+        }
         val spaceAfterColon = (configMap["spaceAfterColon"] as? Number)?.toInt()?.takeIf { it >= 0 } ?: 0
         val spaceBeforeColon = (configMap["spaceBeforeColon"] as? Number)?.toInt()?.takeIf { it >= 0 } ?: 0
         val spacesInAssignSymbol = (configMap["spacesInAssignSymbol"] as? Number)?.toInt()?.takeIf { it >= 0 } ?: 0
@@ -19,7 +22,7 @@ class VariableDeclaratorFormatter : Formatter {
 
                 else ->
                     spaces(spacesInAssignSymbol) + '=' + spaces(spacesInAssignSymbol) +
-                        ExpressionFormatter().format(astNode.init!!, configMap)
+                        ExpressionFormatter().format(astNode.init!!, configMap, version)
             }
     }
 

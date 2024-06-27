@@ -47,13 +47,12 @@ class ConsoleInputter(
                 else -> ""
             }
         outputProvider.print(text)
-        val input = inputProvider.readInput(text)
+        val input = inputProvider.readInput()
         return when {
-            input?.matches("true|false".toRegex()) == true -> input.toBoolean()
-            input?.matches("\\d+(\\.\\d+)?".toRegex()) == true -> {
+            input.matches("true|false".toRegex()) -> input.toBoolean()
+            input.matches("\\d+(\\.\\d+)?".toRegex()) -> {
                 input.toIntOrNull() ?: (input.toDoubleOrNull() ?: "")
             }
-            input?.matches("\"[^\"]*\"|'[^']*'".toRegex()) == true -> input.removeSurrounding("\"").removeSurrounding("'")
             else -> input
         }
     }

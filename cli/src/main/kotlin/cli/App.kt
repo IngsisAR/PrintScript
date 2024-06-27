@@ -21,6 +21,7 @@ import kotlin.system.exitProcess
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private var version = "1.1.0"
+private var chunkStartLine = 1
 
 fun main() {
     print("""Version (latest as default): """)
@@ -33,10 +34,12 @@ fun main() {
     println("""  |  __/| |  | | | | | |_ ___) | (__| |  | | |_) | |_   """)
     println("""  |_|   |_|  |_|_| |_|\__|____/ \___|_|  |_| .__/ \__|  """)
     println("""                                           |_|      $version """)
-    print("""File path: """)
-    val path = readlnOrNull() ?: throw IllegalArgumentException("Script needed")
-    val script = getFile(path)
-    handleCommand(script, path, regexPath)
+    print("""File path (or enter to use example): """)
+    var path = readlnOrNull()
+    if (path.isNullOrEmpty()) {
+        path = "cli/src/main/resources/script_example.txt"
+    }
+    handleCommand(path, regexPath)
 }
 
 private fun validateVersion(version: String): String {
@@ -50,10 +53,11 @@ private fun validateVersion(version: String): String {
 }
 
 private fun handleCommand(
-    script: List<String>,
     path: String,
     regexPath: String,
 ) {
+    chunkStartLine = 1
+    val script = getFile(path)
     println("Choose an option for that file:")
     println("       1. Validation")
     println("       2. Execution")
@@ -63,63 +67,79 @@ private fun handleCommand(
     val number = readlnOrNull() ?: throw IllegalArgumentException("Choose a valid option ")
     when (number) {
         "1" -> validate(script, regexPath)
-        "2" -> execute(script, regexPath)
+        "2" -> {
+            var interpreter =
+                InterpreterImpl(version = version, outputProvider = PrintOutputProvider(), inputProvider = SystemInputProvider())
+            for (chunk in script) {
+                when (val ast = validateChunk(chunk, regexPath)) {
+                    is ASTBuilderFailure -> {
+                        if (ast.errorMessage == "Empty tokens") continue
+                        printlnRed(ast.errorMessage)
+                        handleCommand(path, regexPath)
+                        return
+                    }
+                    is ASTBuilderSuccess -> {
+                        val executeResult = executeASTNode(ast.astNode, interpreter)
+                        if (executeResult == null) {
+                            handleCommand(path, regexPath)
+                            return
+                        }
+                        interpreter = executeResult
+                    }
+                }
+            }
+            printlnGreen("✓ File executed successfully")
+        }
         "3" -> format(script, path, regexPath)
         "4" -> analyze(script, regexPath)
         "5" -> exitProcess(0)
         else -> println("Invalid function specified - use 'analyze', 'format', 'execute' or 'validate'")
     }
-    handleCommand(script, path, regexPath)
+    handleCommand(path, regexPath)
 }
 
 private fun validate(
-    fileChunks: List<String>,
+    script: List<String>,
     regexPath: String,
-): List<ASTNode> {
-    val successfulASTs = mutableListOf<ASTNode>()
-    var chunkStartLine = 1
-    for ((index, chunk) in fileChunks.withIndex()) {
-        val lexer = Lexer(chunk, chunkStartLine, regexPath)
-        val tokens = lexer.tokenize()
-        chunkStartLine = lexer.getCurrentLineIndex() + 1
-        val parser = Parser()
-        when (val ast = parser.parse(ASTProviderFactory(tokens, version))) {
-            is ASTBuilderSuccess -> {
-                successfulASTs.add(ast.astNode)
-                printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
-            }
+) {
+    for ((index, chunk) in script.withIndex()) {
+        when (val ast = validateChunk(chunk, regexPath)) {
+            is ASTBuilderSuccess -> printlnGreen("\rProgress: ${functionProgress(script.size, index)}%\r")
             is ASTBuilderFailure -> {
                 if (ast.errorMessage == "Empty tokens") continue
                 printlnRed(ast.errorMessage)
-                return emptyList()
+                return
             }
         }
     }
     printlnGreen("✓ File validated successfully")
-    return successfulASTs
 }
 
-private fun execute(
-    fileLines: List<String>,
+private fun validateChunk(
+    chunk: String,
     regexPath: String,
-) {
-    var interpreter = InterpreterImpl(version = version, outputProvider = PrintOutputProvider(), inputProvider = SystemInputProvider())
-    val astNodes = validate(fileLines, regexPath)
-    if (astNodes.isEmpty()) return
-    for (ast in astNodes) {
-        try {
-            interpreter = interpreter.interpret(ast)
-        } catch (e: Exception) {
-            println(e.message)
-            return
-        }
-    }
-    printlnGreen("✓ File executed successfully")
+): ASTBuilderResult {
+    val lexer = Lexer(chunk, chunkStartLine, regexPath)
+    val tokens = lexer.tokenize()
+    chunkStartLine = lexer.getCurrentLineIndex() + 1
+    val parser = Parser()
+    return parser.parse(ASTProviderFactory(tokens, version))
 }
 
-// Debe usar validate o bien corregir processChunk() y utilizarlo en validate
+private fun executeASTNode(
+    ast: ASTNode,
+    interpreter: InterpreterImpl,
+): InterpreterImpl? {
+    try {
+        return interpreter.interpret(ast)
+    } catch (e: Exception) {
+        println(e.message)
+        return null
+    }
+}
+
 private fun format(
-    fileLines: List<String>,
+    fileChunks: List<String>,
     path: String,
     regexPath: String,
 ) {
@@ -135,16 +155,22 @@ private fun format(
     val formatter = FormatterImpl()
     val formattedContent: StringBuilder = StringBuilder()
 
-    for ((index, line) in fileLines.withIndex()) {
-        val ast = processChunk(line, regexPath)
-        if (ast is ASTBuilderSuccess) {
-            try {
-                formattedContent.append(formatter.format(ast.astNode, configFile, version))
-            } catch (e: Exception) {
-                println(e.message)
+    for ((index, chunk) in fileChunks.withIndex()) {
+        when (val ast = validateChunk(chunk, regexPath)) {
+            is ASTBuilderSuccess -> {
+                try {
+                    formattedContent.append(formatter.format(ast.astNode, configFile, version))
+                } catch (e: Exception) {
+                    println(e.message)
+                }
+            }
+            is ASTBuilderFailure -> {
+                if (ast.errorMessage == "Empty tokens") continue
+                printlnRed(ast.errorMessage)
+                return
             }
         }
-        printlnGreen("\rProgress: ${functionProgress(fileLines.size, index)}%\r")
+        printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
     }
     createFormattedFile(newFilePath, formattedContent.toString())
 }
@@ -159,13 +185,19 @@ private fun analyze(
     val sca = StaticCodeAnalyzer()
 
     for ((index, line) in fileChunks.withIndex()) {
-        val ast = processChunk(line, regexPath)
-        if (ast is ASTBuilderSuccess) {
-            val response: String = sca.analyze(ast.astNode, configFile, version)
-            if (response.isNotEmpty()) {
-                return printlnRed(response)
+        when (val ast = validateChunk(line, regexPath)) {
+            is ASTBuilderSuccess -> {
+                val response: String = sca.analyze(ast.astNode, configFile, version)
+                if (response.isNotEmpty()) {
+                    return printlnRed(response)
+                }
+                printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
             }
-            printlnGreen("\rProgress: ${functionProgress(fileChunks.size, index)}%\r")
+            is ASTBuilderFailure -> {
+                if (ast.errorMessage == "Empty tokens") continue
+                printlnRed(ast.errorMessage)
+                return
+            }
         }
     }
     printlnGreen("✓ File analyzed successfully")
@@ -176,15 +208,6 @@ private fun functionProgress(
     index: Int,
 ): Int {
     return ((index + 1).toDouble() / totalLines * 100).roundToInt()
-}
-private fun processChunk(
-    line: String,
-    regexPath: String,
-): ASTBuilderResult {
-    val lexer = Lexer(line, 0, regexPath)
-    val tokens = lexer.tokenize()
-    val parser = Parser()
-    return parser.parse(ASTProviderFactory(tokens, version))
 }
 
 private fun createFormattedFile(

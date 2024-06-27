@@ -7,9 +7,12 @@ class BinaryExpressionFormatter : Formatter {
     override fun format(
         astNode: ASTNode,
         configMap: Map<String, Any?>,
+        version: String,
     ): String {
-        astNode as BinaryExpression
-        return ExpressionFormatter().format(astNode.left, configMap) + " " + astNode.operator + " " +
-            ExpressionFormatter().format(astNode.right, configMap)
+        require(astNode is BinaryExpression) {
+            "astNode is not BinaryExpression"
+        }
+        return ExpressionFormatter().format(astNode.left, configMap, version) + " " + astNode.operator + " " +
+            ExpressionFormatter().format(astNode.right, configMap, version)
     }
 }
