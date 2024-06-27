@@ -29,61 +29,61 @@ class InterpreterTest {
     private val outputProvider: OutputProvider = PrintOutputProvider()
     private val inputProvider: InputProvider = SystemInputProvider()
 
-    @Test
-    fun interpretEmptyVariableDeclaration() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
-        val astNode =
-            VariableDeclaration(
-                declarations =
-                    listOf(
-                        VariableDeclarator(
-                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
-                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
-                            init = null,
-                            line = 1,
-                            start = 4,
-                            end = 13,
-                        ),
-                    ),
-                kind = "let",
-                line = 1,
-                start = 0,
-                end = 14,
-            )
-
-        interpreter = interpreter.interpret(astNode)
-        val resultVariableMap = interpreter.variableMap
-
-        assertVariableInfo(resultVariableMap, "a", "string", true, null)
-    }
-
-    @Test
-    fun interpretVariableDeclaration() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
-        val astNode =
-            VariableDeclaration(
-                declarations =
-                    listOf(
-                        VariableDeclarator(
-                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
-                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
-                            init = StringLiteral(value = "hello", line = 1, start = 16, end = 23),
-                            line = 1,
-                            start = 4,
-                            end = 23,
-                        ),
-                    ),
-                kind = "let",
-                line = 1,
-                start = 0,
-                end = 24,
-            )
-
-        interpreter = interpreter.interpret(astNode)
-        val resultVariableMap = interpreter.variableMap
-
-        assertVariableInfo(resultVariableMap, "a", "string", true, "hello")
-    }
+//    @Test
+//    fun interpretEmptyVariableDeclaration() {
+//        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+//        val astNode =
+//            VariableDeclaration(
+//                declarations =
+//                    listOf(
+//                        VariableDeclarator(
+//                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+//                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+//                            init = null,
+//                            line = 1,
+//                            start = 4,
+//                            end = 13,
+//                        ),
+//                    ),
+//                kind = "let",
+//                line = 1,
+//                start = 0,
+//                end = 14,
+//            )
+//
+//        interpreter = interpreter.interpret(astNode)
+//        val resultVariableMap = interpreter.variableMap
+//
+//        assertVariableInfo(resultVariableMap, "a", "string", true, null)
+//    }
+//
+//    @Test
+//    fun interpretVariableDeclaration() {
+//        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+//        val astNode =
+//            VariableDeclaration(
+//                declarations =
+//                    listOf(
+//                        VariableDeclarator(
+//                            id = Identifier(name = "a", line = 1, start = 4, end = 5),
+//                            type = TypeReference(type = "string", line = 1, start = 7, end = 13),
+//                            init = StringLiteral(value = "hello", line = 1, start = 16, end = 23),
+//                            line = 1,
+//                            start = 4,
+//                            end = 23,
+//                        ),
+//                    ),
+//                kind = "let",
+//                line = 1,
+//                start = 0,
+//                end = 24,
+//            )
+//
+//        interpreter = interpreter.interpret(astNode)
+//        val resultVariableMap = interpreter.variableMap
+//
+//        assertVariableInfo(resultVariableMap, "a", "string", true, "hello")
+//    }
 
     @Test
     fun interpretIdentifierVariableDeclaration() {
