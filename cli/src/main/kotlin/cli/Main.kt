@@ -9,7 +9,7 @@ import parser.Parser
 import utils.PrintScriptChunkReader
 
 fun main() {
-    val printScriptChunkReader = PrintScriptChunkReader()
+    val printScriptChunkReader = PrintScriptChunkReader("utils/src/main/resources/ChunkKeywordsRegex.json")
 //    println("\nReading from string\n")
 //    val input =
 //        """

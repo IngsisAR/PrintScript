@@ -12,8 +12,7 @@ data class ChunkKeywordRegex(
     @JsonProperty("identifier") val identifier: String,
 )
 
-class PrintScriptChunkReader {
-    private val chunkKeywordsJsonPath = "utils/src/main/resources/ChunkKeywordsRegex.json"
+class PrintScriptChunkReader(chunkKeywordsJsonPath: String) {
     private val chunkKeywordsRegex: ChunkKeywordRegex = jacksonObjectMapper().readValue(File(chunkKeywordsJsonPath))
 
     fun readChunksFromString(string: String): List<String> {

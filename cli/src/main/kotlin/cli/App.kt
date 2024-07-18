@@ -20,6 +20,7 @@ import kotlin.system.exitProcess
 
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
+private const val CHUNK_KEYWORDS_REGEX_PATH = "utils/src/main/resources/ChunkKeywordsRegex.json"
 private var version = "1.1.0"
 private var chunkStartLine = 1
 
@@ -220,7 +221,7 @@ private fun createFormattedFile(
 }
 
 private fun getFile(path: String): List<String> {
-    val printScriptChunkReader = PrintScriptChunkReader()
+    val printScriptChunkReader = PrintScriptChunkReader(CHUNK_KEYWORDS_REGEX_PATH)
     return printScriptChunkReader.readChunksFromFile(path)
 }
 

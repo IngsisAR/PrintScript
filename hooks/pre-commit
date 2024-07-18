@@ -9,6 +9,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+#add formatting changes, avoiding unversioned files
+git add -u
+
 echo "Checking build"
 
 ./gradlew build
