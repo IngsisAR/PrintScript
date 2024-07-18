@@ -10,6 +10,7 @@ import utils.BinaryExpression
 import utils.BooleanLiteral
 import utils.CallExpression
 import utils.ConditionalStatement
+import utils.EnvironmentProvider
 import utils.ExpressionStatement
 import utils.Identifier
 import utils.InputProvider
@@ -17,6 +18,7 @@ import utils.NumberLiteral
 import utils.OutputProvider
 import utils.PrintOutputProvider
 import utils.StringLiteral
+import utils.SystemEnvironmentProvider
 import utils.SystemInputProvider
 import utils.TypeReference
 import utils.VariableDeclaration
@@ -28,10 +30,17 @@ import java.io.PrintStream
 class InterpreterTest {
     private val outputProvider: OutputProvider = PrintOutputProvider()
     private val inputProvider: InputProvider = SystemInputProvider()
+    private val environmentProvider: EnvironmentProvider = SystemEnvironmentProvider()
 
     @Test
     fun interpretEmptyVariableDeclaration() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -59,7 +68,13 @@ class InterpreterTest {
 
     @Test
     fun interpretVariableDeclaration() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -95,6 +110,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             VariableDeclaration(
@@ -123,7 +139,13 @@ class InterpreterTest {
 
     @Test
     fun interpretMultipleVariableDeclaration() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -168,7 +190,13 @@ class InterpreterTest {
 
     @Test
     fun interpretErrorVariableDeclaration() {
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -201,7 +229,13 @@ class InterpreterTest {
 
     @Test
     fun interpretNumberBinaryExpression() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -237,7 +271,13 @@ class InterpreterTest {
 
     @Test
     fun interpretStringBinaryExpression() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -303,7 +343,13 @@ class InterpreterTest {
 
     @Test
     fun interpretNumberStringBinaryExpression() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -339,7 +385,13 @@ class InterpreterTest {
 
     @Test
     fun interpretStringNumberBinaryExpression() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             VariableDeclaration(
                 declarations =
@@ -384,6 +436,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             VariableDeclaration(
@@ -428,6 +481,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             VariableDeclaration(
@@ -475,6 +529,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         System.setIn(ByteArrayInputStream("hello ".toByteArray()))
         // let result = readInput("Enter a value: ") + a
@@ -528,6 +583,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             VariableDeclaration(
@@ -580,7 +636,13 @@ class InterpreterTest {
 
     @Test
     fun interpretInvalidOperatorBinaryExpression() {
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             BinaryExpression(
                 left = NumberLiteral(value = 5.toBigDecimal(), line = 1, start = 16, end = 17),
@@ -603,6 +665,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNodeA =
             ExpressionStatement(
@@ -630,6 +693,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNodeD =
             ExpressionStatement(
@@ -659,6 +723,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNodeBinaryExpression =
             ExpressionStatement(
@@ -697,6 +762,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNodeBinaryExpression =
             ExpressionStatement(
@@ -724,6 +790,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
 
         val input = "Name"
@@ -757,7 +824,13 @@ class InterpreterTest {
 
     @Test
     fun interpretNotFoundAssignmentExpression() {
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNodeB =
             ExpressionStatement(
                 expression =
@@ -785,6 +858,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -816,6 +890,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -851,6 +926,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -882,6 +958,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -914,6 +991,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -942,6 +1020,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode = NumberLiteral(value = 2.toBigDecimal(), line = 1, start = 22, end = 23)
         assertThrows(IllegalArgumentException::class.java) {
@@ -954,7 +1033,13 @@ class InterpreterTest {
         val consoleOutputCapture = ByteArrayOutputStream()
         System.setOut(PrintStream(consoleOutputCapture))
 
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             ExpressionStatement(
                 expression =
@@ -978,7 +1063,13 @@ class InterpreterTest {
         val consoleOutputCapture = ByteArrayOutputStream()
         System.setOut(PrintStream(consoleOutputCapture))
 
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             ExpressionStatement(
                 expression =
@@ -1008,6 +1099,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -1032,7 +1124,13 @@ class InterpreterTest {
         val consoleOutputCapture = ByteArrayOutputStream()
         System.setOut(PrintStream(consoleOutputCapture))
 
-        val interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
         val astNode =
             ExpressionStatement(
                 expression =
@@ -1069,6 +1167,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
 
         val astNode =
@@ -1116,6 +1215,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         let a:number = 1;
@@ -1166,6 +1266,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         let a:number = 1;
@@ -1231,6 +1332,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         let b:string = "true";
@@ -1261,6 +1363,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         b = readEnv("PATH")
@@ -1300,6 +1403,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         b = readEnv("PAT"+"H")
@@ -1349,6 +1453,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         b = readEnv(2+3)
@@ -1404,6 +1509,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         /*
         b = readEnv("PATH", "HOME")
@@ -1453,6 +1559,7 @@ class InterpreterTest {
                 "1.1.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         System.setIn(ByteArrayInputStream("PATH".toByteArray()))
         /*
@@ -1495,7 +1602,14 @@ class InterpreterTest {
     @Test
     fun callExpressionPrintln() {
         val variableMap = mapOf("b" to VariableInfo("string", "true", true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                variableMap,
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val outContent = ByteArrayOutputStream()
         System.setOut(PrintStream(outContent))
@@ -1516,7 +1630,14 @@ class InterpreterTest {
 
     @Test
     fun interpretCallExpression_ReadUserInput_with_numericInput() {
-        val interpreter = CallExpressionInterpreter(emptyMap(), "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                emptyMap(),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "123"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1537,7 +1658,14 @@ class InterpreterTest {
 
     @Test
     fun interpretCallExpression_ReadUserInput_with_booleanInput() {
-        val interpreter = CallExpressionInterpreter(emptyMap(), "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                emptyMap(),
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "true"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1559,7 +1687,14 @@ class InterpreterTest {
     @Test
     fun interpretCallExpression_ReadUserInput_with_IdentifierStringAsArgument() {
         val variableMap = mapOf("b" to VariableInfo("string", "true", true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                variableMap,
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "123"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1581,7 +1716,14 @@ class InterpreterTest {
     @Test
     fun interpretCallExpression_ReadUserInput_with_IdentifierBooleanAsArgument_ShouldThrowException() {
         val variableMap = mapOf("b" to VariableInfo("boolean", "true", true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                variableMap,
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "true"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1609,7 +1751,14 @@ class InterpreterTest {
     @Test
     fun interpretCallExpression_ReadUserInput_with_IdentifierNullAsArgument_ShouldThrowException() {
         val variableMap = mapOf("b" to VariableInfo("string", null, true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                variableMap,
+                "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "123"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1645,6 +1794,7 @@ class InterpreterTest {
                 "1.0.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ConditionalStatement(
@@ -1685,6 +1835,7 @@ class InterpreterTest {
                 "1.0.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
 
         val astNode =
@@ -1709,7 +1860,14 @@ class InterpreterTest {
     @Test
     fun callExpressionReadUserInputOnOlderVersion() {
         val variableMap = mapOf("b" to VariableInfo("string", "true", true))
-        val interpreter = CallExpressionInterpreter(variableMap, "1.0.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        val interpreter =
+            CallExpressionInterpreter(
+                variableMap,
+                "1.0.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         val input = "true"
         System.setIn(ByteArrayInputStream(input.toByteArray()))
@@ -1739,6 +1897,7 @@ class InterpreterTest {
                 "1.0.0",
                 outputProvider = outputProvider,
                 inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
             )
         val astNode =
             ExpressionStatement(
@@ -1761,7 +1920,13 @@ class InterpreterTest {
 
     @Test
     fun interpretReadEnvWithIdentifierAssignedToVariable() {
-        var interpreter = InterpreterImpl(version = "1.1.0", outputProvider = outputProvider, inputProvider = inputProvider)
+        var interpreter =
+            InterpreterImpl(
+                version = "1.1.0",
+                outputProvider = outputProvider,
+                inputProvider = inputProvider,
+                environmentProvider = environmentProvider,
+            )
 
         // Declare a variable and assign "PATH" to it
         val varDeclaration =

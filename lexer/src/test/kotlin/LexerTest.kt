@@ -38,7 +38,7 @@ class LexerTest {
                 val lexer = Lexer(code, 0, tokenRegexJsonPath)
                 lexer.tokenize()
             }
-        assertEquals("Unexpected character at (0:3): '", exception.message)
+        assertEquals("Unexpected token at (0:3)", exception.message)
     }
 
     @Test

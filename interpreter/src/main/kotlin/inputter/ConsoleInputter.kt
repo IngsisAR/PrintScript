@@ -5,6 +5,7 @@ import interpreter.IdentifierInterpreter
 import interpreter.VariableInfo
 import utils.ASTNode
 import utils.CallExpression
+import utils.EnvironmentProvider
 import utils.Identifier
 import utils.InputProvider
 import utils.OutputProvider
@@ -15,6 +16,7 @@ class ConsoleInputter(
     private val version: String,
     private val outputProvider: OutputProvider,
     private val inputProvider: InputProvider,
+    private val environmentProvider: EnvironmentProvider,
 ) : Inputter {
     override fun readInput(node: ASTNode): Any {
         val text =
@@ -34,7 +36,10 @@ class ConsoleInputter(
                     }
                 }
                 is CallExpression -> {
-                    val result = CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(node)
+                    val result =
+                        CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                            node,
+                        )
                     if (result is String) {
                         result
                     } else {

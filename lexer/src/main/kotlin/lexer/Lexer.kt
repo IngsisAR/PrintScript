@@ -59,7 +59,7 @@ class Lexer(
         }
 
         // Handle unexpected characters
-        error("Unexpected character at ($currentLineIndex:$currentPosition): ${remainingInput[0]}")
+        error("Unexpected token at ($currentLineIndex:$currentPosition)")
     }
 
     private fun createToken(

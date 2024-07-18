@@ -12,6 +12,7 @@ import sca.StaticCodeAnalyzer
 import utils.ASTNode
 import utils.PrintOutputProvider
 import utils.PrintScriptChunkReader
+import utils.SystemEnvironmentProvider
 import utils.SystemInputProvider
 import utils.VersionChecker
 import java.io.File
@@ -21,7 +22,7 @@ import kotlin.system.exitProcess
 private const val SCA_CONFIG_PATH = "sca/src/main/resources/SCAConfig.json"
 private const val FORMAT_CONFIG_PATH = "formatter/src/main/resources/FormatterConfig.json"
 private const val CHUNK_KEYWORDS_REGEX_PATH = "utils/src/main/resources/ChunkKeywordsRegex.json"
-private var version = "1.1.0"
+private var version = "1.1"
 private var chunkStartLine = 1
 
 fun main() {
@@ -70,7 +71,12 @@ private fun handleCommand(
         "1" -> validate(script, regexPath)
         "2" -> {
             var interpreter =
-                InterpreterImpl(version = version, outputProvider = PrintOutputProvider(), inputProvider = SystemInputProvider())
+                InterpreterImpl(
+                    version = version,
+                    outputProvider = PrintOutputProvider(),
+                    inputProvider = SystemInputProvider(),
+                    environmentProvider = SystemEnvironmentProvider(),
+                )
             for (chunk in script) {
                 when (val ast = validateChunk(chunk, regexPath)) {
                     is ASTBuilderFailure -> {
@@ -121,7 +127,12 @@ private fun validateChunk(
     regexPath: String,
 ): ASTBuilderResult {
     val lexer = Lexer(chunk, chunkStartLine, regexPath)
-    val tokens = lexer.tokenize()
+    val tokens =
+        try {
+            lexer.tokenize()
+        } catch (e: Exception) {
+            return ASTBuilderFailure(e.message!!)
+        }
     chunkStartLine = lexer.getCurrentLineIndex() + 1
     val parser = Parser()
     return parser.parse(ASTProviderFactory(tokens, version))

@@ -4,6 +4,7 @@ import inputter.ConsoleInputter
 import utils.ASTNode
 import utils.BinaryExpression
 import utils.CallExpression
+import utils.EnvironmentProvider
 import utils.Identifier
 import utils.InputProvider
 import utils.Literal
@@ -16,12 +17,13 @@ class CallExpressionInterpreter(
     private val version: String,
     private val outputProvider: OutputProvider,
     private val inputProvider: InputProvider,
+    private val environmentProvider: EnvironmentProvider,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Any {
         require(node is CallExpression) { "Node at (${node.line}:${node.start}) must be an CallExpression" }
         return when (node.callee.name) {
             "println" -> handlePrintln(node)
-            "readEnv" -> handleReadEnv(node)
+            "readEnv" -> handleReadEnv(node) ?: ""
             "readInput" -> handleReadInput(node)
             else -> throw IllegalArgumentException("Unsupported function '${node.callee.name}' at (${node.line}:${node.start})")
         }
@@ -42,18 +44,24 @@ class CallExpressionInterpreter(
                 outputProvider.print(value.toString())
             }
             is CallExpression -> {
-                val value = CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(argument)
+                val value =
+                    CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                        argument,
+                    )
                 outputProvider.print(value.toString())
             }
             is BinaryExpression -> {
-                val value = BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(argument)
+                val value =
+                    BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                        argument,
+                    )
                 outputProvider.print(value.toString())
             }
             else -> throw IllegalArgumentException("Function 'println' expects a string argument at (${argument.line}:${argument.start})")
         }
     }
 
-    private fun handleReadEnv(function: CallExpression): String {
+    private fun handleReadEnv(function: CallExpression): String? {
         val versionChecker = VersionChecker()
         if (versionChecker.versionIsSameOrOlderThanCurrentVersion("1.1.0", version)) {
             if (function.arguments.size != 1) {
@@ -64,30 +72,36 @@ class CallExpressionInterpreter(
             }
             return when (val arg = function.arguments[0]) {
                 is StringLiteral -> {
-                    System.getenv(arg.value)
+                    environmentProvider.getEnv(arg.value)
                 }
                 is Identifier -> {
                     val value =
                         IdentifierInterpreter(variableMap, version).interpret(arg)
                             ?: throw IllegalArgumentException("Variable ${arg.name} is not initialized at (${arg.line}:${arg.start})")
                     if (value is String) {
-                        System.getenv(value)
+                        environmentProvider.getEnv(value)
                     } else {
                         throw IllegalArgumentException("Function 'readEnv' expects a string argument at (${arg.line}:${arg.start})")
                     }
                 }
                 is CallExpression -> {
-                    val value = CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(arg)
+                    val value =
+                        CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                            arg,
+                        )
                     if (value is String) {
-                        System.getenv(value)
+                        environmentProvider.getEnv(value)
                     } else {
                         throw IllegalArgumentException("Function 'readEnv' expects a string argument at (${arg.line}:${arg.start})")
                     }
                 }
                 is BinaryExpression -> {
-                    val value = BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(arg)
+                    val value =
+                        BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                            arg,
+                        )
                     if (value is String) {
-                        System.getenv(value)
+                        environmentProvider.getEnv(value)
                     } else {
                         throw IllegalArgumentException("Function 'readEnv' expects a string argument at (${arg.line}:${arg.start})")
                     }
@@ -110,7 +124,9 @@ class CallExpressionInterpreter(
                     "Function 'readInput' expects 1 argument at (${function.line}:${function.arguments[0].start})",
                 )
             }
-            return ConsoleInputter(variableMap, version, outputProvider, inputProvider).readInput(function.arguments[0])
+            return ConsoleInputter(variableMap, version, outputProvider, inputProvider, environmentProvider).readInput(
+                function.arguments[0],
+            )
         } else {
             throw IllegalArgumentException("Unsupported function '${function.callee.name}' at (${function.line}:${function.start})")
         }

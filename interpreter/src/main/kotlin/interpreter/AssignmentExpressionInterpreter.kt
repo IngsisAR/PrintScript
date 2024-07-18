@@ -4,6 +4,7 @@ import utils.ASTNode
 import utils.AssignmentExpression
 import utils.BinaryExpression
 import utils.CallExpression
+import utils.EnvironmentProvider
 import utils.Identifier
 import utils.InputProvider
 import utils.Literal
@@ -15,6 +16,7 @@ class AssignmentExpressionInterpreter(
     private val version: String,
     private val outputProvider: OutputProvider,
     private val inputProvider: InputProvider,
+    private val environmentProvider: EnvironmentProvider,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
         require(node is AssignmentExpression) { "Node must be an AssignmentExpression" }
@@ -27,9 +29,15 @@ class AssignmentExpressionInterpreter(
         val newValue =
             when (val right = node.right) {
                 is Literal -> right.value
-                is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(right)
+                is BinaryExpression ->
+                    BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                        right,
+                    )
                 is Identifier -> IdentifierInterpreter(variableMap, version).interpret(right)
-                is CallExpression -> CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(right)
+                is CallExpression ->
+                    CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                        right,
+                    )
                 else -> throw IllegalArgumentException(
                     "Unsupported right side of assignment expression: ${right::class.simpleName} at " +
                         "(${right.line}:${right.start})",

@@ -3,6 +3,7 @@ package interpreter
 import utils.ASTNode
 import utils.BinaryExpression
 import utils.CallExpression
+import utils.EnvironmentProvider
 import utils.Expression
 import utils.Identifier
 import utils.InputProvider
@@ -16,6 +17,7 @@ class BinaryExpressionInterpreter(
     private val version: String,
     val outputProvider: OutputProvider,
     val inputProvider: InputProvider,
+    private val environmentProvider: EnvironmentProvider,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Any {
         require(node is BinaryExpression) { "Node must be an BinaryExpression" }
@@ -31,7 +33,7 @@ class BinaryExpressionInterpreter(
             is BinaryExpression -> interpret(operand)
             is CallExpression -> {
                 val operandValue =
-                    CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider)
+                    CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider)
                         .interpret(operand)
                 if (operandValue is String || operandValue is Number) {
                     operandValue

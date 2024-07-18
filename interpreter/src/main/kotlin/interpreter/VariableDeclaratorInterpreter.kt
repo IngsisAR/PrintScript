@@ -3,6 +3,7 @@ package interpreter
 import utils.ASTNode
 import utils.BinaryExpression
 import utils.CallExpression
+import utils.EnvironmentProvider
 import utils.Identifier
 import utils.InputProvider
 import utils.Literal
@@ -16,6 +17,7 @@ class VariableDeclaratorInterpreter(
     private val version: String,
     private val outputProvider: OutputProvider,
     private val inputProvider: InputProvider,
+    private val environmentProvider: EnvironmentProvider,
 ) : Interpreter {
     override fun interpret(node: ASTNode): Map<String, VariableInfo> {
         require(node is VariableDeclarator) { "Node must be a VariableDeclarator" }
@@ -26,9 +28,19 @@ class VariableDeclaratorInterpreter(
         val value =
             node.init?.let {
                 when (it) {
-                    is BinaryExpression -> BinaryExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(it)
+                    is BinaryExpression ->
+                        BinaryExpressionInterpreter(
+                            variableMap,
+                            version,
+                            outputProvider,
+                            inputProvider,
+                            environmentProvider,
+                        ).interpret(it)
                     is Identifier -> IdentifierInterpreter(variableMap, version).interpret(it)
-                    is CallExpression -> CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider).interpret(it)
+                    is CallExpression ->
+                        CallExpressionInterpreter(variableMap, version, outputProvider, inputProvider, environmentProvider).interpret(
+                            it,
+                        )
                     is Literal -> it.value
                     else -> throw IllegalArgumentException("Unsupported init type: ${it::class.simpleName} at (${it.line}:${it.start})")
                 }
